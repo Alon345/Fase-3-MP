@@ -3,7 +3,7 @@ public class Manager {
 
     }
     public void start(){
-        System system = new System();
+        PrincipalSystem system = new PrincipalSystem();
         while (true) {
             system.selector();
         }
