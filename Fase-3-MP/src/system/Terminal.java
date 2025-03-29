@@ -24,5 +24,25 @@ public class Terminal {
     }
 
     public void error() {
+        System.out.println("Error");
     }
+    public void askNameUser() {
+        System.out.println("Introduce tu nombre y apellidos");
+    }
+    public void askNick() {
+        System.out.println("Introduce tu nick de usuario");
+    }
+    public void nickExists() {
+        System.out.println("El nick introducido ya existe");
+    }
+    public void askPassword() {
+        System.out.println("Introduce la contraseña de tu cuenta");
+    }
+    public void confirmPassword() {
+        System.out.println("Confirme la contraseña introducida");
+    }
+    public void errorPassword() {
+        System.out.println("Contraseña incorrecta, pruebe de nuevo");
+    }
+
 }

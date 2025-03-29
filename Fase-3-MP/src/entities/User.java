@@ -2,16 +2,16 @@ package entities;
 
 public class User {
 
-    private String nombre;
+    private String name;
     private String nick;
     private String password;
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String nombre) {
+        this.name = name;
     }
 
     public String getNick() {
