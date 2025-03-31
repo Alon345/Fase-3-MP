@@ -1,10 +1,12 @@
 package system;
 
+import entities.Challenge;
 import entities.Client;
 import java.util.ArrayList;
 import java.io.Console;
 import java.util.Scanner;
 import entities.Operator;
+import entities.Combat;
 
 public class mainSystem {
     public static Console out;
@@ -53,7 +55,7 @@ public class mainSystem {
                     menu.selector(client, this);
                 }
             }
-            case 3 -> {
+            case 3: {
                 // LOGIN AS ADMIN
                 Operator operator = new Operator();
                 operator = loginOperator(operator);

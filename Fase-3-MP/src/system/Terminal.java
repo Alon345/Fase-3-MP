@@ -17,6 +17,18 @@ public class Terminal {
         System.out.println("2.Modo operador");
         System.out.println("3.Salir");
     }
+    public void showMenu() {
+        System.out.println("************MENU************");
+        System.out.println("1.Registrar personaje");
+        System.out.println("2.Eliminar personaje");
+        System.out.println("3.Seleccionar equipo");
+        System.out.println("4.Desafiar");
+        System.out.println("5.Consultar combates");
+        System.out.println("6.Consultar ranking");
+        System.out.println("7.Salir");
+        System.out.println("8.Borrar cuenta");
+        System.out.println("****************************");
+    }
     public void confirmDelete() {
         System.out.println("¿Estas seguro de querer eliminar la cuenta?");
         System.out.println("1.Si");
@@ -45,4 +57,24 @@ public class Terminal {
         System.out.println("Contraseña incorrecta, pruebe de nuevo");
     }
 
+    public void showFactories() {
+        System.out.println("Seleccione que tipo de personaje va a crear:");
+        System.out.println("1.Vampiro");
+        System.out.println("2.Licantropo");
+        System.out.println("3.Cazador");
+    }
+    public void deleteCharacter() {
+        System.out.println("Para crear un personaje nuevo antes tienes que eliminar el existente");
+    }
+    public void confirmDeleteCharacter() {
+        System.out.println("Seguro que desea eliminar el personaje?");
+        System.out.println("1.Si");
+        System.out.println("2.No");
+    }
+    public void deltedCharacter() {
+        System.out.println("Personaje eliminado correctamente");
+    }
+    public void logout() {
+        System.out.println("Cerrando sesion...");
+    }
 }

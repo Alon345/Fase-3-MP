@@ -62,4 +62,23 @@ public class Client extends User {
         return (char) (Math.random() * 10 + '0');
     }
 
+    public void deleteCharacter(Client client) {
+        Terminal terminal = new Terminal();
+        terminal.confirmDeleteCharacter();
+        Scanner sc = new Scanner(System.in);
+        boolean delete = sc.nextInt() == 1;
+        if (delete) {
+            client.setCharacter(null);
+            terminal.deltedCharacter();
+        }
+    }
+    public void selectTeam(Client client) {
+        // A implementar
+    }
+    public void challenge(Client client) {
+
+    }
+    public void deleteAccount(Client client, mainSystem system) {
+
+    }
 }
