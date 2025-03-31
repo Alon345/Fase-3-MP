@@ -22,8 +22,45 @@ public class mainSystem {
                 int user = sc.nextInt();
                 registerUser(user);
             }
-            case 3: {
+            case 2: {
+                // LOGIN AS CLIENT
+                Client client = new Client();
+                client = loginClient(client);
+                if (client != null) {
+                    Menu menu = new Menu();
 
+                    CombatFileReader combatFileReader = new CombatFileReader();
+                    ArrayList<Combat> combatList = combatFileReader.readCombatFile();
+                    for (Combat combat : combatList) {
+                        if (!combat.isSeen() && combat.getChallenger().getNick().equals(client.getNick())) {
+                            NotificationManager notificationManager = new NotificationManager();
+                            notificationManager.notifyCombat(combat);
+                            combat.setSeen(true);
+                        }
+                    }
+                    CombatFileWriter combatFileWriter = new CombatFileWriter();
+                    combatFileWriter.overwriteCombatFile(combatList);
+
+                    ChallengeFileReader challengeFileReader = new ChallengeFileReader();
+                    ArrayList<Challenge> challengeList = challengeFileReader.readChallengeFile();
+                    for (int i = 0; i < challengeList.size(); i++) {
+                        if (challengeList.get(i).isValidated() && challengeList.get(i).getOpponent().getNick().equals(client.getNick())) {
+                            NotificationManager notificationManager = new NotificationManager();
+                            notificationManager.notifyChallenge(client, terminal, challengeList, i);
+                            i--;
+                        }
+                    }
+                    menu.selector(client, this);
+                }
+            }
+            case 3 -> {
+                // LOGIN AS ADMIN
+                Operator operator = new Operator();
+                operator = loginOperator(operator);
+                if (operator != null) {
+                    Menu menu = new Menu();
+                    menu.operatorSelector(operator, this);
+                }
             }
             default: terminal.error();
         }
@@ -149,5 +186,38 @@ public class mainSystem {
         client = list.get(aux);
         return client;
     }
+    public Operator loginOperator(Operator operator) {
+        Scanner sc = new Scanner(System.in);
+        Terminal terminal = new Terminal();
+        OperatorFileReader operatorFileReader = new OperatorFileReader();
+        ArrayList<Operator> list = operatorFileReader.readOperatorFile();
+        terminal.askNick();
+        String nick = sc.nextLine();
+        boolean found = false;
+        int index = -1;
+
+        for (int i = 0; i < list.size(); i++) { // Cambiar por while??
+            if (list.get(i).getNick().equals(nick)) {
+                found = true;
+                index = i;
+                i = list.size();
+            }
+        }
+        if (!found) {
+            return null;
+        }
+        boolean passCorrect = false;
+        do {
+            terminal.askPassword();
+            String password = sc.nextLine();
+            passCorrect = list.get(index).getPassword().equals(password);
+            if (!passCorrect) {
+                terminal.errorPassword();
+            }
+        } while (!passCorrect);
+
+        return operator;
+    }
+
 
 }
