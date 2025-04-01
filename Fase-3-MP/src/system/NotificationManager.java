@@ -1,8 +1,8 @@
-package system;
+package System;
 
-import entities.Challenge;
-import entities.Client;
-import entities.Combat;
+import Entities.Challenge;
+import Entities.Client;
+import Entities.Combat;
 
 import java.util.ArrayList;
 

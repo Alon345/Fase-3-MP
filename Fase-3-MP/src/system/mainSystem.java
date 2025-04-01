@@ -1,12 +1,12 @@
-package system;
+package System;
 
-import entities.Challenge;
-import entities.Client;
+import Entities.Challenge;
+import Entities.Client;
 import java.util.ArrayList;
 import java.io.Console;
 import java.util.Scanner;
-import entities.Operator;
-import entities.Combat;
+import Entities.Operator;
+import Entities.Combat;
 
 public class mainSystem {
     public static Console out;

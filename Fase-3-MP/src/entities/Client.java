@@ -1,9 +1,9 @@
-package entities;
-import system.mainSystem;
-import system.Terminal;
+package Entities;
+import System.mainSystem;
+import System.Terminal;
 import java.util.ArrayList;
 import java.util.Scanner;
-import system.userFileReader;
+import System.userFileReader;
 
 public class Client extends User {
 

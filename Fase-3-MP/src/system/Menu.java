@@ -1,7 +1,7 @@
-package system;
+package System;
 
-import entities.Client;
-import entities.Operator;
+import Entities.Client;
+import Entities.Operator;
 
 import java.util.Scanner;
 

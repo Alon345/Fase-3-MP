@@ -1,6 +1,6 @@
-package system;
+package System;
 
-import entities.Operator;
+import Entities.Operator;
 
 import java.util.ArrayList;
 

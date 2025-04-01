@@ -1,4 +1,4 @@
-package entities;
+package Entities;
 
 public class Challenge {
     public boolean isValidated(){

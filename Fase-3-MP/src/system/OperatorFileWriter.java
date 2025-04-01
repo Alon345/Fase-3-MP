@@ -1,6 +1,6 @@
-package system;
+package System;
 
-import entities.Operator;
+import Entities.Operator;
 
 public class OperatorFileWriter {
     public void registerOperator(Operator operator){

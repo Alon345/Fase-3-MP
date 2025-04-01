@@ -1,6 +1,6 @@
-package system;
+package System;
 
-import entities.Challenge;
+import Entities.Challenge;
 
 import java.util.ArrayList;
 

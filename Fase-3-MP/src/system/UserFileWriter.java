@@ -1,6 +1,6 @@
-package system;
+package System;
 
-import entities.Client;
+import Entities.Client;
 
 public class UserFileWriter {
     public void registerUser(Client client) {

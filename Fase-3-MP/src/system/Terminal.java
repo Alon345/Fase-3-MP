@@ -1,4 +1,4 @@
-package system;
+package System;
 
 public class Terminal {
     public Terminal(){

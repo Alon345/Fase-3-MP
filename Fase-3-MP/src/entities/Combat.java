@@ -1,6 +1,4 @@
-package entities;
-
-import java.util.ArrayList;
+package Entities;
 
 public class Combat {
     public boolean isSeen(){

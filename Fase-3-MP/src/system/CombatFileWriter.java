@@ -1,6 +1,6 @@
-package system;
+package System;
 
-import entities.Combat;
+import Entities.Combat;
 
 import java.util.ArrayList;
 

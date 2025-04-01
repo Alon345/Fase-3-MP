@@ -1,4 +1,4 @@
-import system.Manager;
+import System.Manager;
 
 public class Main {
     public static void main(String[] args) {
