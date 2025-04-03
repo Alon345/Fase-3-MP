@@ -3,7 +3,7 @@ import System.mainSystem;
 import System.Terminal;
 import java.util.ArrayList;
 import java.util.Scanner;
-import System.userFileReader;
+import System.UserFileReader;
 
 public class Client extends User {
 
@@ -28,7 +28,7 @@ public class Client extends User {
 
     public String generateRegisterNumber() {
         boolean valid = false;
-        userFileReader userFileReader = new userFileReader();
+        UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> list = userFileReader.readUserFile();
         String strBuilder = null;
         // Creamos el fichero lista de clientes para comparar si esta ya
