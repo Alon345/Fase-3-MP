@@ -12,6 +12,7 @@ public class mainSystem {
     public static Console out;
     private static String in;
 
+    /**A continuación se definen las operaciones**/
     public void selector(){
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
@@ -46,7 +47,7 @@ public class mainSystem {
                     ChallengeFileReader challengeFileReader = new ChallengeFileReader();
                     ArrayList<Challenge> challengeList = challengeFileReader.readChallengeFile();
                     for (int i = 0; i < challengeList.size(); i++) {
-                        if (challengeList.get(i).isValidated() && challengeList.get(i).getOpponent().getNick().equals(client.getNick())) {
+                        if (challengeList.get(i).isValidated() && challengeList.get(i).getRival().getNick().equals(client.getNick())) {
                             NotificationManager notificationManager = new NotificationManager();
                             notificationManager.notifyChallenge(client, terminal, challengeList, i);
                             i--;
@@ -70,7 +71,7 @@ public class mainSystem {
     public void registerUser(int option) {
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
-        userFileReader userFileReader = new userFileReader();
+        UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> clientList = userFileReader.readUserFile();
         switch (option) {
             case 1: {
@@ -148,7 +149,7 @@ public class mainSystem {
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
         int aux = -1;
-        userFileReader userFileReader = new userFileReader();
+        UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> list = userFileReader.readUserFile();
         terminal.askNick();
         String nick = sc.nextLine();

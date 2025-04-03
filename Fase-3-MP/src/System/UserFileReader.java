@@ -3,7 +3,7 @@ import Entities.Client;
 
 import java.util.ArrayList;
 
-public class userFileReader {
+public class UserFileReader {
     public ArrayList<Client> readUserFile() {
         return null;
     }

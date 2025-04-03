@@ -16,4 +16,9 @@ public class NotificationManager {
     public void notifyChallenge(Client client, Terminal terminal, ArrayList<Challenge> challengeList, int i){
 
     }
+
+    public void notifyChallenge(Challenge challenge) {
+        ChallengeFileWriter ChallengeFileWriter = new ChallengeFileWriter();
+        //ChallengeFileWriter.challengeRgister(challenge);
+    }
 }
