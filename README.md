@@ -5,15 +5,27 @@ Este videojuego de luchas de criaturas fantásticas, desarrollado para la asigna
 
 > **WARNING:** Asegúrate de tener configurado correctamente el entorno y las dependencias para evitar problemas durante la ejecución.
 
+## Equipo
+- **Rubén Ruiz Martín:** Analista Funcional  
+- **Victor Hugo Oliveira Petroceli:** QA  
+- **Raúl Tejada Merinero:** Analista Programador  
+- **Ramón Nieto Villegas:** Ingeniero de Desarrollo  
+- **Alonso Gutiérrez Sánchez:** Jefe de Desarrollo
+
+## Contacto
+Para dudas o sugerencias, contacta a:
+- **Alonso Gutiérrez Sánchez (Jefe de Desarrollo):** [a.gutierrez.2023@alumnos.urjc.es](mailto:a.gutierrez.2023@alumnos.urjc.es)
+
 ## Tabla de Contenidos
-- [Descripción](#descripción)
 - [Características](#características)
+- [Mecánica del Juego](#mecánica-del-juego)
+- [Roles](#roles)
+- [Sistema de Habilidades y Atributos](#sistema-de-habilidades-y-atributos)
 - [Instalación y Configuración](#instalación-y-configuración)
 - [Ejecución](#ejecución)
 - [Pruebas](#pruebas)
 - [Documentación](#documentación)
-- [Equipo](#equipo)
-- [Contacto](#contacto)
+- [FAQ](#faq)
 
 ## Características
 - **Gestión de Personajes:**  
@@ -88,7 +100,7 @@ La documentación técnica se encuentra integrada en el código.
 
 ## FAQ
 
-- **¿Cómo puedo crear un personaje?**
+- **¿Cómo puedo crear un personaje?**  
   Para crear un personaje, simplemente selecciona la opción "Crear Personaje" en el menú principal y elige entre las diferentes razas disponibles. Luego, personaliza sus atributos y habilidades según tus preferencias.
 
 - **¿Qué razas de personajes puedo elegir?**  
@@ -118,7 +130,6 @@ La documentación técnica se encuentra integrada en el código.
 - **¿Puedo modificar la apariencia de mi personaje?**  
   La apariencia de tu personaje es fija, pero puedes cambiar los atributos y habilidades durante la creación.
 
-
 - **¿Puedo cambiar las armas de mi personaje?**  
   Sí, puedes equipar a tu personaje con diferentes armas que afectan sus estadísticas de combate.
 
@@ -139,17 +150,3 @@ La documentación técnica se encuentra integrada en el código.
 
 - **¿Qué debo hacer si el juego se cierra inesperadamente?**  
   Asegúrate de tener el entorno correctamente configurado y que tu dispositivo cumpla con los requisitos del sistema. Si el problema persiste, consulta el archivo de registro de errores o contacta con el soporte técnico.
-
---
-
-## Equipo
-- **Rubén Ruiz Martín:** Analista Funcional  
-- **Victor Hugo Oliveira Petroceli:** QA  
-- **Raúl Tejada Merinero:** Analista Programador  
-- **Ramón Nieto Villegas:** Ingeniero de Desarrollo  
-- **Alonso Gutiérrez Sánchez:** Jefe de Desarrollo
-
-## Contacto
-Para dudas o sugerencias, contacta a:
-- **Alonso Gutiérrez Sánchez (Jefe de Desarrollo):** [a.gutierrez.2023@alumnos.urjc.es](mailto:a.gutierrez.2023@alumnos.urjc.es)
-
