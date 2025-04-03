@@ -1,90 +1,87 @@
 # Videojuego de Luchas Fantásticas - Fase de Codificación
 
 ## Descripción
-Este proyecto es el videojuego de luchas de criaturas fantásticas desarrollado en el marco de la asignatura *Metodología de la Programación* para el curso 2024/2025. La aplicación permite a los usuarios (administrador y jugador) gestionar personajes, desafíos y combates, integrando funcionalidades de persistencia y validación en cada combate.  
+Bienvenido al repositorio del videojuego de luchas de criaturas fantásticas, desarrollado para la asignatura *Metodología de la Programación* (curso 2024/2025). Este juego permite a los usuarios (administrador y jugador) gestionar personajes y participar en combates dinámicos basados en rondas, donde se tienen en cuenta atributos, habilidades especiales, equipamiento, y modificadores de debilidades y fortalezas. Además, el sistema registra la persistencia de combates y configuraciones para garantizar la continuidad de la experiencia de juego.
+
+[!WARNING] Asegúrate de revisar la documentación técnica y los diagramas para comprender la implementación completa de la lógica de combate y la gestión de personajes.
 
 ## Tabla de Contenidos
 - [Descripción](#descripción)
 - [Características](#características)
-- [Requisitos del Sistema](#requisitos-del-sistema)
 - [Instalación y Configuración](#instalación-y-configuración)
 - [Ejecución](#ejecución)
 - [Pruebas](#pruebas)
 - [Documentación y Diagramas](#documentación-y-diagramas)
-- [Contribución](#contribución)
 - [Equipo](#equipo)
-- [Licencia](#licencia)
+- [Contacto](#contacto)
 
 ## Características
-- **Gestión de Personajes:** Creación y modificación de personajes (Vampiros, Licántropos y Cazadores) con atributos específicos, armas, armaduras, esbirros, debilidades y fortalezas.
-- **Sistema de Desafíos:** Permite a los usuarios desafiarse entre ellos, gestionando apuestas de oro y validando combates según las reglas definidas.
-- **Combate por Rondas:** Combates basados en rondas con cálculo de potencial de ataque y defensa, integrando modificadores y efectos de habilidades especiales.
-- **Persistencia:** Registro de combates, usuarios y configuraciones para asegurar la continuidad de la aplicación entre ejecuciones.
+- **Gestión Integral de Personajes:**  
+  Permite la creación y modificación de personajes de tres tipos (Vampiros, Licántropos y Cazadores), cada uno con atributos únicos, armas, armaduras, esbirros, y habilidades especiales.  
+  - *Vampiros:* Utilizan sangre para activar sus disciplinas.  
+  - *Licántropos:* Incrementan su fuerza mediante la rabia acumulada.  
+  - *Cazadores:* Dependen de sus puntos de voluntad que decrecen en combate.
+  
+- **Sistema de Desafíos y Combates:**  
+  Los usuarios pueden desafiar a otros mediante apuestas de oro, activando combates por rondas. Cada ronda evalúa el potencial de ataque y defensa basado en:
+  - Habilidades especiales (Disciplinas, Dones y Talentos).
+  - Modificadores de equipo activo (armas y armaduras).
+  - Fortalezas y debilidades específicas de cada personaje.
+  
+- **Persistencia de Datos:**  
+  Todos los combates, junto con la información de usuarios y configuraciones, se almacenan para su consulta y análisis posterior.
 
-## Requisitos del Sistema
-- **Java JDK 21**
-- **IDE recomendado:** IntelliJ IDEA
-- **Sistema de Control de Versiones:** GitHub (todos los miembros del equipo deberán ser colaboradores del repositorio)
-- **Base de Datos:** (si aplica, según la implementación de persistencia)
-- **Otras Herramientas:**  
-  - Trello para la gestión de tareas  
-  - Teams para la comunicación interna  
-  - PlantText para la elaboración de diagramas UML  
-  - Microsoft Word para la documentación complementaria
-
-[!WARNING] Verifica la instalación y configuración de todas las herramientas antes de iniciar el desarrollo para evitar problemas futuros.
+[!IMPORTANT] Es crucial que cada combate siga las reglas establecidas: se calculan los puntos de éxito mediante lanzamientos aleatorios y se aplican modificadores según el estado de los personajes.
 
 ## Instalación y Configuración
-1. **Clonar el repositorio:**
+1. **Clona el Repositorio:**
     ```bash
     git clone https://github.com/tu-usuario/tu-repositorio.git
     ```
-2. **Acceder al directorio del proyecto:**
+2. **Accede al Directorio del Proyecto:**
     ```bash
     cd tu-repositorio
     ```
-3. **Configurar el entorno:**
-    - Asegúrate de tener Java JDK 21 instalado.
-    - Configura las variables de entorno necesarias y, en caso de usar base de datos, ajusta la configuración en el archivo `config.properties` (o el archivo que hayas definido).
+3. **Configura el Entorno:**
+    - Verifica que tienes instalado **Java JDK 21**.
+    - Configura las variables de entorno necesarias. Si utilizas una base de datos, revisa y ajusta el archivo `config.properties` o el que hayas definido.
 
-[!WARNING] Cualquier error en la configuración del entorno puede impedir la compilación y ejecución del proyecto.
+[!WARNING] Una configuración incorrecta puede impedir que el juego se compile o ejecute correctamente.
 
 ## Ejecución
-- **Compilación:**
-    ```bash
-    mvn clean install
-    ```
-- **Ejecución de la aplicación:**
+- **Ejecución de la Aplicación:**  
+  Ejecuta el método `MAIN` desde tu IDE o compila y ejecuta el JAR generado:
     ```bash
     java -jar target/nombre-del-proyecto.jar
     ```
+  
+  Al iniciar, se mostrará un menú interactivo que permitirá:
+  - Registrar y gestionar personajes.
+  - Realizar desafíos entre usuarios.
+  - Configurar el equipo (armas y armaduras) y activar habilidades especiales.
 
-[!IMPORTANT] Antes de ejecutar, asegúrate de que todos los tests unitarios se hayan completado correctamente y de que el código compile sin errores.
+[!NOTE] Sigue las instrucciones en pantalla para navegar por el juego y experimentar con sus diferentes funcionalidades.
 
 ## Pruebas
-- Se han desarrollado pruebas unitarias para verificar la funcionalidad de:
-  - Gestión de personajes y atributos.
-  - Lógica de desafíos y apuestas.
-  - Cálculo de combates y registro de resultados.
-- Para ejecutar las pruebas:
+- Se han desarrollado pruebas unitarias para asegurar el correcto funcionamiento en:
+  - Creación y gestión de personajes.
+  - Lógica de desafíos, apuestas y combates.
+  - Registro y persistencia de datos.
+  
+  Para ejecutar las pruebas:
     ```bash
     mvn test
     ```
-[!NOTE] Revisa los informes de pruebas para confirmar que todos los casos críticos se comportan según lo esperado.
+
+[!WARNING] No ignores los resultados de las pruebas, ya que ayudan a identificar posibles errores en la lógica de combate y en la gestión de datos.
 
 ## Documentación y Diagramas
-- **Documentación:**  
-  - *Documento de Codificación:* Incluye la descripción de la estructura del código, patrones de diseño y explicaciones de las decisiones técnicas.
+- **Documento de Codificación:**  
+  Incluye descripciones de la estructura del código, patrones de diseño y decisiones técnicas relevantes.
 - **Diagramas UML:**  
-  - Diagrama de clases, actividad, secuencia, estados y casos de uso se encuentran en la carpeta `/diagrams`.  
-  [!WARNING] Asegúrate de que los diagramas estén actualizados y reflejen el estado actual de la implementación.
+  Encuentra los diagramas de clases, actividades, secuencia, estados y casos de uso en la carpeta `/diagrams`.
 
-## Contribución
-- Se recomienda seguir las buenas prácticas de Git: trabajar en ramas para cada nueva funcionalidad y realizar *pull requests* para revisión.
-- Antes de realizar un *commit*, ejecuta las pruebas unitarias y valida la compilación del proyecto.
-- Utiliza comentarios claros y documenta cualquier cambio significativo en el código.
-
-[!NOTE] Si tienes dudas sobre las convenciones de codificación o el flujo de trabajo, consulta al Jefe de Desarrollo.
+[!NOTE] Consulta estos documentos para obtener una visión completa de la arquitectura del juego y para facilitar futuras mejoras o mantenimientos.
 
 ## Equipo
 - **Rubén Ruiz Martín:** Analista Funcional  
@@ -93,11 +90,6 @@ Este proyecto es el videojuego de luchas de criaturas fantásticas desarrollado 
 - **Ramón Nieto Villegas:** Ingeniero de Desarrollo  
 - **Alonso Gutiérrez Sánchez:** Jefe de Desarrollo
 
-[!IMPORTANT] Todos los integrantes deben estar al tanto de las actualizaciones y cambios, y participar activamente en las revisiones de código.
-
-## Licencia
-Este proyecto se distribuye bajo la [Licencia XYZ](./LICENSE).
-
 ## Contacto
 Para cualquier duda o sugerencia, contacta a:
-- **Alonso Gutiérrez Sánchez (Jefe de Desarrollo):** [correo@ejemplo.com](mailto:correo@ejemplo.com)
+- **Alonso Gutiérrez Sánchez (Jefe de Desarrollo):** [a.gutierrez.2023@alumnos.urjc.es](mailto:a.gutierrez.2023@alumnos.urjc.es)
