@@ -21,8 +21,6 @@ Este proyecto es el videojuego de luchas de criaturas fantásticas desarrollado 
 - **Combate por Rondas:** Combates basados en rondas con cálculo de potencial de ataque y defensa, integrando modificadores y efectos de habilidades especiales.
 - **Persistencia:** Registro de combates, usuarios y configuraciones para asegurar la continuidad de la aplicación entre ejecuciones.
 
-[!NOTE] Revisa cada uno de los requisitos detallados en el enunciado para garantizar que la implementación cubre todos los casos de uso y validaciones necesarias.
-
 ## Requisitos del Sistema
 - **Java JDK 21**
 - **IDE recomendado:** IntelliJ IDEA
