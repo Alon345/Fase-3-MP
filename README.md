@@ -3,8 +3,6 @@
 ## Descripción
 Este videojuego de luchas de criaturas fantásticas, desarrollado para la asignatura *Metodología de la Programación* (curso 2024/2025), permite a los usuarios (administradores y jugadores) gestionar sus personajes y enfrentarse en combates llenos de estrategia. La aplicación integra la creación y modificación de personajes, la gestión de desafíos y combates por rondas, y la persistencia de datos, asegurando que cada partida y cada configuración se conserven entre ejecuciones.
 
-Text that is not a quote
-
 > **WARNING:** Asegúrate de tener configurado correctamente el entorno y las dependencias para evitar problemas durante la ejecución.
 
 ## Tabla de Contenidos
@@ -40,8 +38,6 @@ Text that is not a quote
     - Verifica que tienes instalado Java JDK 21.
     - Ajusta las variables de entorno y la configuración (por ejemplo, en `config.properties`) según tus necesidades.
 
-Text that is not a quote
-
 > **WARNING:** La correcta configuración del entorno es crucial para que el proyecto compile y funcione sin errores.
 
 ## Ejecución
@@ -53,10 +49,6 @@ Se han implementado pruebas unitarias para garantizar el correcto funcionamiento
 - La gestión de personajes y sus atributos.
 - La lógica de desafíos y apuestas.
 - El sistema de combate y registro de resultados.
-
-Text that is not a quote
-
-> **NOTE:** Ejecuta las pruebas con el comando habitual en tu entorno de desarrollo para verificar la integridad del código.
 
 ## Documentación
 La documentación técnica se encuentra integrada en el código y se complementa con un breve *Documento de Codificación* que explica la estructura del sistema, los patrones de diseño aplicados y las principales decisiones técnicas.
