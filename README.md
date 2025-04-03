@@ -1,9 +1,11 @@
 # Videojuego de Luchas Fantásticas - Fase de Codificación
 
 ## Descripción
-Bienvenido al repositorio del videojuego de luchas de criaturas fantásticas, desarrollado para la asignatura *Metodología de la Programación* (curso 2024/2025). Este juego permite a los usuarios (administrador y jugador) gestionar personajes y participar en combates dinámicos basados en rondas, donde se tienen en cuenta atributos, habilidades especiales, equipamiento, y modificadores de debilidades y fortalezas. Además, el sistema registra la persistencia de combates y configuraciones para garantizar la continuidad de la experiencia de juego.
+Este videojuego de luchas de criaturas fantásticas, desarrollado para la asignatura *Metodología de la Programación* (curso 2024/2025), permite a los usuarios (administradores y jugadores) gestionar sus personajes y enfrentarse en combates llenos de estrategia. La aplicación integra la creación y modificación de personajes, la gestión de desafíos y combates por rondas, y la persistencia de datos, asegurando que cada partida y cada configuración se conserven entre ejecuciones.
 
-[!WARNING] Asegúrate de revisar la documentación técnica y los diagramas para comprender la implementación completa de la lógica de combate y la gestión de personajes.
+Text that is not a quote
+
+> **WARNING:** Asegúrate de tener configurado correctamente el entorno y las dependencias para evitar problemas durante la ejecución.
 
 ## Tabla de Contenidos
 - [Descripción](#descripción)
@@ -11,77 +13,53 @@ Bienvenido al repositorio del videojuego de luchas de criaturas fantásticas, de
 - [Instalación y Configuración](#instalación-y-configuración)
 - [Ejecución](#ejecución)
 - [Pruebas](#pruebas)
-- [Documentación y Diagramas](#documentación-y-diagramas)
+- [Documentación](#documentación)
 - [Equipo](#equipo)
 - [Contacto](#contacto)
 
 ## Características
-- **Gestión Integral de Personajes:**  
-  Permite la creación y modificación de personajes de tres tipos (Vampiros, Licántropos y Cazadores), cada uno con atributos únicos, armas, armaduras, esbirros, y habilidades especiales.  
-  - *Vampiros:* Utilizan sangre para activar sus disciplinas.  
-  - *Licántropos:* Incrementan su fuerza mediante la rabia acumulada.  
-  - *Cazadores:* Dependen de sus puntos de voluntad que decrecen en combate.
-  
-- **Sistema de Desafíos y Combates:**  
-  Los usuarios pueden desafiar a otros mediante apuestas de oro, activando combates por rondas. Cada ronda evalúa el potencial de ataque y defensa basado en:
-  - Habilidades especiales (Disciplinas, Dones y Talentos).
-  - Modificadores de equipo activo (armas y armaduras).
-  - Fortalezas y debilidades específicas de cada personaje.
-  
-- **Persistencia de Datos:**  
-  Todos los combates, junto con la información de usuarios y configuraciones, se almacenan para su consulta y análisis posterior.
-
-[!IMPORTANT] Es crucial que cada combate siga las reglas establecidas: se calculan los puntos de éxito mediante lanzamientos aleatorios y se aplican modificadores según el estado de los personajes.
+- **Gestión de Personajes:**  
+  Crea y personaliza personajes (Vampiros, Licántropos y Cazadores) con atributos, armas, armaduras, esbirros, debilidades y fortalezas.
+- **Sistema de Desafíos:**  
+  Los jugadores pueden retarse entre sí, apostando oro y configurando sus equipos antes de cada combate.
+- **Combate por Rondas:**  
+  Los enfrentamientos se desarrollan en rondas. Cada ronda calcula el potencial de ataque y defensa de los personajes, teniendo en cuenta sus habilidades especiales, el equipo activo y modificadores derivados de sus fortalezas y debilidades.
+- **Persistencia:**  
+  Toda la información (usuarios, personajes y combates) se guarda de forma persistente, lo que permite continuar la experiencia de juego sin perder datos.
 
 ## Instalación y Configuración
-1. **Clona el Repositorio:**
+1. **Clonar el repositorio:**
     ```bash
     git clone https://github.com/tu-usuario/tu-repositorio.git
     ```
-2. **Accede al Directorio del Proyecto:**
+2. **Acceder al directorio del proyecto:**
     ```bash
     cd tu-repositorio
     ```
-3. **Configura el Entorno:**
-    - Verifica que tienes instalado **Java JDK 21**.
-    - Configura las variables de entorno necesarias. Si utilizas una base de datos, revisa y ajusta el archivo `config.properties` o el que hayas definido.
+3. **Configurar el entorno:**
+    - Verifica que tienes instalado Java JDK 21.
+    - Ajusta las variables de entorno y la configuración (por ejemplo, en `config.properties`) según tus necesidades.
 
-[!WARNING] Una configuración incorrecta puede impedir que el juego se compile o ejecute correctamente.
+Text that is not a quote
+
+> **WARNING:** La correcta configuración del entorno es crucial para que el proyecto compile y funcione sin errores.
 
 ## Ejecución
-- **Ejecución de la Aplicación:**  
-  Ejecuta el método `MAIN` desde tu IDE o compila y ejecuta el JAR generado:
-    ```bash
-    java -jar target/nombre-del-proyecto.jar
-    ```
-  
-  Al iniciar, se mostrará un menú interactivo que permitirá:
-  - Registrar y gestionar personajes.
-  - Realizar desafíos entre usuarios.
-  - Configurar el equipo (armas y armaduras) y activar habilidades especiales.
-
-[!NOTE] Sigue las instrucciones en pantalla para navegar por el juego y experimentar con sus diferentes funcionalidades.
+- **Ejecución de la aplicación:**  
+  Ejecuta el método `main` de la aplicación para iniciar el videojuego. El sistema cargará la configuración y te presentará las opciones disponibles para gestionar tu personaje y desafiar a otros jugadores.
 
 ## Pruebas
-- Se han desarrollado pruebas unitarias para asegurar el correcto funcionamiento en:
-  - Creación y gestión de personajes.
-  - Lógica de desafíos, apuestas y combates.
-  - Registro y persistencia de datos.
-  
-  Para ejecutar las pruebas:
-    ```bash
-    mvn test
-    ```
+Se han implementado pruebas unitarias para garantizar el correcto funcionamiento de:
+- La gestión de personajes y sus atributos.
+- La lógica de desafíos y apuestas.
+- El sistema de combate y registro de resultados.
 
-[!WARNING] No ignores los resultados de las pruebas, ya que ayudan a identificar posibles errores en la lógica de combate y en la gestión de datos.
+Text that is not a quote
 
-## Documentación y Diagramas
-- **Documento de Codificación:**  
-  Incluye descripciones de la estructura del código, patrones de diseño y decisiones técnicas relevantes.
-- **Diagramas UML:**  
-  Encuentra los diagramas de clases, actividades, secuencia, estados y casos de uso en la carpeta `/diagrams`.
+> **NOTE:** Ejecuta las pruebas con el comando habitual en tu entorno de desarrollo para verificar la integridad del código.
 
-[!NOTE] Consulta estos documentos para obtener una visión completa de la arquitectura del juego y para facilitar futuras mejoras o mantenimientos.
+## Documentación
+La documentación técnica se encuentra integrada en el código y se complementa con un breve *Documento de Codificación* que explica la estructura del sistema, los patrones de diseño aplicados y las principales decisiones técnicas.
 
 ## Equipo
 - **Rubén Ruiz Martín:** Analista Funcional  
@@ -91,5 +69,6 @@ Bienvenido al repositorio del videojuego de luchas de criaturas fantásticas, de
 - **Alonso Gutiérrez Sánchez:** Jefe de Desarrollo
 
 ## Contacto
-Para cualquier duda o sugerencia, contacta a:
+Para dudas o sugerencias, contacta a:
 - **Alonso Gutiérrez Sánchez (Jefe de Desarrollo):** [a.gutierrez.2023@alumnos.urjc.es](mailto:a.gutierrez.2023@alumnos.urjc.es)
+
