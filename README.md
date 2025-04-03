@@ -1,8 +1,7 @@
 # Videojuego de Luchas Fantásticas - Fase de Codificación
 
 ## Descripción
-Este proyecto es el videojuego de luchas de criaturas fantásticas desarrollado en el marco de la asignatura *Metodología de la Programación* para el curso 2023/2024. La aplicación permite a los usuarios (administrador y jugador) gestionar personajes, desafíos y combates, integrando funcionalidades de persistencia y validación en cada combate.  
-[!WARNING] Es fundamental que la aplicación cumpla todos los requisitos especificados en el enunciado, independientemente de la interfaz de usuario (sea consola o GUI).
+Este proyecto es el videojuego de luchas de criaturas fantásticas desarrollado en el marco de la asignatura *Metodología de la Programación* para el curso 2024/2025. La aplicación permite a los usuarios (administrador y jugador) gestionar personajes, desafíos y combates, integrando funcionalidades de persistencia y validación en cada combate.  
 
 ## Tabla de Contenidos
 - [Descripción](#descripción)
