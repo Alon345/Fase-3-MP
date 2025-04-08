@@ -150,3 +150,5 @@ La documentación técnica se encuentra integrada en el código.
 
 - **¿Qué debo hacer si el juego se cierra inesperadamente?**  
   Asegúrate de tener el entorno correctamente configurado y que tu dispositivo cumpla con los requisitos del sistema. Si el problema persiste, consulta el archivo de registro de errores o contacta con el soporte técnico.
+
+  
