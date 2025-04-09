@@ -107,7 +107,7 @@ public class mainSystem {
                     client.setRegister(register1);
                     client.setCharacter(null);
                     UserFileWriter userFileWriter = new UserFileWriter();
-                    userFileWriter.registerUser(client);
+                    userFileWriter.userRegister(client);
 
                 }
             }

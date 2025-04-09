@@ -4,10 +4,402 @@ import Entities.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
-import System.mainSystem;
+import Entities.Character;
 
 public class UserFileWriter {
-    public void registerUser(Client client) {
+    /**
+     * A continuación se definen las operaciones de escrituras
+     **/
+    public void userRegister(Client client) {
+        try {
+            String ruta = "./Fase-3-MP/src/Files/UserRegister.txt"; //ruta relativa
+            File file = new File(ruta);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileWriter fw = new FileWriter(file.getAbsoluteFile(), true); //opción append habilitada!
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("--------- USUARIO ---------");
+            bw.newLine();
+            bw.write("NOMBRE  ");
+            bw.write(client.getName());
+            bw.newLine();
+            bw.write("NICK ");
+            bw.write(client.getNick());
+            bw.newLine();
+            bw.write("PASSWORD  ");
+            bw.write(client.getPassword());
+            bw.newLine();
+            bw.write("REGISTRO  ");
+            bw.write(client.getRegister());
+            bw.newLine();
+            bw.write("TIPO DE PERSONAJE  ");
+            bw.newLine();
+            bw.write("--------- FIN USUARIO ---------");
+            bw.newLine();
+            bw.close();
+
+        } catch (Exception e) {
+            mainSystem system = new mainSystem();
+            system.selector();
+            e.printStackTrace();
+        }
     }
-}
+
+    public void rewriteUserFile(ArrayList<Client> clientArrayList) {
+        try {
+            String ruta = "./Fase-3-MP/src/Files/UserRegister.txt"; //ruta relativa
+            File file = new File(ruta);
+            FileWriter fw = new FileWriter(file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            //recorre la lista de clientes
+            for (int i = 0; i < clientArrayList.size(); i++) {
+
+                bw.write("--------- USUARIO ---------");
+                bw.newLine();
+                bw.write("NOMBRE: ");
+                bw.write(clientArrayList.get(i).getName());
+                bw.newLine();
+                bw.write("NICK ");
+                bw.write(clientArrayList.get(i).getNick());
+                bw.newLine();
+                bw.write("PASSWORD ");
+                bw.write(clientArrayList.get(i).getPassword());
+                bw.newLine();
+                bw.write("REGISTRO ");
+                bw.write(clientArrayList.get(i).getRegister());
+                bw.newLine();
+
+                if (clientArrayList.get(i).getCharacter() == null) {
+                    bw.write("TIPO PERSONAJE  ");
+                    bw.newLine();
+                } else {
+                    String tipoPersonaje = clientArrayList.get(i).getCharacter().getType();
+                    switch (tipoPersonaje) {
+                       case "VAMPIRO" -> vampireWriter(clientArrayList, i, bw);
+                       case "LICANTROPO" -> licantropWriter(clientArrayList, i, bw);
+                        //case "CAZADOR" -> hunterWriter(clientArrayList, i, bw);
+                    }
+                }
+            }
+            bw.close();
+        } catch (Exception e) {
+            mainSystem system = new mainSystem();
+            system.selector();
+            e.printStackTrace();
+        }
+    }
+
+    private void vampireWriter(ArrayList<Client> clientArrayList, int i, BufferedWriter bw) throws IOException {
+
+        Vampire vampire = (Vampire) clientArrayList.get(i).getCharacter();
+        Discipline discipline = (Discipline) vampire.getAbility();
+        //TIPO PERSONAJE
+        bw.write("------ TIPO DE PERSONAJE ------");
+        bw.write(clientArrayList.get(i).getCharacter().getType());
+        bw.newLine();
+        //NOMBRE PERSONAJE
+        bw.write("NOMBRE DE PERSONAJE ");
+        bw.write(clientArrayList.get(i).getCharacter().getName());
+        bw.newLine();
+        //PUNTOS DE SANGRE
+        bw.write("SANGRE ");
+        //bw.write("0");
+        bw.newLine();
+        //NOMBRE DE HABILIDAD
+        bw.write("NOMBRE DE LA HABILIDAD ");
+        bw.write(discipline.getName());
+        bw.newLine();
+        //VALOR ATAQUE
+        bw.write("VALOR DE ATAQUE ");
+        bw.write(String.valueOf(discipline.getAttack()));
+        bw.newLine();
+        //VALOR DEFENSA
+        bw.write("VALOR DE DEFENSA ");
+        bw.write(String.valueOf(discipline.getDefense()));
+        bw.newLine();
+        //COSTE HABILIDAD
+        bw.write("COSTE DE LA HABILIDAD ");
+        bw.write(String.valueOf(discipline.getCost()));
+        bw.newLine();
+        //ARMAS
+        bw.write("NUMERO DE ARMAS ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getWeapons().size()));
+        bw.newLine();
+
+
+        for (int weaponVar = 0; weaponVar < (clientArrayList.get(i).getCharacter().getWeapons().size()); weaponVar++) {
+            Weapon weapon = vampire.getWeapons().get(weaponVar);
+            bw.write("NOMBRE DEL ARMA ");
+            bw.write(weapon.getName());
+            bw.newLine();
+            bw.write("ATAQUE DEL ARMA ");
+            bw.write(String.valueOf(weapon.getAttackModifier()));
+            bw.newLine();
+            bw.write("DEFENSA DEL ARMA ");
+            bw.write(String.valueOf(weapon.getDefenseModifier()));
+            bw.newLine();
+            bw.write("EMPUÑADURA ");
+            if (weapon.isSingleHand()) {
+                bw.write("true"); //True 1 mano
+            } else {
+                bw.write("false"); //False 2 manos
+            }
+            bw.newLine();
+        }
+        bw.newLine();
+        //NUMERO DE ARMAS ACTIVAS
+        bw.write("NUMERO DE ARMAS ACTIVAS ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getActiveWeapons().size()));
+        bw.newLine();
+        for (int activeWeaponVar = 0; activeWeaponVar < (clientArrayList.get(i).getCharacter().getActiveWeapons().size()); activeWeaponVar++) {
+            Weapon activeWeapon = vampire.getActiveWeapons().get(activeWeaponVar);
+            bw.write("NOMBRE DE LAS ARMAS ACTIVAS ");
+            bw.write(activeWeapon.getName());
+            bw.newLine();
+            bw.write("ATAQUE DE LAS ARMA ACTIVAS ");
+            bw.write(String.valueOf(activeWeapon.getAttackModifier()));
+            bw.newLine();
+            bw.write("DEFENSA DEL ARMA ACTIVAS ");
+            bw.write(String.valueOf(activeWeapon.getDefenseModifier()));
+            bw.newLine();
+            bw.write("EMPUÑADURA ");
+            if (activeWeapon.isSingleHand()) {
+                bw.write("true"); //True 1 mano
+            } else {
+                bw.write("false"); //False 2 manos
+            }
+            bw.newLine();
+        }
+        bw.newLine();
+        //ARMADURAS
+        bw.write("NUMERO DE ARMADURAS  ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getArmors().size()));
+        bw.newLine();
+        for (int j = 0; j < (clientArrayList.get(i).getCharacter().getArmors().size()); j++) {
+            Armor armours = (Armor) vampire.getArmors().get(j);
+            bw.write("NOMBRE DE LA ARMADURA ");
+            bw.write(armours.getName());
+            bw.newLine();
+            bw.write("DEFENSA DE LA ARMADURA ");
+            bw.write(String.valueOf(armours.getDefenseModifier()));
+            bw.newLine();
+            bw.write("ATAQUE DE LA ARMADURA ");
+            bw.write(String.valueOf(armours.getAttackModifier()));
+            bw.newLine();
+        }
+        bw.newLine();
+        bw.write("NOMBRE DE LA ARMADURA ACTIVA ");
+        bw.write(vampire.getActiveArmor().getName());
+        bw.newLine();
+        bw.write("DEFENSA DE LA ARMADURA ACTIVA ");
+        bw.write(String.valueOf(vampire.getActiveArmor().getDefenseModifier()));
+        bw.newLine();
+        bw.write("ATAQUE DE LA ARMADURA ACTIVA ");
+        bw.write(String.valueOf(vampire.getActiveArmor().getAttackModifier()));
+        bw.newLine();
+        bw.newLine();
+        bw.write("ORO DISPONIBLE ");
+        bw.write(String.valueOf(vampire.getGold()));
+        bw.newLine();
+        bw.write("EDAD DEL VAMPIRO ");
+        bw.write(String.valueOf(vampire.getAge()));
+        bw.newLine();
+        bw.write("HP ");
+        bw.write(String.valueOf(vampire.getHp()));
+        bw.newLine();
+        bw.write("PODER ");
+        bw.write(String.valueOf(vampire.getPower()));
+        bw.newLine();
+        bw.write("NUMERO DE FORTALEZAS ");
+        bw.write(String.valueOf(vampire.getStrengths().size()));
+        bw.newLine();
+
+
+        for (int j = 0; j < (clientArrayList.get(i).getCharacter().getStrengths().size()); j++) {
+            Strength strength = clientArrayList.get(i).getCharacter().getStrengths().get(j);
+            bw.write("  -NOMBRE DE LA FORTALEZA ");
+            bw.write(strength.getName());
+            bw.newLine();
+            bw.write("  -VALOR DE LA FORTALEZA ");
+            bw.write(String.valueOf(strength.getValue()));
+            bw.newLine();
+        }
+
+
+        bw.write("NUMERO DE DEBILIDADES ");
+        bw.write(String.valueOf(vampire.getWeaknesses().size()));
+        bw.newLine();
+
+
+        for (int j = 0; j < (clientArrayList.get(i).getCharacter().getWeaknesses().size()); j++) {
+            Weakness weakness = clientArrayList.get(i).getCharacter().getWeaknesses().get(j);
+            bw.write("NOMBRE DE LA DEBILIDAD ");
+            bw.write(weakness.getName());
+            bw.newLine();
+            bw.write("VALOR DE LA DEBILIDAD ");
+            bw.write(String.valueOf(weakness.getValue()));
+            bw.newLine();
+        }
+        //ESBIRROS
+        bw.write("NUMERO DE ESBIRROS  ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getMinions().size()));
+        bw.newLine();
+        //ESBIRROS
+       // minionsWriter(clientArrayList, i, vampire, bw); Faltaría un mimions Writer
+        bw.write("------ FIN USUARIO ------");
+        bw.newLine();
+    }
+
+    private void licantropWriter(ArrayList<Client> clientArrayList, int i, BufferedWriter bw) throws IOException {
+
+
+        Werewolf licantrop= (Werewolf) clientArrayList.get(i).getCharacter();
+        Don don = (Don) licantrop.getAbility();
+        //TIPO PERSONAJE
+        bw.write("------ TIPO DE PERSONAJE ------");
+        bw.write(clientArrayList.get(i).getCharacter().getType());
+        bw.newLine();
+        //NOMBRE PERSONAJE
+        bw.write("NOMBRE DEL PERSONAJE ");
+        bw.write(clientArrayList.get(i).getCharacter().getName());
+        bw.newLine();
+        //NOMBRE HABILIDAD
+        bw.write("NOMBRE DE LA HABILIDAD ");
+        bw.write(clientArrayList.get(i).getCharacter().getAbility().getName());
+        bw.newLine();
+        //PUNTOS DE RABIA
+        bw.write("RABIA ");
+        //bw.write("0");
+        bw.newLine();
+        //ARMAS
+        bw.write("NUMERO DE ARMAS ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getWeapons().size()));
+        bw.newLine();
+
+
+        for (int weaponVar = 0; weaponVar < (clientArrayList.get(i).getCharacter().getWeapons().size()); weaponVar++) {
+            Weapon weapon = licantrop.getWeapons().get(i);
+            bw.write("NOMBRE DEL ARMA ");
+            bw.write(weapon.getName());
+            bw.newLine();
+            bw.write("ATAQUE DEL ARMA ");
+            bw.write(String.valueOf(weapon.getAttackModifier()));
+            bw.newLine();
+            bw.write("DEFENSA DEL ARMA ");
+            bw.write(String.valueOf(weapon.getDefenseModifier()));
+            bw.newLine();
+            bw.write("EMPUÑADURA ");
+            if (weapon.isSingleHand()) {
+                bw.write("true"); //True una mano
+            } else {
+                bw.write("false"); //False dos manos
+            }
+            bw.newLine();
+        }
+        bw.newLine();
+        //NUMERO DE ARMAS ACTIVAS
+        bw.write("NUMERO DE ARMAS ACTIVAS ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getActiveWeapons().size()));
+        bw.newLine();
+
+        for (int activeWeaponVar = 0; activeWeaponVar < (clientArrayList.get(i).getCharacter().getActiveWeapons().size()); activeWeaponVar++) {
+            Weapon activeWeapon = licantrop.getActiveWeapons().get(activeWeaponVar);
+            bw.write("NOMBRE DE LAS ARMAS ACTIVAS ");
+            bw.write(activeWeapon.getName());
+            bw.newLine();
+            bw.write("ATAQUE DE LAS ARMA ACTIVAS ");
+            bw.write(String.valueOf(activeWeapon.getAttackModifier()));
+            bw.newLine();
+            bw.write("DEFENSA DE LAS ARMAS ACTIVAS ");
+            bw.write(String.valueOf(activeWeapon.getDefenseModifier()));
+            bw.newLine();
+            bw.write("EMPUÑADURA ");
+            if (activeWeapon.isSingleHand()) {
+                bw.write("true");//True una mano
+            } else {
+                bw.write("false");//False dos manos
+            }
+            bw.newLine();
+        }
+        bw.newLine();
+        //ARMADURAS
+        bw.write("NUMERO DE ARMADURAS  ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getWeapons().size()));
+        bw.newLine();
+        for (int j = 0; j < (clientArrayList.get(i).getCharacter().getArmors().size()); j++) {
+            Armor armours = (Armor) licantrop.getArmors().get(j);
+            bw.write("NOMBRE DE LA ARMADURA  ");
+            bw.write(armours.getName());
+            bw.newLine();
+            bw.write("DEFENSA DE LA ARMADURA  ");
+            bw.write(String.valueOf(armours.getDefenseModifier()));
+            bw.newLine();
+            bw.write("ATAQUE DE LA ARMADURA  ");
+            bw.write(String.valueOf(armours.getAttackModifier()));
+            bw.newLine();
+        }
+        bw.newLine();
+        //ARMADURA ACTIVA / EQUIPADA
+        bw.write("NOMBRE DE LA RMADURA ACTIVA ");
+        bw.write(clientArrayList.get(i).getCharacter().getActiveArmor().getName());
+        bw.newLine();
+        //DEFENSA ARMADURA ACTIVA / EQUIPADA
+        bw.write("DEFENSA DE LA ARMADURA ACTIVA ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getActiveArmor().getDefenseModifier()));
+        bw.newLine();
+        //ATAQUE ARMADURA ACTIVA / EQUIPADA
+        bw.write("ATAQUE DE LA ARMADURA ACTIVA ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getActiveArmor().getAttackModifier()));
+        bw.newLine();
+        //CANTIDAD ORO
+        bw.write("ORO ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getGold()));
+        bw.newLine();
+        //CANTIDAD HP
+        bw.write("HP ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getHp()));
+        bw.newLine();
+        //PODER
+        bw.write("PODER ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getPower()));
+        bw.newLine();
+        //DEBLIDADES
+        bw.write("NUMERO DE DEBILIDADES ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getWeaknesses().size()));
+        bw.newLine();
+        for (int j = 0; j < (clientArrayList.get(i).getCharacter().getArmors().size()); j++) {
+            Weakness weakness = (Weakness) licantrop.getWeaknesses().get(j);
+            bw.write("NOMBRE DE LA DEBILIADAD ");
+            bw.write(weakness.getName());
+            bw.newLine();
+            bw.write("VALOR DE LA DEBILIADAD ");
+            bw.write(String.valueOf(weakness.getValue()));
+            bw.newLine();
+        }
+        bw.newLine();
+        //FORTALEZAS
+        bw.write("NUMERO DE FORTALEZAS ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getStrengths().size()));
+        bw.newLine();
+        for (int j = 0; j < (clientArrayList.get(i).getCharacter().getArmors().size()); j++) {
+            Strength strength = (Strength) licantrop.getStrengths().get(j);
+            bw.write("NOMBRE DE LA FORTALEZA ");
+            bw.write(strength.getName());
+            bw.newLine();
+            bw.write("VALOR DE LA FORTALEZA");
+            bw.write(String.valueOf(strength.getValue()));
+            bw.newLine();
+        }
+        bw.newLine();
+        //ESBIRROS
+        bw.write("NUMERO DE ESBIRROS ");
+        bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getMinions().size()));
+        bw.newLine();
+       // minionsWriter(clientArrayList, i, licantrop, bw); Faltaría un mimions Writer
+        bw.write("------- FIN USUARIO ------");
+        bw.newLine();
+    }
+}//FIN

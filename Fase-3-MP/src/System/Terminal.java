@@ -1,6 +1,7 @@
 package System;
 
 import Entities.Client;
+import Entities.Combat;
 
 import java.util.ArrayList;
 
@@ -37,8 +38,8 @@ public class Terminal {
         System.out.println("Registro de nuevo usuario");
         System.out.println("--------------------------------");
         System.out.println("¿En qué modo se desea registrar?");
-        System.out.println("  1 Modo cliente");
-        System.out.println("  2 Modo operador");
+        System.out.println("  1 Modo Jugador");
+        System.out.println("  2 Modo Administrador");
         System.out.println("  3 Salir");
         System.out.println("--------------------------------");
     }
@@ -69,7 +70,7 @@ public class Terminal {
         System.out.println("Contraseña incorrecta, pruebe de nuevo");
     }
     public void logout() {
-        System.out.println("Cerrando sesion...");
+        System.out.println("Cerrando sesion... Un momento");
     }
 
     /**Mensajes de los personajes y lo relacionado a ellos**/
@@ -97,7 +98,7 @@ public class Terminal {
 
     public void wellcomeChallenge() {
         System.out.println("Bienvenido al menu de desafios");
-        System.out.println(" Escoge a un rival: ");
+        System.out.println(" Escoge a un rival ");
     }
     public void notAvaliableRival() {System.out.println("No hay rivales disponibles en este momento!");}
     public void showAvaliableRivals(ArrayList<Client> clientArrayList, Client client) {
@@ -114,12 +115,65 @@ public class Terminal {
         System.out.println("Elige un numero valido");
     }
     public void askForGoldBet() {
-        System.out.println("Introduce la cantidad de oro que deseas apostar:");
+        System.out.println("Introduce la cantidad de oro que deseas apostar ");
     }
-    public void challengeCreated(){System.out.println("Desafío creado!");}
+    public void challengeCreated(){System.out.println("Desafío creado y enviado al rival!");}
+
+    /**Mensajes de los esbirros**/
+    public void askMinionType() {
+        System.out.println("Selecciona tu tipo de esbirro:");
+        System.out.println("------------------------------");
+        System.out.println("1 Humano");
+        System.out.println("2 Ghoul");
+        System.out.println("3 Demonio");
+        System.out.println("------------------------------");
+    }
+    public void askMinionName() {
+        System.out.println("Introduce el nombre del esbirro: ");
+    }
+    public void askForHp() {
+        System.out.println("Introduce la cantidad de vida:");
+    }
+    public void askForMinionsNum() {
+        System.out.println("Introduce el numero de esbirros que deseas:");
+    }
 
 
+    /**Mensajes de los Humanos**/
+    public void errorHuman() {
+        System.out.println("Como vampiro, los humanos no pueden ser tus esbirros. Elige otro tipo de criatura.");
+    }
+    public void askForLoyalty() {
+        System.out.println("Introduce la lealtad de tu humano:");
+        System.out.println("----------------------------------");
+        System.out.println("1 Alta");
+        System.out.println("2 Media");
+        System.out.println("3 Baja");
+        System.out.println("---------------------------------");
+    }
+
+    /**Mensajes de los Demonios**/
+    public void askForPact() {
+        System.out.println("Introduce el pacto del demonio:");
+    }
 
 
+    /**Mensajes de las RONDAS**/
+    public void showRounds(Combat combat) {
+        for (int numOfRound = 0; numOfRound < combat.getRounds().size(); numOfRound++) {
+            System.out.println("Ronda " + (numOfRound+1) + " :");
+            System.out.println("Vida de " + combat.getChallenger().getCharacter().getName() + " al final de la ronda: " + combat.getRounds().get(numOfRound).getHpChallengerEnd());
+            System.out.println("Vida de " + combat.getRival().getCharacter().getName() + " al final de la ronda: " + combat.getRounds().get(numOfRound).getHpRivalEnd());
+        }
+        System.out.println("FIN DEL COMBATE");
+        if (combat.getWinner() != null) {
+            System.out.println("Vencedor " + combat.getWinner().getNick());
+        } else {
+            System.out.println("!Ha habido un empate!");
+        }
+    }
+    public void showRound(int numOfRound) {
+        System.out.println("Ronda número " + numOfRound + ":");
+    }
 
 } //FIN

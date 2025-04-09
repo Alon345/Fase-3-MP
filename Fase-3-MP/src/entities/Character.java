@@ -3,6 +3,7 @@ package Entities;
 import java.util.ArrayList;
 
 public class Character {
+    /**A continuación se definen los atributos**/
     private String name;
     private Ability ability;
     private ArrayList<Weapon> weapons;
@@ -13,9 +14,13 @@ public class Character {
     private ArrayList<Strength> strengths;
     private int gold;
     private int health;
+    private int hp;
     private int power;
     private String type;
+    private ArrayList<MinionsComposit> minionsComposit;
 
+
+    /**A continuación se definen los setters y getters**/
     public Character() {
         this.weapons = new ArrayList<>();
         this.activeWeapons = new ArrayList<>();
@@ -27,7 +32,6 @@ public class Character {
     public String getName() {
         return this.name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -35,7 +39,6 @@ public class Character {
     public Ability getAbility() {
         return this.ability;
     }
-
     public void setAbility(Ability ability) {
         this.ability = ability;
     }
@@ -43,7 +46,6 @@ public class Character {
     public ArrayList<Weapon> getWeapons() {
         return this.weapons;
     }
-
     public void setWeapons(ArrayList<Weapon> weapons) {
         this.weapons = weapons;
     }
@@ -51,7 +53,6 @@ public class Character {
     public ArrayList<Weapon> getActiveWeapons() {
         return this.activeWeapons;
     }
-
     public void setActiveWeapons(ArrayList<Weapon> activeWeapons) {
         this.activeWeapons = activeWeapons;
     }
@@ -59,7 +60,6 @@ public class Character {
     public ArrayList<Armor> getArmors() {
         return this.armors;
     }
-
     public void setArmors(ArrayList<Armor> armors) {
         this.armors = armors;
     }
@@ -67,7 +67,6 @@ public class Character {
     public Armor getActiveArmor() {
         return this.activeArmor;
     }
-
     public void setActiveArmor(Armor activeArmor) {
         this.activeArmor = activeArmor;
     }
@@ -75,7 +74,6 @@ public class Character {
     public ArrayList<Weakness> getWeaknesses() {
         return this.weaknesses;
     }
-
     public void setWeaknesses(ArrayList<Weakness> weaknesses) {
         this.weaknesses = weaknesses;
     }
@@ -83,7 +81,6 @@ public class Character {
     public ArrayList<Strength> getStrengths() {
         return this.strengths;
     }
-
     public void setStrengths(ArrayList<Strength> strengths) {
         this.strengths = strengths;
     }
@@ -91,15 +88,20 @@ public class Character {
     public int getGold() {
         return this.gold;
     }
-
     public void setGold(int gold) {
         this.gold = gold;
+    }
+
+    public ArrayList<MinionsComposit> getMinions() {
+        return minionsComposit;
+    }
+    public void setMinions(ArrayList<MinionsComposit> minionsComposit) {
+        this.minionsComposit = minionsComposit;
     }
 
     public int getHealth() {
         return this.health;
     }
-
     public void setHealth(int health) {
         this.health = health;
     }
@@ -107,7 +109,6 @@ public class Character {
     public int getPower() {
         return this.power;
     }
-
     public void setPower(int power) {
         this.power = power;
     }
@@ -115,9 +116,13 @@ public class Character {
     public String getType() {
         return this.type;
     }
-
     public void setType(String type) {
         this.type = type;
+    }
+
+    public int getHp() {return hp;}
+    public void setHp(int hp) {
+        this.hp = hp;
     }
 }
 

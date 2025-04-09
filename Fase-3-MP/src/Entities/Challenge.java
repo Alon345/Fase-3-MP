@@ -1,4 +1,4 @@
-package entities;
+package Entities;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -80,7 +80,7 @@ public class Challenge {
             setDate(todaysDate);
             terminal.challengeCreated();
             UserFileWriter userFileWriter = new UserFileWriter()   ;
-            //userFileWriter.rewriteUserFile(clientsLits);
+            userFileWriter.rewriteUserFile(clientsLits);
             NotificationManager NotificationManager = new NotificationManager();
             NotificationManager.notifyChallenge(this);
 
