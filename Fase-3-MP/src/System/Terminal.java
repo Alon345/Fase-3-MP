@@ -2,17 +2,15 @@ package System;
 
 import Entities.Client;
 import Entities.Combat;
-
 import java.util.ArrayList;
 
 public class Terminal {
     public Terminal(){
     }
     /**Mensajes iniciales**/
-
+    public void wellcome(){System.out.println("Bienvenido a Shadow Clash!");}
     public void showStart() {
         System.out.println("---------------------------------------");
-        System.out.println("Bienvenido a Shadow Clash!");
         System.out.println("¿Que deseas hacer?");
         System.out.println("  1 Registrarse");
         System.out.println("  2 Iniciar sesión (modo jugador)"); //jugador = cliente
@@ -57,15 +55,14 @@ public class Terminal {
     public void askNick() {
         System.out.println("Introduce tu nick de usuario");
     }
-    public void nickExists() {
-        System.out.println("El nick introducido ya existe");
-    }
+    public void nickExists() {System.out.println("El nick introducido ya existe");}
     public void askPassword() {
         System.out.println("Introduce la contraseña de tu cuenta");
     }
-    public void confirmPassword() {
-        System.out.println("Confirme la contraseña introducida");
-    }
+    public void confirmPassword() {System.out.println("Por favor, confirme la contraseña introducida");}
+    public void confirmNewUser(String username){
+        System.out.println("---------------------------------------");
+        System.out.println("Bienvenido al sistema, "+ username + ",\ninicia sesión con tus credenciales para acceder");}
     public void errorPassword() {
         System.out.println("Contraseña incorrecta, pruebe de nuevo");
     }
@@ -157,6 +154,8 @@ public class Terminal {
         System.out.println("Introduce el pacto del demonio:");
     }
 
+    /**Mensajes de los GHOULS**/
+    public void askForDependency() {System.out.println("Que dependencia deseas? ");}
 
     /**Mensajes de las RONDAS**/
     public void showRounds(Combat combat) {

@@ -18,7 +18,7 @@ public class Demon extends MinionsComposit{
     public ArrayList<MinionsComposit> getMinionsComposits() {
         return minionsComposits;
     }
-    public void setEsbirrosComposites(ArrayList<MinionsComposit> minionsComposits) {
+    public void setMinionsComposites(ArrayList<MinionsComposit> minionsComposits) {
         this.minionsComposits = minionsComposits;
     }
 }

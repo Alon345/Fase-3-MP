@@ -1,7 +1,7 @@
 package System;
 
 import Entities.Client;
-import Entities.Operator;
+import Entities.Administrator;
 
 import java.util.Scanner;
 
@@ -64,7 +64,7 @@ public class Menu {
     public void selectFactory(Client client) {
 
     }
-    public void operatorSelector(Operator operator, mainSystem system) {
+    public void operatorSelector(Administrator operator, mainSystem system) {
 
     }
 }

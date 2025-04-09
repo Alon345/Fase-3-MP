@@ -5,7 +5,7 @@ import Entities.Client;
 import java.util.ArrayList;
 import java.io.Console;
 import java.util.Scanner;
-import Entities.Operator;
+import Entities.Administrator;
 import Entities.Combat;
 
 public class mainSystem {
@@ -58,7 +58,7 @@ public class mainSystem {
             }
             case 3: {
                 // LOGIN AS ADMIN
-                Operator operator = new Operator();
+                Administrator operator = new Administrator();
                 operator = loginOperator(operator);
                 if (operator != null) {
                     Menu menu = new Menu();
@@ -74,10 +74,10 @@ public class mainSystem {
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> clientList = userFileReader.readUserFile();
         switch (option) {
-            case 1: {
+            case 1: { //opcion de modo jugador
                 Client client = new Client();
                 terminal.askNameUser();
-                String name = sc.next();
+                String name = sc.nextLine();
                 client.setName(name);
                 terminal.askNick();
                 String nick = sc.nextLine();
@@ -94,33 +94,33 @@ public class mainSystem {
                 if (!found) {
                     client.setNick(nick);
                     terminal.askPassword();
-                    String password = sc.nextLine();
+                    String password = sc.next();
+                    sc.nextLine(); // Limpiar el salto de línea del buffer
                     terminal.confirmPassword();
                     String confirm = sc.nextLine();
-                    //comprobamos la contraseña;
-                    if (!password.equals(confirm)) {
+                    if (!password.equals(confirm)) { //comprobamos la contraseña
                         terminal.error();
                         break;
                     }
                     client.setPassword(password);
+                    terminal.confirmNewUser(name);
                     String register1 = client.generateRegisterNumber();
                     client.setRegister(register1);
                     client.setCharacter(null);
                     UserFileWriter userFileWriter = new UserFileWriter();
                     userFileWriter.userRegister(client);
-
                 }
             }
             case 2: {
-                Operator operator = new Operator();
-                OperatorFileReader operatorFileReader = new OperatorFileReader();
-                ArrayList<Operator> list = operatorFileReader.readOperatorFile();
+                Administrator operator = new Administrator();
+                AdministratorFileReader operatorFileReader = new AdministratorFileReader();
+                ArrayList<Administrator> list = operatorFileReader.readOperatorFile();
                 terminal.askNick();
                 String name = sc.nextLine();
                 operator.setName(name);
                 terminal.askNick();
                 String nick = sc.nextLine();
-                for (Operator value : list) {
+                for (Administrator value : list) {
                     if ((value.getNick().equals(nick))) {
                         terminal.nickExists();
                         break;
@@ -130,14 +130,14 @@ public class mainSystem {
                 terminal.askPassword();
                 String password = sc.nextLine();
                 terminal.confirmPassword();
-                String confirm = sc.nextLine();
-                // Verificamos que la contraseña esta bien
-                if (!password.equals(confirm)) {
+                String confirmPassword = sc.next(); //volvemos a leer la contraseña
+                if (!password.equals(confirmPassword)) { // Verificamos que la contraseña esta bien
+                    //si password != confirmPassword
                     terminal.error();
                     break;
                 }
                 operator.setPassword(password);
-                OperatorFileWriter operatorFileWriter = new OperatorFileWriter();
+                AdministratorFileWriter operatorFileWriter = new AdministratorFileWriter();
                 operatorFileWriter.registerOperator(operator);
             }
             case 3: {
@@ -145,6 +145,7 @@ public class mainSystem {
             default: terminal.error();
         }
     }
+
     public Client loginClient(Client client) {
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
@@ -189,11 +190,11 @@ public class mainSystem {
         client = list.get(aux);
         return client;
     }
-    public Operator loginOperator(Operator operator) {
+    public Administrator loginOperator(Administrator operator) {
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
-        OperatorFileReader operatorFileReader = new OperatorFileReader();
-        ArrayList<Operator> list = operatorFileReader.readOperatorFile();
+        AdministratorFileReader operatorFileReader = new AdministratorFileReader();
+        ArrayList<Administrator> list = operatorFileReader.readOperatorFile();
         terminal.askNick();
         String nick = sc.nextLine();
         boolean found = false;

@@ -1,10 +1,13 @@
-import System.Manager;
+import System.mainSystem;
+import System.Terminal;
 
 public class Main {
     public static void main(String[] args) {
-        Manager manager = new Manager();
+        mainSystem system = new mainSystem();
+        Terminal terminal = new Terminal();
+        terminal.wellcome();
         while (true) {
-            manager.start();
+            system.selector();
         }
     }
 }
