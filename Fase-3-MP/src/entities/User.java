@@ -1,11 +1,12 @@
 package Entities;
 
 public class User {
-
+    /**A continuación se definen los atributos**/
     private String name;
     private String nick;
     private String password;
 
+    /**A continuación se definen los Getters y Setters**/
     public String getName() {
         return name;
     }
