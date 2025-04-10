@@ -5,6 +5,7 @@ import java.util.Date;
 import System.Terminal;
 
 public class Combat {
+
     /**A continuación se definen los atributos**/
     private Client challenger;
     private Client rival;
@@ -23,14 +24,14 @@ public class Combat {
     public Client getChallenger() {
         return challenger;
     }
-    public void setDesafiante(Client challenger) {
+    public void setChallenger(Client challenger) {
         this.challenger = challenger;
     }
 
     public Client getRival() {
         return rival;
     }
-    public void setContrincante(Client rival) {
+    public void setRival(Client rival) {
         this.rival = rival;
     }
 
@@ -98,8 +99,8 @@ public class Combat {
     /**A continuación se definen las Operaciones**/
 
     public Combat initializeCombat(Client challenger, Client rival, int gold, ArrayList<Modifier> modifiers, String register) {
-        setDesafiante(challenger);
-        setContrincante(challenger);
+        setChallenger(challenger);
+        setRival(rival);
         Date todaysDate = new Date();
         setDate(todaysDate);
         setGold(gold);
@@ -123,19 +124,19 @@ public class Combat {
         while (!endOfTheCombat) {
             Round round = new Round();
             terminal.showRound(numOfRound);
-            //endOfTheCombat = round.startRound(hpChallenger, hpRival, combat.getChallenger(), combat.getRival(), combat.getModifiers());
+            endOfTheCombat = round.startRound(hpChallenger, hpRival, combat.getChallenger(), combat.getRival(), combat.getModifiers());
             hpChallenger = round.getHpChallengerEnd();
             hpRival = round.getHpRivalEnd();
             rounds.add(round);
             numOfRound++;
         }
         combat.setRounds(rounds);
-        if (rounds.get(rounds.size() - 1).getHpChallengerEnd() > 0) {
+        if (rounds.getLast().getHpChallengerEnd() > 0) {
             combat.setWinner(combat.getChallenger());
-            combat.setChallengerMinion(rounds.get(rounds.size() - 1).getHpChallengerEnd() > combat.getChallenger().getCharacter().getHp());
-        } else if (rounds.get(rounds.size() - 1).getHpRivalEnd() > 0) {
+            combat.setChallengerMinion(rounds.getLast().getHpChallengerEnd() > combat.getChallenger().getCharacter().getHp());
+        } else if (rounds.getLast().getHpRivalEnd() > 0) {
             combat.setWinner(combat.getRival());
-            if (rounds.get(rounds.size() - 1).getHpRivalEnd() > combat.getRival().getCharacter().getHp()) {
+            if (rounds.getLast().getHpRivalEnd() > combat.getRival().getCharacter().getHp()) {
                 combat.setChallengerMinion(true);
             } else {
                 combat.setChallengerMinion(false);

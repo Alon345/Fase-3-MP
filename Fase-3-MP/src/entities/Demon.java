@@ -3,6 +3,7 @@ package Entities;
 import java.util.ArrayList;
 
 public class Demon extends MinionsComposit{
+
     /**A continuación se definen los atributos**/
     private String description;
     private ArrayList<MinionsComposit> minionsComposits;

@@ -9,33 +9,35 @@ import java.util.ArrayList;
 import Entities.Character;
 
 public class UserFileWriter {
+
     /**A continuación se definen las operaciones de escrituras**/
     public void userRegister(Client client) {
         try {
-            String ruta = "./Fase-3-MP/src/Files/UserRegister.txt"; //ruta relativa
+            String ruta = "Fase-3-MP/src/Files/UserRegister.txt"; //ruta relativa
             File file = new File(ruta);
             if (!file.exists()) { //si no existe el archivo, lo creamos en la ruta.
                 file.createNewFile();
             }
-            FileWriter fw = new FileWriter(file.getAbsoluteFile(), true); //opción append habilitada!
+            FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write("--------- USUARIO ---------");
             bw.newLine();
-            bw.write("NOMBRE  ");
+            bw.write("=========== USUARIO ===========");
+            bw.newLine();
+            bw.write("  NOMBRE  ");
             bw.write(client.getName());
             bw.newLine();
-            bw.write("NICK ");
+            bw.write("  NICK  ");
             bw.write(client.getNick());
             bw.newLine();
-            bw.write("PASSWORD  ");
+            bw.write("  PASSWORD  ");
             bw.write(client.getPassword());
             bw.newLine();
-            bw.write("REGISTRO  ");
+            bw.write("  REGISTRO  ");
             bw.write(client.getRegister());
             bw.newLine();
-            bw.write("TIPO DE PERSONAJE  ");
+            bw.write("  TIPO DE PERSONAJE  ");
             bw.newLine();
-            bw.write("--------- FIN USUARIO ---------");
+            bw.write("=========== FIN USUARIO ===========");
             bw.newLine();
             bw.close();
 
@@ -55,7 +57,7 @@ public class UserFileWriter {
             //recorre la lista de clientes
             for (int i = 0; i < clientArrayList.size(); i++) {
 
-                bw.write("--------- USUARIO ---------");
+                bw.write("=========== USUARIO ===========");
                 bw.newLine();
                 bw.write("NOMBRE: ");
                 bw.write(clientArrayList.get(i).getName());
@@ -95,7 +97,7 @@ public class UserFileWriter {
         Vampire vampire = (Vampire) clientArrayList.get(i).getCharacter();
         Discipline discipline = (Discipline) vampire.getAbility();
         //TIPO PERSONAJE
-        bw.write("------ TIPO DE PERSONAJE ------");
+        bw.write("=========== TIPO DE PERSONAJE ===========");
         bw.write(clientArrayList.get(i).getCharacter().getType());
         bw.newLine();
         //NOMBRE PERSONAJE

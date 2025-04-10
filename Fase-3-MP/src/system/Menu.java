@@ -56,15 +56,11 @@ public class Menu {
         } while (option != 7 && option != 8);
     }
     public void checkFights(Client client) {
-
     }
     public void checkRanking(Client client) {
-
     }
     public void selectFactory(Client client) {
-
     }
     public void operatorSelector(Administrator operator, mainSystem system) {
-
     }
 }

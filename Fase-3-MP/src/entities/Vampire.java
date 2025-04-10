@@ -6,8 +6,7 @@ public class Vampire extends Character {
     private int blood;
 
     /**A continuación se define el constructor**/
-    public Vampire() {
-    }
+    public Vampire() {}
 
     /**A continuación se definen los Getters y Setters**/
     public int getBlood() {

@@ -68,17 +68,17 @@ public class mainSystem {
             default: terminal.error();
         }
     }
+
     public void registerUser(int option) {
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> clientList = userFileReader.readUserFile();
         switch (option) {
-            case 1: { //opcion de modo jugador
+            case 1: { // Modo jugador
                 Client client = new Client();
                 terminal.askNameUser();
                 String name = sc.nextLine();
-                client.setName(name);
                 terminal.askNick();
                 String nick = sc.nextLine();
                 boolean found = false;
@@ -92,25 +92,27 @@ public class mainSystem {
                     }
                 }
                 if (!found) {
+                    String password, confirm;
+                    do {
+                        terminal.askPassword();
+                        password = sc.nextLine();
+                        terminal.confirmPassword();
+                        confirm = sc.nextLine();
+                        if (!password.equals(confirm)) {
+                            terminal.errorPassword();
+                        }
+                    } while (!password.equals(confirm));
+                    client.setName(name);
                     client.setNick(nick);
-                    terminal.askPassword();
-                    String password = sc.next();
-                    sc.nextLine(); // Limpiar el salto de línea del buffer
-                    terminal.confirmPassword();
-                    String confirm = sc.nextLine();
-                    if (!password.equals(confirm)) { //comprobamos la contraseña
-                        terminal.error();
-                        break;
-                    }
                     client.setPassword(password);
+                    client.setRegister(client.generateRegisterNumber());
+                    client.setCharacter(null); // Si aún no elige personaje, lo dejamos null
                     terminal.confirmNewUser(name);
-                    String register1 = client.generateRegisterNumber();
-                    client.setRegister(register1);
-                    client.setCharacter(null);
                     UserFileWriter userFileWriter = new UserFileWriter();
                     userFileWriter.userRegister(client);
                 }
             }
+
             case 2: {
                 Administrator operator = new Administrator();
                 AdministratorFileReader operatorFileReader = new AdministratorFileReader();

@@ -7,13 +7,14 @@ import System.UserFileReader;
 
 public class Client extends User {
 
+    /**A continuación se definen atributos**/
     private String register;
     private Character character;
 
+    /**A continuación se definen Getters y Setters**/
     public Character getCharacter() {
         return character;
     }
-
     public void setCharacter(Character character) {
         this.character = character;
     }
@@ -21,11 +22,18 @@ public class Client extends User {
     public String getRegister() {
         return register;
     }
-
     public void setRegister(String register) {
         this.register = register;
     }
 
+    public char getLetter() {
+        return (char) (Math.random() * 26 + 'a');
+    }
+    public char getNumber() {
+        return (char) (Math.random() * 10 + '0');
+    }
+
+    /**A continuación se definen operaciones**/
     public String generateRegisterNumber() {
         boolean valid = false;
         UserFileReader userFileReader = new UserFileReader();
@@ -54,13 +62,6 @@ public class Client extends User {
         }
         return strBuilder;
     }
-    public char getLetter() {
-        return (char) (Math.random() * 26 + 'a');
-    }
-
-    public char getNumber() {
-        return (char) (Math.random() * 10 + '0');
-    }
 
     public void deleteCharacter(Client client) {
         Terminal terminal = new Terminal();
@@ -75,10 +76,7 @@ public class Client extends User {
     public void selectTeam(Client client) {
         // A implementar
     }
-    public void challenge(Client client) {
+    public void challenge(Client client) {}
 
-    }
-    public void deleteAccount(Client client, mainSystem system) {
-
-    }
-}
+    public void deleteAccount(Client client, mainSystem system) {}
+}//FIN
