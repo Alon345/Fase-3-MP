@@ -86,7 +86,6 @@ public class Challenge {
 
         }
     }
-
     public int askForNumber(){
         Scanner sc = new Scanner(System.in);
         return sc.nextInt();
@@ -94,4 +93,4 @@ public class Challenge {
     public String generateRegisterNumber(){
         return null;
     }
-}
+}//FIN

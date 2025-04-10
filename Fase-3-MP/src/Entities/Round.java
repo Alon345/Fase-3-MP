@@ -5,16 +5,19 @@ import System.Terminal;
 import java.util.ArrayList;
 
 public class Round {
-    /**A continuación se definen los atributos**/
+    /**
+     * A continuación se definen los atributos
+     **/
     private int hpChallengerEnd;
     private int hpRivalEnd;
-
-    /**A continuación se definen las operaciones**/
+    /**
+     * A continuación se definen las operaciones
+     **/
     public int getHpChallengerEnd() {
         return hpChallengerEnd;
     }
 
-    public void setHpDesafianteEnd(int hpChallengerEnd) {
+    public void setHpChallengerEnd(int hpChallengerEnd) {
         this.hpChallengerEnd = hpChallengerEnd;
     }
 
@@ -26,192 +29,199 @@ public class Round {
         this.hpRivalEnd = hpRivalEnd;
     }
 
-   /** public boolean startRound(int hpDesafiante, int hpContrincante, Client challenger, Client rival, ArrayList<Modifier> modfiers) {
+    public boolean startRound(int hpChallenger, int hpRival, Client challenger, Client rival, ArrayList<Modifier> modifiers) {
         Terminal terminal = new Terminal();
-        int ataqueEquipoDesafiante = 0;
-        int ataqueEquipoContrincante = 0;
-        ataqueEquipoDesafiante = getAtaqueEquipo(desafiante, ataqueEquipoDesafiante);
-        ataqueEquipoContrincante = getAtaqueEquipo(contrincante, ataqueEquipoContrincante);
-        int potencialAtaqueDesafiante = desafiante.getPersonaje().getPoder() + desafiante.getPersonaje().getHabilidad().getAtaque() + ataqueEquipoDesafiante;
-        int potencialAtaqueContrincante = contrincante.getPersonaje().getPoder() + contrincante.getPersonaje().getHabilidad().getAtaque() + ataqueEquipoContrincante;
-        potencialAtaqueDesafiante = getPotencialAtaque(desafiante, potencialAtaqueDesafiante);
-        potencialAtaqueContrincante = getPotencialAtaque(contrincante, potencialAtaqueContrincante);
-        int defensaEquipoDesafiante = 0;
-        int defensaEquipoContrincante = 0;
-        defensaEquipoDesafiante = getDefensaEquipo(desafiante, defensaEquipoDesafiante);
-        defensaEquipoContrincante = getDefensaEquipo(contrincante, defensaEquipoContrincante);
-        int potencialDefensaDesafiante = desafiante.getPersonaje().getPoder() + desafiante.getPersonaje().getHabilidad().getDefensa() + defensaEquipoDesafiante;
-        int potencialDefensaContrincante = contrincante.getPersonaje().getPoder() + contrincante.getPersonaje().getHabilidad().getDefensa() + defensaEquipoContrincante;
-        potencialDefensaDesafiante = getPotencialDefensa(desafiante, potencialDefensaDesafiante);
-        potencialDefensaContrincante = getPotencialDefensa(contrincante, potencialDefensaContrincante);
-        int valorModsDesafiante = 0;
-        int valorModsContrincante = 0;
-        valorModsDesafiante = getValorModsDesafiante(desafiante, modificadores, valorModsDesafiante);
-        valorModsContrincante = getValorModsDesafiante(contrincante, modificadores, valorModsContrincante);
+        int challengerArmorAttack = 0;
+        int rivalArmorAttack = 0;
 
-        if (valorModsDesafiante >= 0) {
-            potencialAtaqueDesafiante += valorModsDesafiante;
-            potencialDefensaDesafiante += valorModsDesafiante;
+        challengerArmorAttack = getArmourAttack(challenger, challengerArmorAttack);
+        rivalArmorAttack = getArmourAttack(rival, rivalArmorAttack);
+
+        int challengerAttackPotential = challenger.getCharacter().getPower() + challenger.getCharacter().getAbility().getAttack() + challengerArmorAttack;
+        int rivalAttackPotential = rival.getCharacter().getPower() + rival.getCharacter().getAbility().getAttack() + rivalArmorAttack;
+
+        challengerAttackPotential = getAttackPotential(challenger, challengerAttackPotential);
+        rivalAttackPotential = getAttackPotential(rival, rivalAttackPotential);
+
+        int challengerArmorDefence= 0;
+        int rivalArmorDefence = 0;
+
+        challengerArmorDefence = getArmourDefence(challenger, challengerArmorDefence);
+        rivalArmorDefence = getArmourDefence(rival, rivalArmorDefence);
+
+        int challengerDefencePotential = challenger.getCharacter().getPower() + challenger.getCharacter().getAbility().getDefense() + challengerArmorDefence;
+        int rivalDefencePotential = rival.getCharacter().getPower() + rival.getCharacter().getAbility().getDefense() + rivalArmorDefence;
+
+        challengerDefencePotential = getDefencePotential(challenger, challengerDefencePotential);
+        rivalDefencePotential = getDefencePotential(rival, rivalDefencePotential);
+
+        int challengerModifiersValue = 0;
+        int rivalModifiersValue = 0;
+
+        challengerModifiersValue = getChallengerMofifiersValues(challenger, modifiers, challengerModifiersValue);
+        rivalModifiersValue = getChallengerMofifiersValues(rival, modifiers, rivalModifiersValue);
+
+        if (challengerModifiersValue >= 0) {
+            challengerDefencePotential += challengerModifiersValue;
         } else {
-            potencialAtaqueDesafiante -= valorModsDesafiante;
-            potencialDefensaDesafiante -= valorModsDesafiante;
+            challengerDefencePotential -= challengerModifiersValue;
         }
-        if (valorModsContrincante >= 0) {
-            potencialAtaqueContrincante += valorModsContrincante;
-            potencialDefensaContrincante += valorModsContrincante;
+        if (rivalModifiersValue >= 0) {
+            rivalDefencePotential += rivalModifiersValue;
         } else {
-            potencialAtaqueContrincante -= valorModsContrincante;
-            potencialDefensaContrincante -= valorModsContrincante;
+            rivalDefencePotential -= rivalModifiersValue;
         }
-        terminal.inicioRonda(hpDesafiante, hpContrincante, desafiante.getNick(), contrincante.getNick(), potencialAtaqueDesafiante, potencialDefensaDesafiante, potencialAtaqueContrincante, potencialDefensaContrincante);
-        int ataqueDesafiante = hacerTiradas(potencialAtaqueDesafiante);
-        int ataqueContrincante = hacerTiradas(potencialAtaqueContrincante);
-        int defensaDesafiante = hacerTiradas(potencialDefensaDesafiante);
-        int defensaContrincante = hacerTiradas(potencialDefensaContrincante);
-        hpContrincante = getHp(ataqueDesafiante, defensaContrincante, hpContrincante, desafiante, contrincante);
-        hpDesafiante = getHp(ataqueContrincante, defensaDesafiante, hpDesafiante, contrincante, desafiante);
-        setHpDesafianteEnd(hpDesafiante);
-        setHpContrincanteEnd(hpContrincante);
-        return (getHpDesafianteEnd() == 0 || getHpContrincanteEnd() == 0);
+
+        terminal.startRound(hpChallenger, hpRival, challenger.getNick(), rival.getNick(), challengerAttackPotential, challengerDefencePotential, rivalAttackPotential, rivalDefencePotential);
+
+        int challengerAttack = doRoundShots(challengerAttackPotential);
+        int rivalAttack = doRoundShots(rivalAttackPotential);
+
+        int challengerDefence = doRoundShots(challengerDefencePotential);
+        int rivalDefence = doRoundShots(rivalDefencePotential);
+
+        hpChallenger = getHp(challengerAttack, rivalDefence, hpRival, challenger, rival);
+        hpRival = getHp(rivalAttack, challengerDefence, hpChallenger, rival, challenger);
+
+        setHpChallengerEnd(hpChallenger);
+        setHpRivalEnd(hpRival);
+        return (getHpChallengerEnd() == 0 || getHpRivalEnd() == 0);
     }
 
-
-    private int getHp(int ataqueDesafiante, int defensaContrincante, int hpContrincante, Cliente desafiante, Cliente contrincante) {
+    private int getHp(int ataqueDesafiante, int defensaContrincante, int hpContrincante, Client challenger, Client rival) {
         if (ataqueDesafiante >= defensaContrincante) {
             hpContrincante -= 1;
-            modificarValores(desafiante, contrincante);
+            modifyValues(challenger, rival);
         }
         return hpContrincante;
     }
 
-
-    private int hacerTiradas(int potencial) {
-        int resultado = 0;
-        for (int tirada = 1; tirada <= potencial; tirada++) {
-            double numAleatorio = Math.random() * 6 + 1;
-            if (numAleatorio >= 5) {
-                resultado += 1;
+    private int doRoundShots(int potential) {
+        int result = 0;
+        for (int shot = 1; shot <= potential; shot++) {
+            double numRandom = Math.random() * 6 + 1;
+            if (numRandom >= 5) {
+                result += 1;
             }
         }
-        return resultado;
+        return result;
+    }
+
+    private int getArmourDefence(Client client, int armourDefence) {
+        for (int numWeapon = 0; numWeapon < client.getCharacter().getActiveWeapons().size(); numWeapon++) {
+            armourDefence += client.getCharacter().getActiveWeapons().get(numWeapon).getDefenseModifier();
+        }
+        armourDefence += client.getCharacter().getActiveWeapons().getFirst().getDefenseModifier();
+        return armourDefence;
     }
 
 
-    private int getDefensaEquipo(Client client, int defensaEquipo) {
-        for (int numArma = 0; numArma < client.getPersonaje().getArmasActivas().size(); numArma++) {
-            defensaEquipo += client.getPersonaje().getArmasActivas().get(numArma).getModDefensa();
+    private int getArmourAttack(Client client, int armourAttack) {
+        for (int numWeapon = 0; numWeapon < client.getCharacter().getActiveWeapons().size(); numWeapon++) {
+            armourAttack += client.getCharacter().getActiveWeapons().get(numWeapon).getAttackModifier();
         }
-        defensaEquipo += client.getPersonaje().getArmaduraActiva().getModDefensa();
-        return defensaEquipo;
+        armourAttack += client.getCharacter().getActiveWeapons().getFirst().getAttackModifier();
+        return armourAttack;
     }
 
 
-    private int getAtaqueEquipo(Client client, int ataqueEquipo) {
-        for (int numArma = 0; numArma < cliente.getPersonaje().getArmasActivas().size(); numArma++) {
-            ataqueEquipo += cliente.getPersonaje().getArmasActivas().get(numArma).getModAtaque();
-        }
-        ataqueEquipo += cliente.getPersonaje().getArmaduraActiva().getModAtaque();
-        return ataqueEquipo;
-    }
-
-
-    private void modificarValores(Cliente desafiante, Cliente contrincante) {
-        if (desafiante.getPersonaje().getTipo().equals("VAMPIRO")) {
-            Vampiro vampiro = (Vampiro) desafiante.getPersonaje();
-            vampiro.setSangre(vampiro.getSangre() + 4);
-            if (vampiro.getSangre() > 10) {
-                vampiro.setSangre(10);
+    private void modifyValues(Client challenger, Client rival) {
+        if (challenger.getCharacter().getType().equals("VAMPIRO")) {
+            Vampire vampire = (Vampire) challenger.getCharacter();
+            vampire.setBlood(vampire.getBlood() + 4);
+            if (vampire.getBlood() > 10) {
+                vampire.setBlood(10);
             }
         }
-        if (contrincante.getPersonaje().getTipo().equals("LICANTROPO")) {
-            Licantropo licantropo = (Licantropo) contrincante.getPersonaje();
-            if (licantropo.getRabia() != 3) {
-                licantropo.setRabia(licantropo.getRabia() + 1);
+        if (rival.getCharacter().getType().equals("LICANTROPO")) {
+            Werewolf werewolf = (Werewolf) rival.getCharacter();
+            if (werewolf.getRage() != 3) {
+                werewolf.setRage(werewolf.getRage() + 1);
             }
-        } else if (contrincante.getPersonaje().getTipo().equals("CAZADOR")) {
-            Cazador cazador = (Cazador) contrincante.getPersonaje();
-            if (cazador.getVoluntad() != 0) {
-                cazador.setVoluntad(cazador.getVoluntad() - 1);
+        } else if (rival.getCharacter().getType().equals("CAZADOR")) {
+            Hunter hunter = (Hunter) rival.getCharacter();
+            if (hunter.getWillpower() != 0) { //willpower = voluntad
+                hunter.setWillpower(hunter.getWillpower() - 1);
             }
         }
     }
 
 
-    private int getValorModsDesafiante(Cliente cliente, ArrayList<Modificador> modificadores, int valorMods) {
-        for (int numDebilidad = 0; numDebilidad < cliente.getPersonaje().getDebilidades().size(); numDebilidad++) {
-            for (Modificador modificadore : modificadores) {
-                if (cliente.getPersonaje().getDebilidades().get(numDebilidad).getNombre().equals(modificadore.getNombre())) {
-                    valorMods -= cliente.getPersonaje().getDebilidades().get(numDebilidad).getValor();
+    private int getChallengerMofifiersValues(Client client, ArrayList<Modifier> modifiers, int valueOfMods) {
+        for (int weaknessNum = 0; weaknessNum < client.getCharacter().getWeaknesses().size(); weaknessNum++) {
+            for (Modifier mod : modifiers) {
+                if (client.getCharacter().getWeaknesses().get(weaknessNum).getName().equals(mod.getName())) {
+                    valueOfMods -= client.getCharacter().getWeaknesses().get(weaknessNum).getValue();
                 }
             }
         }
-
-
-        for (int numFortaleza = 0; numFortaleza < cliente.getPersonaje().getFortalezas().size(); numFortaleza++) {
-            for (Modificador modificadore : modificadores) {
-                if (cliente.getPersonaje().getFortalezas().get(numFortaleza).getNombre().equals(modificadore.getNombre())) {
-                    valorMods += cliente.getPersonaje().getFortalezas().get(numFortaleza).getValor();
+        for (int strengthNum = 0; strengthNum < client.getCharacter().getStrengths().size(); strengthNum++) {
+            for (Modifier mod : modifiers) {
+                if (client.getCharacter().getStrengths().get(strengthNum).getName().equals(mod.getName())) {
+                    valueOfMods += client.getCharacter().getStrengths().get(strengthNum).getValue();
                 }
             }
         }
-        return valorMods;
+        return valueOfMods;
     }
 
+    private int getDefencePotential(Client client, int defencePotential) {
+        if (client.getCharacter().getType().equals("VAMPIRO")) {
+            Vampire vampire = (Vampire) client.getCharacter();
+            Discipline discipline = (Discipline) vampire.getAbility();
+            Terminal terminal = new Terminal();
 
-    private int getPotencialDefensa(Cliente cliente, int potencialDefensa) {
-        if (cliente.getPersonaje().getTipo().equals("VAMPIRO")) {
-            Vampiro vampiro = (Vampiro) cliente.getPersonaje();
-            Disciplina disciplina = (Disciplina) vampiro.getHabilidad();
-            Terminal terminal = new Terminal();
-            if (vampiro.getSangre() >= 5 && vampiro.getSangre() >= disciplina.getCoste()) {
-                terminal.usoHabilidadDefensa(vampiro.getNombre(), disciplina.getNombre());
-                potencialDefensa += 2;
-                vampiro.setSangre(vampiro.getSangre() - disciplina.getCoste());
+            if (vampire.getBlood() >= 5 && vampire.getBlood() >= discipline.getCost()) {
+                terminal.defenceAbility(vampire.getName(), discipline.getName());
+                defencePotential += 2;
+                vampire.setBlood(vampire.getBlood() - discipline.getCost());
             }
-        } else if (cliente.getPersonaje().getTipo().equals("LICANTROPO")) {
-            Licantropo licantropo = (Licantropo) cliente.getPersonaje();
-            Don don = (Don) licantropo.getHabilidad();
+        } else if (client.getCharacter().getType().equals("LICANTROPO")) {
+            Werewolf werewolf = (Werewolf) client.getCharacter();
+            Don don = (Don) werewolf.getAbility();
             Terminal terminal = new Terminal();
-            if (don.getValorMinimo() <= licantropo.getRabia()) {
-                terminal.usoHabilidadDefensa(licantropo.getNombre(), don.getNombre());
-                potencialDefensa += licantropo.getRabia();
+            if (don.getMinimumValue() <= werewolf.getRage()) {
+                terminal.defenceAbility(werewolf.getName(), don.getName());
+                defencePotential += werewolf.getRage();
             }
         } else {
             Terminal terminal = new Terminal();
-            Cazador cazador = (Cazador) cliente.getPersonaje();
-            Talento talento = (Talento) cazador.getHabilidad();
-            terminal.usoHabilidadDefensa(cazador.getNombre(), talento.getNombre());
-            potencialDefensa += talento.getDefensa();
+            Hunter hunter = (Hunter) client.getCharacter();
+            Talent talent = (Talent) hunter.getAbility();
+            terminal.defenceAbility(hunter.getName(), talent.getName());
+            defencePotential += talent.getDefense();
         }
-        return potencialDefensa;
+        return defencePotential;
     }
 
 
-    private int getPotencialAtaque(Cliente cliente, int potencialAtaque) {
-        if (cliente.getPersonaje().getTipo().equals("VAMPIRO")) {
-            Vampiro vampiro = (Vampiro) cliente.getPersonaje();
-            Disciplina disciplina = (Disciplina) vampiro.getHabilidad();
+    private int getAttackPotential(Client client, int attackPotential) {
+        if (client.getCharacter().getType().equals("VAMPIRO")) {
+
+            Vampire vampire = (Vampire) client.getCharacter();
+            Discipline discipline = (Discipline) vampire.getAbility();
             Terminal terminal = new Terminal();
-            if (vampiro.getSangre() >= 5 && vampiro.getSangre() >= disciplina.getCoste()) {
-                terminal.usoHabilidadAtaque(vampiro.getNombre(), disciplina.getNombre());
-                potencialAtaque += 2;
-                vampiro.setSangre(vampiro.getSangre() - disciplina.getCoste());
+
+            if (vampire.getBlood() >= 5 && vampire.getBlood() >= discipline.getCost()) {
+                terminal.attackAbility(vampire.getName(), discipline.getName());
+                attackPotential += 2;
+                vampire.setBlood(vampire.getBlood() - discipline.getCost());
             }
-        } else if (cliente.getPersonaje().getTipo().equals("LICANTROPO")) {
-            Licantropo licantropo = (Licantropo) cliente.getPersonaje();
-            Don don = (Don) licantropo.getHabilidad();
+        } else if (client.getCharacter().getType().equals("LICANTROPO")) {
+            Werewolf werewolf = (Werewolf) client.getCharacter();
+            Don don = (Don) werewolf.getAbility();
             Terminal terminal = new Terminal();
-            if (don.getValorMinimo() <= licantropo.getRabia()) {
-                terminal.usoHabilidadAtaque(licantropo.getNombre(), don.getNombre());
-                potencialAtaque += licantropo.getRabia();
+            if (don.getMinimumValue() <= werewolf.getRage()) {
+                terminal.attackAbility(werewolf.getName(), don.getName());
+                attackPotential += werewolf.getRage();
             }
         } else {
-            Cazador cazador = (Cazador) cliente.getPersonaje();
-            Talento talento = (Talento) cazador.getHabilidad();
+            Hunter hunter = (Hunter) client.getCharacter();
+            Talent talent = (Talent) hunter.getAbility();
             Terminal terminal = new Terminal();
-            terminal.usoHabilidadAtaque(cazador.getNombre(), talento.getNombre());
-            potencialAtaque += talento.getAtaque();
+            terminal.attackAbility(hunter.getName(), talent.getName());
+            attackPotential += talent.getAttack();
         }
-        return potencialAtaque;
-    }**/
-}
+        return attackPotential;
+    }
+}//FIN

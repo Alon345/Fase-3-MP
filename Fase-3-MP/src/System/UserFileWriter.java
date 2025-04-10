@@ -48,7 +48,7 @@ public class UserFileWriter {
 
     public void rewriteUserFile(ArrayList<Client> clientArrayList) {
         try {
-            String ruta = "./Fase-3-MP/src/Files/UserRegister.txt"; //ruta relativa
+            String ruta = "Fase-3-MP/src/Files/UserRegister.txt"; //ruta relativa
             File file = new File(ruta);
             FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
@@ -404,51 +404,51 @@ public class UserFileWriter {
         Hunter hunter = (Hunter) clientArrayList.get(i).getCharacter();
         Talent talent = (Talent) hunter.getAbility();
         //TIPO PERSONAJE
-        bw.write("TIPO_PERSONAJE: ");
+        bw.write("TIPO DE PERSONAJE ");
         bw.write(clientArrayList.get(i).getCharacter().getType());
         bw.newLine();
         //NOMBRE PERSONAJE
-        bw.write("NOMBRE_PERSONAJE: ");
+        bw.write("NOMBRE DE PERSONAJE ");
         bw.write(clientArrayList.get(i).getCharacter().getName());
         bw.newLine();
         //NOMBRE HABILDIAD
-        bw.write("NOMBRE_HABILIDAD: ");
+        bw.write("NOMBRE DE LA HABILIDAD ");
         bw.write(hunter.getAbility().getName());
         bw.newLine();
         //VOLUNTAD CAZADOR
-        bw.write("VOLUNTAD: ");
+        bw.write("VOLUNTAD ");
         bw.write("3");
         bw.newLine();
         //ATAQUE HABILIDAD
-        bw.write("ATAQUE_HABILIDAD: ");
+        bw.write("ATAQUE DE ABILIDAD ");
         bw.write(String.valueOf(hunter.getAbility().getAttack()));
         bw.newLine();
         //DEBILIDAD HABILIDAD
-        bw.write("DEFENSA_HABILIDAD: ");
+        bw.write("DEFENSA DE LA HABILIDAD ");
         bw.write(String.valueOf(hunter.getAbility().getDefense()));
         bw.newLine();
         //EDAD CAZADOR
-        bw.write("EDAD_CAZADOR: ");
+        bw.write("EDAD DEL CAZADOR ");
         bw.write(String.valueOf(talent.getAge()));
         bw.newLine();
         //ARMAS
-        bw.write("NUMERO_ARMAS: ");
+        bw.write("NUMERO DE ARMAS ");
         bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getWeapons().size()));
         bw.newLine();
 
 
         for (int weaponVar = 0; weaponVar < (clientArrayList.get(i).getCharacter().getWeapons().size()); weaponVar++) {
             Weapon weapon = hunter.getWeapons().get(weaponVar);
-            bw.write("NOMBRE_ARMA: ");
+            bw.write("NOMBRE DEL ARMA ");
             bw.write(weapon.getName());
             bw.newLine();
-            bw.write("ATAQUE_ARMA: ");
+            bw.write("ATAQUE DEL ARMA ");
             bw.write(String.valueOf(weapon.getAttackModifier()));
             bw.newLine();
-            bw.write("DEFENSA_ARMA: ");
+            bw.write("DEFENSA DEL ARMA ");
             bw.write(String.valueOf(weapon.getDefenseModifier()));
             bw.newLine();
-            bw.write("EMPUÑADURA: ");
+            bw.write("EMPUÑADURA ");
             if (weapon.isSingleHand()) {
                 bw.write("true");//True una mano
             } else {
@@ -458,23 +458,23 @@ public class UserFileWriter {
         }
         bw.newLine();
         //ARMAS ACTIVAS
-        bw.write("NUMERO ARMAS_ACTIVAS: ");
+        bw.write("NUMERO DE ARMAS ACTIVAS ");
         bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getActiveWeapons().size()));
         bw.newLine();
         for (int activeWeaponVar = 0; activeWeaponVar < (clientArrayList.get(i).getCharacter().getActiveWeapons().size()); activeWeaponVar++) {
             Weapon activeWeapon = hunter.getActiveWeapons().get(activeWeaponVar);
 
 
-            bw.write("NOMBRE_ARMAS_ACTIVAS: ");
+            bw.write("NOMBRE DE ARMAS ACTIVAS ");
             bw.write(activeWeapon.getName());
             bw.newLine();
-            bw.write("ATAQUE_ARMA_ACTIVAS: ");
+            bw.write("ATAQUE DEL ARMA ACTIVAS ");
             bw.write(String.valueOf(activeWeapon.getAttackModifier()));
             bw.newLine();
-            bw.write("DEFENSA_ARMA_ACTIVAS: ");
+            bw.write("DEFENSA DEL ARMA ACTIVAS ");
             bw.write(String.valueOf(activeWeapon.getDefenseModifier()));
             bw.newLine();
-            bw.write("EMPUÑADURA: ");
+            bw.write("EMPUÑADURA ");
             if (activeWeapon.isSingleHand()) {
                 bw.write("true"); //True 1 mano
             } else {
@@ -484,18 +484,18 @@ public class UserFileWriter {
         }
         bw.newLine();
         //ARMADURAS
-        bw.write("NUMERO_ARMADURAS: ");
+        bw.write("NUMERO DE ARMADURAS ");
         bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getArmors().size()));
         bw.newLine();
         for (int j = 0; j < (clientArrayList.get(i).getCharacter().getArmors().size()); j++) {
             Armor armours = hunter.getArmors().get(j);
-            bw.write("NOMBRE_ARMADURA: ");
+            bw.write("NOMBRE DE LA ARMADURA ");
             bw.write(armours.getName());
             bw.newLine();
-            bw.write("DEFENSA_ARMADURA: ");
+            bw.write("DEFENSA DE LA ARMADURA ");
             bw.write(String.valueOf(armours.getDefenseModifier()));
             bw.newLine();
-            bw.write("ATAQUE_ARMADURA: ");
+            bw.write("ATAQUE DE LA ARMADURA ");
             bw.write(String.valueOf(armours.getAttackModifier()));
             bw.newLine();
         }

@@ -175,4 +175,22 @@ public class Terminal {
         System.out.println("Ronda número " + numOfRound + ":");
     }
 
+    public void startRound(int hpChallenger, int hpRival, String nick, String nick2, int challengerAttackPotential, int challengerDefencePotential, int rivalAttackPotential, int rivalDefencePotential) {
+        System.out.println(nick + ":");
+        System.out.println("- Vida " + hpChallenger);
+        System.out.println("- Potencial ataque " + challengerAttackPotential);
+        System.out.println("- Potencial defensa " + challengerDefencePotential);
+        System.out.println();
+        System.out.println(nick2 + ":");
+        System.out.println("- Vida " + hpRival);
+        System.out.println("- Potencial ataque " + rivalAttackPotential);
+        System.out.println("- Potencial defensa " + rivalDefencePotential);
+        System.out.println();
+    }
+    public void attackAbility(String character, String ability) {
+        System.out.println(character + " usa " + ability + " para potenciar su ataque");
+    }
+    public void defenceAbility(String character, String ability) {
+        System.out.println(character + " usa " + ability + " para potenciar su defensa");
+    }
 } //FIN

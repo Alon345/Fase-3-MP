@@ -222,6 +222,4 @@ public class mainSystem {
 
         return operator;
     }
-
-
-}
+}//FIN
