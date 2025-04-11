@@ -35,11 +35,11 @@ public class Client extends User {
 
     /**A continuación se definen operaciones**/
     public String generateRegisterNumber() {
-        boolean valid = false;
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> list = userFileReader.readUserFile();
         String strBuilder = null;
-        // Creamos el fichero lista de clientes para comparar si esta ya
+        boolean valid = false;
+
         while (!valid) {
             strBuilder = String.valueOf(getLetter()) +
                     getNumber() +
@@ -48,18 +48,16 @@ public class Client extends User {
                     getLetter() +
                     getLetter() +
                     getLetter();
-            if (!list.isEmpty()) {
-                for (Client value : list) {
-                    if (!(value.getRegister().equals(strBuilder))) {
-                        valid = true;
-                    } else {
-                        strBuilder = null;
-                    }
+
+            valid = true; // asumimos que es válido hasta que se demuestre lo contrario
+
+            for (Client client : list) {
+                if (client.getRegister().equals(strBuilder)) {
+                    valid = false; // se encontró un duplicado, no es válido
                 }
-            } else {
-                valid = true;
             }
         }
+
         return strBuilder;
     }
 

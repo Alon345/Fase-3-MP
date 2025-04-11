@@ -129,22 +129,23 @@ public class mainSystem {
                     }
                 }
                 operator.setNick(nick);
-                terminal.askPassword();
-                String password = sc.nextLine();
-                terminal.confirmPassword();
-                String confirmPassword = sc.next(); //volvemos a leer la contraseña
-                if (!password.equals(confirmPassword)) { // Verificamos que la contraseña esta bien
-                    //si password != confirmPassword
-                    terminal.error();
-                    break;
-                }
+                String password, confirmPassword;
+                do {
+                    terminal.askPassword();
+                    password = sc.nextLine();
+                    terminal.confirmPassword();
+                    confirmPassword = sc.nextLine();
+                    if (!password.equals(confirmPassword)) {
+                        terminal.errorPassword();
+                    }
+                } while (!password.equals(confirmPassword));
                 operator.setPassword(password);
                 AdministratorFileWriter operatorFileWriter = new AdministratorFileWriter();
                 operatorFileWriter.registerOperator(operator);
             }
             case 3: {
+                selector();
             }
-            default: terminal.error();
         }
     }
 

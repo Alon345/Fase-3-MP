@@ -68,7 +68,7 @@ public class Terminal {
     public void confirmPassword() {System.out.println("Por favor, confirme la contraseña introducida");}
     public void confirmNewUser(String username){
         System.out.println("=======================================");
-        System.out.println("Bienvenido al sistema, "+ username + ",\ninicia sesión con tus credenciales para acceder");}
+        System.out.println("Bienvenido al sistema, "+ username + ".\nInicia sesión con tus credenciales para acceder");}
     public void errorPassword() {
         System.out.println("Contraseña incorrecta, pruebe de nuevo");
     }
