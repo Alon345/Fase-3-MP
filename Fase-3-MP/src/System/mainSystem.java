@@ -31,7 +31,7 @@ public class mainSystem {
                 if (client != null) {
                     Menu menu = new Menu();
                     CombatFileReader  combatFileReader = new CombatFileReader();
-                    ArrayList<Combat> listCombats = combatFileReader.combatFileReader();
+                    ArrayList<Combat> listCombats = combatFileReader.readCombatFile();
                     for (Combat listCombat : listCombats) {
                         if (!listCombat.isSeen() && listCombat.getChallenger().getNick().equals(client.getNick())) {
                             NotificationManager notificationManager = new NotificationManager();
@@ -40,7 +40,7 @@ public class mainSystem {
                         }
                     }
                     CombatFileWriter combatFileWriter = new CombatFileWriter();
-                    combatFileWriter.overwriteCombatFile(listCombats);
+                    //combatFileWriter.sobreescribirFicheroCombate(listCombats);
 
                     ChallengeFileReader challengeFileReader = new ChallengeFileReader();
                     ArrayList<Challenge> listaDesafios = challengeFileReader.readChallengeFile();
@@ -58,7 +58,7 @@ public class mainSystem {
             case 3 -> {
                 //INICIO DE SESION COMO ADMIN
                 Administrator admin = new Administrator();
-                admin = loginAdmin(admin);
+                admin = loginOperator(admin);
                 if (admin != null) {
                     Menu menu = new Menu();
                     menu.operatorSelector(admin, this);
@@ -81,133 +81,98 @@ public class mainSystem {
                     UserFileReader userFileReader = new UserFileReader();
                     ArrayList<Client> listClient = userFileReader.userFileReader();
 
-                    // Validación nombre completo
-                    String name;
-                    do {
-                        terminal.askNameUser();
-                        name = sc.nextLine().trim();
-                        if(name.isEmpty()) {
-                            terminal.emptyName();
-                        }
-                    } while(name.isEmpty());
+                    terminal.askNameUser();
+                    String name = sc.nextLine();
                     client.setName(name);
 
-                    // Validación nick (único y no vacío)
+                    // Solicitar el nick en bucle hasta que sea único.
                     String nick;
-                    boolean nickEncontrado;
+                    boolean encontrado;
                     do {
-                        nickEncontrado = false;
-                        do {
-                            terminal.askNick();
-                            nick = sc.nextLine().trim();
-                            if(nick.isEmpty()) {
-                                terminal.emptyNick();
-                            }
-                        } while(nick.isEmpty());
-
-                        // Verificar unicidad
-                        for (Client c : listClient) {
-                            if (c.getNick().equalsIgnoreCase(nick)) {
-                                terminal.nickExists();
-                                nickEncontrado = true;
-                                break;
+                        terminal.askNick();
+                        nick = sc.nextLine();
+                        encontrado = false;
+                        if (!listClient.isEmpty()) {
+                            for (Client value : listClient) {
+                                if (value.getNick().equals(nick)) {
+                                    terminal.nickExists(); // Notificar que el nick ya existe.
+                                    encontrado = true;
+                                    break;
+                                }
                             }
                         }
-                    } while (nickEncontrado);
+                    } while (encontrado);
                     client.setNick(nick);
 
-                    // Validación contraseña (no vacía y coincidente)
+                    // Pedir la contraseña en bucle hasta que la confirmación sea correcta.
                     String password, confirm;
                     do {
-                        do {
-                            terminal.askPassword();
-                            password = sc.nextLine().trim();
-                            if(password.isEmpty()) {
-                                terminal.emptyPassword();
-                            }
-                        } while(password.isEmpty());
-
+                        terminal.askPassword();
+                        password = sc.nextLine();
                         terminal.confirmPassword();
-                        confirm = sc.nextLine().trim();
-
+                        confirm = sc.nextLine();
                         if (!password.equals(confirm)) {
                             terminal.errorPassword();
                         }
                     } while (!password.equals(confirm));
                     client.setPassword(password);
 
-                    // Generación y asignación de datos adicionales
-                    client.setRegister(client.generateRegisterNumber());
+                    String registro = client.generateRegisterNumber();
+                    client.setRegister(registro);
                     client.setCharacter(null);
 
                     // Guardar el nuevo usuario
-                    new UserFileWriter().userRegister(client);
+                    UserFileWriter userFileWriter = new UserFileWriter();
+                    userFileWriter.userRegister(client);
+
                     terminal.confirmNewUser(name);
                 }
 
-                case 2 -> { // Modo Admin
-                        Administrator client = new Administrator();
-                        AdministratorFileReader administratorFileReader = new AdministratorFileReader();
-                        ArrayList<Administrator> listClient = administratorFileReader.adminFileReader();
+                case 2 -> { // Modo jugador
+                    Administrator client = new Administrator();
+                    AdministratorFileReader administratorFileReader = new AdministratorFileReader();
+                    ArrayList<Administrator> listClient = administratorFileReader.adminFileReader();
 
-                        // Validación nombre (no vacío)
-                        String name;
-                        do {
-                            terminal.askNameUser();
-                            name = sc.nextLine().trim();
-                            if(name.isEmpty()) {
-                                terminal.emptyName(); // Mensaje específico para nombre vacío
-                            }
-                        } while(name.isEmpty());
-                        client.setName(name);
-
-                        // Validación nick (único y no vacío)
-                        String nick;
-                        boolean nickExists;
-                        do {
-                            nickExists = false;
-                            do {
-                                terminal.askNick();
-                                nick = sc.nextLine().trim();
-                                if(nick.isEmpty()) {
-                                    terminal.emptyNick(); // Mensaje específico para nick vacío
-                                }
-                            } while(nick.isEmpty());
-
-                            // Verificar unicidad (case sensitive)
-                            for (Administrator admin : listClient) {
-                                if (admin.getNick().equals(nick)) {
-                                    terminal.nickExists();
-                                    nickExists = true;
+                    terminal.askNameUser();
+                    String name = sc.nextLine();
+                    client.setName(name);
+                    // Solicitar el nick en bucle hasta que sea único.
+                    String nick;
+                    boolean encontrado;
+                    do {
+                        terminal.askNick();
+                        nick = sc.nextLine();
+                        encontrado = false;
+                        if (!listClient.isEmpty()) {
+                            for (Administrator value : listClient) {
+                                if (value.getNick().equals(nick)) {
+                                    terminal.nickExists(); // Notificar que el nick ya existe.
+                                    encontrado = true;
                                     break;
                                 }
                             }
-                        } while (nickExists);
-                        client.setNick(nick);
+                        }
+                    } while (encontrado);
+                    client.setNick(nick);
 
-                        // Validación contraseña (no vacía y coincidente)
-                        String password, confirm;
-                        do {
-                            do {
-                                terminal.askPassword();
-                                password = sc.nextLine().trim();
-                                if(password.isEmpty()) {
-                                    terminal.emptyPassword(); // Mensaje específico para contraseña vacía
-                                }
-                            } while(password.isEmpty());
+                    // Pedir la contraseña en bucle hasta que la confirmación sea correcta.
+                    String password, confirm;
+                    do {
+                        terminal.askPassword();
+                        password = sc.nextLine();
+                        terminal.confirmPassword();
+                        confirm = sc.nextLine();
+                        if (!password.equals(confirm)) {
+                            terminal.errorPassword();
+                        }
+                    } while (!password.equals(confirm));
+                    client.setPassword(password);
 
-                            terminal.confirmPassword();
-                            confirm = sc.nextLine().trim();
+                    // Guardar el nuevo usuario
+                    AdministratorFileWriter adminFileWriter = new AdministratorFileWriter();
+                    adminFileWriter.adminRegister(client);
 
-                            if (!password.equals(confirm)) {
-                                terminal.errorPassword();
-                            }
-                        } while (!password.equals(confirm));
-                        client.setPassword(password);
-
-                        // Registro del administrador
-                        new AdministratorFileWriter().adminRegister(client);
-                        terminal.confirmNewAdmin(name);
+                    terminal.confirmNewAdmin(name);
                 }
                 case 3 -> {
                 }
@@ -219,28 +184,20 @@ public class mainSystem {
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
         int aux = -1;
-
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> list = userFileReader.userFileReader();
-        if (list.isEmpty()) { //en caso de no haber usuarios en la BD llama de nuevo a sleector
-            terminal.noUsersError();
-            mainSystem mainSystem = new mainSystem();
-            mainSystem.selector();
-            return null;
-        }
         terminal.askNick();
         String nick = sc.nextLine();
-        boolean found = false;
-        //Comparar nick con lista clientes ficheros
+        boolean encontrado = false;
+        //comparar nick con lista clientes ficheros
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getNick().equals(nick)) {
-                found = true;
+                encontrado = true;
                 aux = i;
                 i = list.size();
             }
         }
-        if (!found) {
-            terminal.nickNotFoundError(); // Muestra mensaje de error
+        if (!encontrado) {
             return null;
         }
         BanFileReader banFileReader = new BanFileReader();
@@ -264,40 +221,27 @@ public class mainSystem {
             }
         } while (!passCorrect);
         client = list.get(aux);
-
-        if (client != null && passCorrect && found) {
-            String username = client.getName();
-            terminal.hiAgainUser(username);
-        }
-
         return client;
     }
 
-    public Administrator loginAdmin(Administrator admin) {
+    public Administrator loginOperator(Administrator operator) {
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
         AdministratorFileReader operatorFileReader = new AdministratorFileReader();
         ArrayList<Administrator> list = operatorFileReader.adminFileReader();
-        if (list.isEmpty()) { //en caso de no haber usuarios en la BD llama de nuevo a sleector
-            terminal.noUsersError();
-            mainSystem mainSystem = new mainSystem();
-            mainSystem.selector();
-            return null;
-        }
         terminal.askNick();
         String nick = sc.nextLine();
         boolean found = false;
         int index = -1;
 
-        for (int i = 0; i < list.size(); i++) { // Cambiar por while??
+        for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getNick().equals(nick)) {
                 found = true;
                 index = i;
-                i = list.size();
+                break;  // Salir del bucle en cuanto se encuentre
             }
         }
         if (!found) {
-            terminal.nickNotFoundError(); // Muestra mensaje de error
             return null;
         }
         boolean passCorrect = false;
@@ -309,11 +253,10 @@ public class mainSystem {
                 terminal.errorPassword();
             }
         } while (!passCorrect);
-        admin  = list.get(index);
-        if (admin != null && passCorrect && found) {
-            String username = admin.getName();
-            terminal.hiAgainUser(username);
-        }
-        return admin;
+
+        // Retornar el administrador encontrado, no el 'operator' pasado como parámetro.
+        return list.get(index);
     }
+
+
 }//FIN

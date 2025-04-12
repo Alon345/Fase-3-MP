@@ -1,5 +1,0 @@
-========== USUARIO ==========
-NOMBRE Admin88
-NICK we3
-PASSWORD e3
-========== FIN USUARIO ==========

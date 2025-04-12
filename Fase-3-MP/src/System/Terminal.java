@@ -19,6 +19,10 @@ public class Terminal {
             System.out.println("=======================================");
         }
 
+    public void showMessage(String message) {
+        System.out.println(message);
+    }
+
     public void showMenu() {
         System.out.println("=======================================");
         System.out.println("               MENU JUGADOR ");
@@ -112,7 +116,7 @@ public class Terminal {
         System.out.println(" 1 Si");
         System.out.println(" 2 No");
     }
-    public void deltedCharacter() {
+    public void deletedCharacter() {
         System.out.println("Personaje eliminado correctamente");
     }
 
@@ -125,7 +129,7 @@ public class Terminal {
 
     /**Mensajes de los desafíos**/
 
-    public void wellcomeChallenge() {
+    public void welcomeChallenge() {
         System.out.println("Bienvenido al menu de desafios");
         System.out.println(" Escoge a un rival ");
     }
