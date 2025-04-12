@@ -71,6 +71,13 @@ public class Terminal {
         System.out.println("Introduce la contraseña de tu cuenta");
     }
     public void confirmPassword() {System.out.println("Por favor, confirme la contraseña introducida");}
+    public void noUsersError(){System.out.println("No hay usuarios registrados en este videojuego \n        !Regístrate para jugar!");}
+    public void nickNotFoundError(){System.out.println("El nick no existe en este videojuego, comprueba los campos");}
+    public void hiAgainUser(String username){System.out.println("  !Un placer verte de nuevo, "+ username+"!");}
+    public void emptyPassword(){System.out.println("!El campo 'Contraseña' no debe estar vacio!");}
+    public void emptyNick(){System.out.println("!El campo 'Nick' no debe estar vacio!");}
+    public void emptyName(){System.out.println("!El campo 'Nombre' no debe estar vacio!");}
+
     public void confirmNewUser(String username){
         System.out.println("=======================================");
         System.out.println("Bienvenido al sistema, "+ username + ".\nInicia sesión con tus credenciales para acceder");}
