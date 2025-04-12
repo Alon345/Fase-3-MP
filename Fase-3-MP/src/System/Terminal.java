@@ -8,7 +8,7 @@ public class Terminal {
     public Terminal(){
     }
     /**Mensajes iniciales**/
-    public void wellcome(){System.out.println("       Bienvenido a Shadow Clash!");}
+    public void wellcome(){System.out.println("       Bienvenido a Shadow Clash!");} //no cambiar
     public void showStart() {
             System.out.println("=======================================");
             System.out.println("  Por favor, selecciona una opción");
@@ -20,7 +20,9 @@ public class Terminal {
         }
 
     public void showMenu() {
-        System.out.println("================ MENU ================");
+        System.out.println("=======================================");
+        System.out.println("               MENU JUGADOR ");
+        System.out.println("=======================================");
         System.out.println("  1 Registrar personaje");
         System.out.println("  2 Eliminar personaje");
         System.out.println("  3 Seleccionar equipo");
@@ -28,7 +30,7 @@ public class Terminal {
         System.out.println("  5 Consultar combates");
         System.out.println("  6 Consultar ranking global");
         System.out.println("  7 Salir");
-        System.out.println("  8 Borrar cuenta :(");
+        System.out.println("  8 Borrar cuenta");
         System.out.println("=======================================");
     }
 
@@ -229,7 +231,9 @@ public class Terminal {
 
     /**Mensajes de los Administradores**/
     public void adminMenu() {
-        System.out.println("============= MENU ADMIN =============");
+        System.out.println("=======================================");
+        System.out.println("               MENU ADMIN ");
+        System.out.println("=======================================");
         System.out.println(" 1 MODIFICAR PERSONAJE");
         System.out.println(" 2 VALIDAR DESAFIO");
         System.out.println(" 3 DESBANEAR USUARIO");

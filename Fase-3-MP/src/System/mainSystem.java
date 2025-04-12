@@ -309,6 +309,7 @@ public class mainSystem {
                 terminal.errorPassword();
             }
         } while (!passCorrect);
+        admin  = list.get(index);
         if (admin != null && passCorrect && found) {
             String username = admin.getName();
             terminal.hiAgainUser(username);
