@@ -4,6 +4,7 @@ import System.Terminal;
 import java.util.ArrayList;
 import java.util.Scanner;
 import System.UserFileReader;
+import System.UserFileWriter;
 
 public class Client extends User {
 
@@ -76,5 +77,48 @@ public class Client extends User {
     }
     public void challenge(Client client) {}
 
-    public void deleteAccount(Client client, mainSystem system) {}
+    /**
+     * Elimina permanentemente una cuenta del sistema
+     * @param client Usuario logueado (puede ser Client o Administrator)
+     * @param system Referencia al sistema principal
+     */
+    public void deleteAccount(Client client, mainSystem system) {
+        Terminal terminal = new Terminal();
+        Scanner sc = new Scanner(System.in);
+
+        // Mostrar advertencia y solicitar confirmación
+        terminal.advertency();
+        terminal.writeConfirm();
+        // Leer confirmación
+        String confirmation = sc.nextLine().trim();
+
+        if (confirmation.equalsIgnoreCase("ELIMINAR")) {
+            try {
+                // Leer lista actual de clientes
+                UserFileReader userFileReader = new UserFileReader();
+                ArrayList<Client> clientList = userFileReader.userFileReader();
+
+                // Buscar y eliminar cliente
+                boolean removed = clientList.removeIf(c -> c.getRegister().equals(client.getRegister()));
+
+                if (removed) {
+                    // Guardar lista actualizada
+                    UserFileWriter userFileWriter = new UserFileWriter();
+                    userFileWriter.rewriteUserFile(clientList);
+
+                    // Cerrar sesión
+                    terminal.deletedAccountOK();
+                    terminal.logout();
+                    system.selector();
+                } else {
+                    terminal.noAccountAvaliable();
+                }
+            } catch (Exception e) {
+                terminal.error();
+                e.getMessage();
+            }
+        } else {
+            terminal.cancelOperation();
+        }
+    }
 }//FIN
