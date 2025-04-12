@@ -1,7 +1,0 @@
-========== USUARIO ==========
-NOMBRE José David
-NICK DubaiMall
-PASSWORD 12
-REGISTRO v88inbw
-TIPO DE PERSONAJE 
-========== FIN USUARIO ==========
