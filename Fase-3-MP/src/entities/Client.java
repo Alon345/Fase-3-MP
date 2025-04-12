@@ -68,7 +68,7 @@ public class Client extends User {
         boolean delete = sc.nextInt() == 1;
         if (delete) {
             client.setCharacter(null);
-            terminal.deltedCharacter();
+            terminal.deletedCharacter();
         }
     }
     public void selectTeam(Client client) {
