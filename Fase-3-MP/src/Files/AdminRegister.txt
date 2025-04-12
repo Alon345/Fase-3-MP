@@ -1,6 +1,0 @@
-
-========== USUARIO ==========
-NOMBRE 2
-NICK 2
-PASSWORD 2
-========== FIN USUARIO ==========

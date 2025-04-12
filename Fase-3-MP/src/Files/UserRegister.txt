@@ -5,3 +5,10 @@ PASSWORD 1
 REGISTRO t87zvpr
 TIPO DE PERSONAJE 
 ========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE 2
+NICK 2
+PASSWORD 2
+REGISTRO p70eqoi
+TIPO DE PERSONAJE 
+========== FIN USUARIO ==========

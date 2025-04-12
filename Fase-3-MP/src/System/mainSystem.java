@@ -31,7 +31,7 @@ public class mainSystem {
                 if (client != null) {
                     Menu menu = new Menu();
                     CombatFileReader  combatFileReader = new CombatFileReader();
-                    ArrayList<Combat> listCombats = combatFileReader.combatFileReader();
+                    ArrayList<Combat> listCombats = combatFileReader.readCombatFile();
                     for (Combat listCombat : listCombats) {
                         if (!listCombat.isSeen() && listCombat.getChallenger().getNick().equals(client.getNick())) {
                             NotificationManager notificationManager = new NotificationManager();
@@ -234,11 +234,11 @@ public class mainSystem {
         boolean found = false;
         int index = -1;
 
-        for (int i = 0; i < list.size(); i++) { // Cambiar por while??
+        for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getNick().equals(nick)) {
                 found = true;
                 index = i;
-                i = list.size();
+                break;  // Salir del bucle en cuanto se encuentre
             }
         }
         if (!found) {
@@ -254,6 +254,9 @@ public class mainSystem {
             }
         } while (!passCorrect);
 
-        return operator;
+        // Retornar el administrador encontrado, no el 'operator' pasado como parámetro.
+        return list.get(index);
     }
+
+
 }//FIN
