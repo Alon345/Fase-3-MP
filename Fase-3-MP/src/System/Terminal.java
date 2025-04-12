@@ -8,7 +8,7 @@ public class Terminal {
     public Terminal(){
     }
     /**Mensajes iniciales**/
-    public void wellcome(){System.out.println("       Bienvenido a Shadow Clash!");}
+    public void wellcome(){System.out.println("       Bienvenido a Shadow Clash!");} //no cambiar
     public void showStart() {
             System.out.println("=======================================");
             System.out.println("  Por favor, selecciona una opción");
@@ -24,7 +24,9 @@ public class Terminal {
     }
 
     public void showMenu() {
-        System.out.println("================ MENU ================");
+        System.out.println("=======================================");
+        System.out.println("               MENU JUGADOR ");
+        System.out.println("=======================================");
         System.out.println("  1 Registrar personaje");
         System.out.println("  2 Eliminar personaje");
         System.out.println("  3 Seleccionar equipo");
@@ -32,7 +34,7 @@ public class Terminal {
         System.out.println("  5 Consultar combates");
         System.out.println("  6 Consultar ranking global");
         System.out.println("  7 Salir");
-        System.out.println("  8 Borrar cuenta :(");
+        System.out.println("  8 Borrar cuenta");
         System.out.println("=======================================");
     }
 
@@ -75,6 +77,13 @@ public class Terminal {
         System.out.println("Introduce la contraseña de tu cuenta");
     }
     public void confirmPassword() {System.out.println("Por favor, confirme la contraseña introducida");}
+    public void noUsersError(){System.out.println("No hay usuarios registrados en este videojuego \n        !Regístrate para jugar!");}
+    public void nickNotFoundError(){System.out.println("El nick no existe en este videojuego, comprueba los campos");}
+    public void hiAgainUser(String username){System.out.println("  !Un placer verte de nuevo, "+ username+"!");}
+    public void emptyPassword(){System.out.println("!El campo 'Contraseña' no debe estar vacio!");}
+    public void emptyNick(){System.out.println("!El campo 'Nick' no debe estar vacio!");}
+    public void emptyName(){System.out.println("!El campo 'Nombre' no debe estar vacio!");}
+
     public void confirmNewUser(String username){
         System.out.println("=======================================");
         System.out.println("Bienvenido al sistema, "+ username + ".\nInicia sesión con tus credenciales para acceder");}
@@ -226,7 +235,9 @@ public class Terminal {
 
     /**Mensajes de los Administradores**/
     public void adminMenu() {
-        System.out.println("============= MENU ADMIN =============");
+        System.out.println("=======================================");
+        System.out.println("               MENU ADMIN ");
+        System.out.println("=======================================");
         System.out.println(" 1 MODIFICAR PERSONAJE");
         System.out.println(" 2 VALIDAR DESAFIO");
         System.out.println(" 3 DESBANEAR USUARIO");
