@@ -15,32 +15,30 @@ public class UserFileWriter {
         try {
             String ruta = "Fase-3-MP/src/Files/UserRegister.txt"; //ruta relativa
             File file = new File(ruta);
-            if (!file.exists()) { //si no existe el archivo, lo creamos en la ruta.
+            if (!file.exists()) {
                 file.createNewFile();
             }
             FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
             BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("========== USUARIO ==========");
             bw.newLine();
-            bw.write("=========== USUARIO ===========");
-            bw.newLine();
-            bw.write("  NOMBRE  ");
+            bw.write("NOMBRE ");
             bw.write(client.getName());
             bw.newLine();
-            bw.write("  NICK  ");
+            bw.write("NICK ");
             bw.write(client.getNick());
             bw.newLine();
-            bw.write("  PASSWORD  ");
+            bw.write("PASSWORD ");
             bw.write(client.getPassword());
             bw.newLine();
-            bw.write("  REGISTRO  ");
+            bw.write("REGISTRO ");
             bw.write(client.getRegister());
             bw.newLine();
-            bw.write("  TIPO DE PERSONAJE  ");
+            bw.write("TIPO DE PERSONAJE ");
             bw.newLine();
-            bw.write("=========== FIN USUARIO ===========");
+            bw.write("========== FIN USUARIO ==========");
             bw.newLine();
             bw.close();
-
         } catch (Exception e) {
             mainSystem system = new mainSystem();
             system.selector();
@@ -59,19 +57,18 @@ public class UserFileWriter {
 
                 bw.write("=========== USUARIO ===========");
                 bw.newLine();
-                bw.write("NOMBRE: ");
+                bw.write("  NOMBRE: ");
                 bw.write(clientArrayList.get(i).getName());
                 bw.newLine();
-                bw.write("NICK ");
+                bw.write("  NICK ");
                 bw.write(clientArrayList.get(i).getNick());
                 bw.newLine();
-                bw.write("PASSWORD ");
+                bw.write("  PASSWORD ");
                 bw.write(clientArrayList.get(i).getPassword());
                 bw.newLine();
-                bw.write("REGISTRO ");
+                bw.write("  REGISTRO ");
                 bw.write(clientArrayList.get(i).getRegister());
                 bw.newLine();
-
                 if (clientArrayList.get(i).getCharacter() == null) {
                     bw.write("TIPO PERSONAJE  ");
                     bw.newLine();
@@ -96,39 +93,30 @@ public class UserFileWriter {
 
         Vampire vampire = (Vampire) clientArrayList.get(i).getCharacter();
         Discipline discipline = (Discipline) vampire.getAbility();
-        //TIPO PERSONAJE
         bw.write("=========== TIPO DE PERSONAJE ===========");
         bw.write(clientArrayList.get(i).getCharacter().getType());
         bw.newLine();
-        //NOMBRE PERSONAJE
         bw.write("NOMBRE DE PERSONAJE ");
         bw.write(clientArrayList.get(i).getCharacter().getName());
         bw.newLine();
-        //PUNTOS DE SANGRE
         bw.write("SANGRE ");
         //bw.write("0");
         bw.newLine();
-        //NOMBRE DE HABILIDAD
         bw.write("NOMBRE DE LA HABILIDAD ");
         bw.write(discipline.getName());
         bw.newLine();
-        //VALOR ATAQUE
         bw.write("VALOR DE ATAQUE ");
         bw.write(String.valueOf(discipline.getAttack()));
         bw.newLine();
-        //VALOR DEFENSA
         bw.write("VALOR DE DEFENSA ");
         bw.write(String.valueOf(discipline.getDefense()));
         bw.newLine();
-        //COSTE HABILIDAD
         bw.write("COSTE DE LA HABILIDAD ");
         bw.write(String.valueOf(discipline.getCost()));
         bw.newLine();
-        //ARMAS
         bw.write("NUMERO DE ARMAS ");
         bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getWeapons().size()));
         bw.newLine();
-
 
         for (int weaponVar = 0; weaponVar < (clientArrayList.get(i).getCharacter().getWeapons().size()); weaponVar++) {
             Weapon weapon = vampire.getWeapons().get(weaponVar);
@@ -150,7 +138,6 @@ public class UserFileWriter {
             bw.newLine();
         }
         bw.newLine();
-        //NUMERO DE ARMAS ACTIVAS
         bw.write("NUMERO DE ARMAS ACTIVAS ");
         bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getActiveWeapons().size()));
         bw.newLine();
@@ -174,7 +161,6 @@ public class UserFileWriter {
             bw.newLine();
         }
         bw.newLine();
-        //ARMADURAS
         bw.write("NUMERO DE ARMADURAS  ");
         bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getArmors().size()));
         bw.newLine();

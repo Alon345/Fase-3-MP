@@ -90,7 +90,7 @@ public class MinionsComposit {
         } else {
             loyalty = Human.Loyalty.BAJA;
         }
-        human.setLealtad(loyalty);
+        human.setLoyalty(loyalty);
         human.setType("HUMANO");
         return human;
     }

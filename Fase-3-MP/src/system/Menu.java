@@ -61,6 +61,25 @@ public class Menu {
     }
     public void selectFactory(Client client) {
     }
-    public void operatorSelector(Administrator operator, mainSystem system) {
+    public void operatorSelector(Administrator admin, mainSystem system) {
+        Terminal terminal = new Terminal();
+        Scanner sc = new Scanner(System.in);
+
+        int opcion;
+        do {
+            terminal.adminMenu();
+            opcion = sc.nextInt();
+            switch (opcion) {
+                case 1 -> admin.modifyCharacter();
+                case 2 -> admin.validatingChallenge();
+                case 3 -> admin.unbanUser();
+                case 4 -> {
+                    terminal.logout();
+                    system.selector();
+                }
+                case 5 -> admin.deleteAccount(admin, system);
+                default -> terminal.error();
+            }
+        } while (opcion != 4 && opcion != 5);
     }
 }

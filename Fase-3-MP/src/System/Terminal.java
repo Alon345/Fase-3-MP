@@ -15,6 +15,7 @@ public class Terminal {
             System.out.println("  1 Registrarse");
             System.out.println("  2 Iniciar sesión como Jugador");
             System.out.println("  3 Iniciar sesión como Administrador");
+            System.out.println("  4 Salir");
             System.out.println("=======================================");
         }
 
@@ -52,6 +53,9 @@ public class Terminal {
         System.out.println("  2 No :)");
         System.out.println("=======================================");
     }
+
+    /**Mensajes Mini**/
+
     public void error() {
         System.out.println("!Error!. Algo inesperado ocurrió");
     }
@@ -62,6 +66,7 @@ public class Terminal {
         System.out.println("Introduce tu nick de usuario");
     }
     public void nickExists() {System.out.println("El nick introducido ya existe");}
+    public void reenterNewNick() {System.out.println("Introduce otro nick de usuario");}
     public void askPassword() {
         System.out.println("Introduce la contraseña de tu cuenta");
     }
@@ -69,11 +74,14 @@ public class Terminal {
     public void confirmNewUser(String username){
         System.out.println("=======================================");
         System.out.println("Bienvenido al sistema, "+ username + ".\nInicia sesión con tus credenciales para acceder");}
+    public void confirmNewAdmin(String username){
+        System.out.println("=======================================");
+        System.out.println("Bienvenido al sistema Administrador, "+ username + ".\nInicia sesión con tus credenciales para acceder");}
     public void errorPassword() {
         System.out.println("Contraseña incorrecta, pruebe de nuevo");
     }
     public void logout() {
-        System.out.println("Cerrando sesion... Un momento");
+        System.out.println("Cerrando sesion... Bye");
     }
 
     /**Mensajes de los personajes y lo relacionado a ellos**/
@@ -211,4 +219,16 @@ public class Terminal {
     public void defenceAbility(String character, String ability) {
         System.out.println(character + " usa " + ability + " para potenciar su defensa");
     }
+
+    /**Mensajes de los Administradores**/
+    public void adminMenu() {
+        System.out.println("============= MENU ADMIN =============");
+        System.out.println(" 1 MODIFICAR PERSONAJE");
+        System.out.println(" 2 VALIDAR DESAFIO");
+        System.out.println(" 3 DESBANEAR USUARIO");
+        System.out.println(" 4 SALIR");
+        System.out.println(" 5 BORRAR CUENTA");
+        System.out.println("=======================================");
+    }
+
 } //FIN

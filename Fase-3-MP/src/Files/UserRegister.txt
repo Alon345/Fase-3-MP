@@ -1,0 +1,7 @@
+========== USUARIO ==========
+NOMBRE 1
+NICK 1
+PASSWORD 1
+REGISTRO t87zvpr
+TIPO DE PERSONAJE 
+========== FIN USUARIO ==========

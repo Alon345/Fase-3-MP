@@ -19,6 +19,6 @@ public class NotificationManager {
 
     public void notifyChallenge(Challenge challenge) {
         ChallengeFileWriter ChallengeFileWriter = new ChallengeFileWriter();
-        //ChallengeFileWriter.challengeRgister(challenge);
+        ChallengeFileWriter.challengeRegister(challenge);
     }
 }

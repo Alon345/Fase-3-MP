@@ -42,7 +42,7 @@ public class Challenge {
         Terminal terminal = new Terminal();
         Scanner scanner = new Scanner(System.in);
         UserFileReader userFileReader = new UserFileReader();
-        ArrayList<Client> clientsLits = userFileReader.readUserFile();
+        ArrayList<Client> clientsLits = userFileReader.userFileReader();
         terminal.wellcomeChallenge();
         int goldAmount = -1;
         int rivalNum = -1;

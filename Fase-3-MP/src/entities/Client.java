@@ -36,7 +36,7 @@ public class Client extends User {
     /**A continuación se definen operaciones**/
     public String generateRegisterNumber() {
         UserFileReader userFileReader = new UserFileReader();
-        ArrayList<Client> list = userFileReader.readUserFile();
+        ArrayList<Client> list = userFileReader.userFileReader();
         String strBuilder = null;
         boolean valid = false;
 

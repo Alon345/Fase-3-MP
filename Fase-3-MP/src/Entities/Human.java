@@ -9,5 +9,5 @@ public class Human extends MinionsComposit {
     public Loyalty getLoyalty() {
         return loyalty;
     }
-    public void setLealtad(Loyalty loyalty) {this.loyalty = loyalty;}
+    public void setLoyalty(Loyalty loyalty) {this.loyalty = loyalty;}
 }
