@@ -1,6 +1,6 @@
 =========== USUARIO ===========
-  NOMBRE: Pep
-  NICK p0
-  PASSWORD p0
-  REGISTRO f39imcx
+  NOMBRE: Alonso
+  NICK Nick9
+  PASSWORD 90
+  REGISTRO s12bwgn
 TIPO PERSONAJE  

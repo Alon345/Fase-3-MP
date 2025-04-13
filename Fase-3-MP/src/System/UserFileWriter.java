@@ -10,11 +10,12 @@ import Entities.Character;
 
 public class UserFileWriter {
 
+    private static final String USER_FILE_PATH = "Fase-3-MP/src/Files/UserRegister.txt";
+
     /**A continuación se definen las operaciones de escrituras**/
     public void userRegister(Client client) {
         try {
-            String ruta = "Fase-3-MP/src/Files/UserRegister.txt"; //ruta relativa
-            File file = new File(ruta);
+            File file = new File(USER_FILE_PATH);
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -48,8 +49,7 @@ public class UserFileWriter {
 
     public void rewriteUserFile(ArrayList<Client> clientArrayList) {
         try {
-            String ruta = "Fase-3-MP/src/Files/UserRegister.txt"; //ruta relativa
-            File file = new File(ruta);
+            File file = new File(USER_FILE_PATH);
             FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
             //recorre la lista de clientes

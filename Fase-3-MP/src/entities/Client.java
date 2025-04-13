@@ -77,11 +77,22 @@ public class Client extends User {
     }
     public void challenge(Client client) {}
 
-    /**
-     * Elimina permanentemente una cuenta del sistema
-     * @param client Usuario logueado (puede ser Client o Administrator)
-     * @param system Referencia al sistema principal
-     */
+    public Vampire createVampire(){
+        return new Vampire();
+    }
+    public Hunter createHunter() {
+        return new Hunter();
+    }
+
+    public Werewolf createWerewolf() {
+        return new Werewolf();
+    }
+
+        /**
+         * Elimina permanentemente una cuenta del sistema
+         * @param client Usuario logueado (puede ser Client o Administrator)
+         * @param system Referencia al sistema principal
+         */
     public void deleteAccount(Client client, mainSystem system) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
@@ -119,6 +130,28 @@ public class Client extends User {
             }
         } else {
             terminal.cancelOperation();
+            terminal.closedSesion4Security();
+            system.selector();
         }
+    }
+
+    public void globalRanking() {
+        Terminal terminal = new Terminal();
+        terminal.rankingMessage();
+        UserFileReader userFileReader = new UserFileReader();
+        ArrayList<Client> lista = userFileReader.userFileReader();
+
+        // --- Operaciones  ---
+        ArrayList<Client> listaAux = new ArrayList<>(lista); // Copia la lista original
+        listaAux.sort((c1, c2) -> {
+            // Maneja casos donde el personaje es null
+            if (c1.getCharacter() == null && c2.getCharacter() == null) return 0;
+            if (c1.getCharacter() == null) return 1;  // Los sin personaje van al final
+            if (c2.getCharacter() == null) return -1;
+            // Orden descendente por oro (mayor a menor)
+            return Integer.compare(c2.getCharacter().getGold(), c1.getCharacter().getGold());
+        });
+        // --- FIN DE MODIFICACIÓN ---
+        terminal.showGoldRanking(listaAux);
     }
 }//FIN

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class CombatFileReader {
     public ArrayList<Combat> readCombatFile(){
-        return null;
+        ArrayList<Combat> combats = new ArrayList<>();
+        return combats;
     }
 }

@@ -1,10 +1,5 @@
 ========== USUARIO ==========
-NOMBRE: Lucas
-NICK: we4
-PASSWORD: 45
-========== FIN USUARIO ==========
-========== USUARIO ==========
-NOMBRE: Admin007
-NICK: 007
-PASSWORD: 007
+NOMBRE Admin007
+NICK Admin
+PASSWORD 123
 ========== FIN USUARIO ==========

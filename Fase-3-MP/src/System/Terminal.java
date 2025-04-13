@@ -2,6 +2,8 @@ package System;
 
 import Entities.Client;
 import Entities.Combat;
+import Entities.User;
+
 import java.util.ArrayList;
 
 public class Terminal {
@@ -50,14 +52,16 @@ public class Terminal {
         System.out.println("  3 Salir");
         System.out.println("=======================================");
     }
-    public void confirmDeleteAccount() {
+    public void rankingMessage() {
         System.out.println("=======================================");
-        System.out.println("   Eliminación de Cuenta de Usuario");
+        System.out.println("             RANKING GLOBAL");
         System.out.println("=======================================");
-        System.out.println(" ¿Esta seguro de esta acción?");
-        System.out.println("  1 Si :(");
-        System.out.println("  2 No :)");
-        System.out.println("=======================================");
+    }
+
+    public void showGoldRanking(ArrayList<Client> list) {
+        for (int numUser = 0; numUser < list.size(); numUser++) { //recorremos toda la lista de usuarios para mostrarlos a todos
+            System.out.println(numUser + 1 + ": " + list.get(numUser).getNick() + "\t\t" + list.get(numUser).getCharacter().getGold() + " Monedas de Oro");
+        }
     }
 
     /**Mensajes Mini**/
@@ -88,7 +92,10 @@ public class Terminal {
     public void noAccountAvaliable(){System.out.println("No se ha encontrado esta cuenta en el sistema");}
     public void cancelOperation(){System.out.println("         Operación Cancelada");}
     public void closedSesion4Security(){System.out.println("Hemos cerrado tu sesión por seguridad.");}
-
+    public void deleteCharacToCreateAnother() {
+        System.out.println("Debes eliminar a un personaje para volver a crear otro nuevo.");
+    }
+    public void invalidSelecction(){System.out.println("          Opción invalida");}
     public void advertency(){
         System.out.println("=========================================");
         System.out.println("IMPORTANTE: La siguiente acción puede ser \nirreversible asegurate de que deseas hacerlo.");
@@ -115,26 +122,34 @@ public class Terminal {
         System.out.println("Para crear un personaje nuevo antes tienes que eliminar el existente");
     }
     public void confirmDeleteCharacter() {
-        System.out.println("¿Seguro que desea eliminar el personaje?");
-        System.out.println(" 1 Si");
-        System.out.println(" 2 No");
+        System.out.println("=========================================");
+        System.out.println("       ELIMINACIÓN DE PERSONAJE");
+        System.out.println("=========================================");
+        System.out.println(" ¿Seguro que desea eliminar el personaje?");
+        System.out.println("   1 Si");
+        System.out.println("   2 No");
     }
     public void deletedCharacter() {
         System.out.println("Personaje eliminado correctamente");
     }
 
-    public void showFactories() {
-        System.out.println("Seleccione que tipo de personaje va a crear:");
-        System.out.println(" 1 Vampiro");
-        System.out.println(" 2 Licantropo");
-        System.out.println(" 3 Cazador");
+    public void showTipesOfCharacters() {
+        System.out.println("=========================================");
+        System.out.println("        CREACIÓN DE PERSONAJE");
+        System.out.println("=========================================");
+        System.out.println(" ¿Qué tipo de Personaje quieres crear");
+        System.out.println("  1 Vampiro");
+        System.out.println("  2 Licantropo");
+        System.out.println("  3 Cazador");
     }
 
     /**Mensajes de los desafíos**/
 
     public void welcomeChallenge() {
-        System.out.println("Bienvenido al menu de desafios");
-        System.out.println(" Escoge a un rival ");
+        System.out.println("=========================================");
+        System.out.println("     BIENVENIDO AL MENU DE DESAFÍOS");
+        System.out.println("=========================================");
+        System.out.println("   Rivales disponibles. Escoge a uno. ");
     }
     public void notAvaliableRival() {System.out.println("No hay rivales disponibles en este momento!");}
     public void showAvaliableRivals(ArrayList<Client> clientArrayList, Client client) {
@@ -151,7 +166,7 @@ public class Terminal {
         System.out.println("Elige un numero valido");
     }
     public void askForGoldBet() {
-        System.out.println("Introduce la cantidad de oro que deseas apostar ");
+        System.out.println("Introduce la cantidad de oro que deseas apostar (>100)");
     }
     public void challengeCreated(){System.out.println("Desafío creado y enviado al rival!");}
 
@@ -166,13 +181,13 @@ public class Terminal {
         System.out.println("=======================================");
     }
     public void askMinionName() {
-        System.out.println("Introduce el nombre del esbirro: ");
+        System.out.println("Introduce el nombre del esbirro ");
     }
     public void askForHp() {
-        System.out.println("Introduce la cantidad de vida:");
+        System.out.println("Introduce la cantidad de vida (0-3)");
     }
     public void askForMinionsNum() {
-        System.out.println("Introduce el numero de esbirros que deseas:");
+        System.out.println("Introduce el numero de esbirros que deseas");
     }
 
 
@@ -252,10 +267,69 @@ public class Terminal {
         System.out.println("=======================================");
         System.out.println(" 1 Modificar personaje");
         System.out.println(" 2 Validar desafío");
-        System.out.println(" 3 Desbanear usuario");
-        System.out.println(" 4 Salir");
-        System.out.println(" 5 Borrar cuenta");
+        System.out.println(" 3 Banear a un usuario");
+        System.out.println(" 4 Desbanear a un usuario");
+        System.out.println(" 5 Salir");
+        System.out.println(" 6 Borrar cuenta");
         System.out.println("=======================================");
     }
+    public void allUsers(ArrayList<Client> users) {
+        System.out.println("=======================================");
+        System.out.println("    LISTA DE USUARIOS EN EL SISTEMA");
+        System.out.println("=======================================");
+        for (int i = 0; i < users.size(); i++) {
+            Client user = users.get(i);
+            System.out.println((i+1) + " " + user.getNick() + " - " +
+                    user.getName());
+        }
+    }
+    public void whatUserToBan(){
+        System.out.println("========================================");
+        System.out.println("Introduce el número del usuario a banear");
+        System.out.println("========================================");
+    }
+    public void confirmBan(String username){
+        System.out.println("======================================");
+        System.out.println("               IMPORTANTE");
+        System.out.println("========================================");
+        System.out.println("¿Confirmas que deseas banear a " + username +"?");
+        System.out.println("Para confirmar escribe 'BANEAR', para cancelar \npulsa cualquier tecla");
+    }
+    public void banned(String username){
+        System.out.println("El usuario "+username+" ha sido baneado con éxito");
+    }
+    public void noNumberIn(){System.out.println("Debes introducir un número de usuario");}
+    public void whyDoYouBannedThisUser(String username){System.out.println("¿Por qué se ha baneado a "+username+"? (opcional)");}
+    public void howManyHours(){System.out.println("¿Cuantas horas deseas banearle (mínimo 1h)?");}
+    public void notifyBanExpired(){System.out.println("Bienvenido de nuevo, tu baneo ha expirado.");}
+    public void invalidNumberOfHours(){System.out.println("Introduce un numero de horas adecuado.");}
+    // Método para mostrar la lista de usuarios baneados
+    public void allBannedUsers(ArrayList<String> bannedClients) {
+        if (bannedClients.isEmpty()) {
+            System.out.println("No hay usuarios baneados.");
+        } else {
+            System.out.println("Usuarios baneados:");
+            for (int i = 0; i < bannedClients.size(); i++) {
+                String[] parts = bannedClients.get(i).split("\\|");
+                String nick = parts[0];
+                String motivo = parts.length > 1 ? parts[1] : "Sin motivo";
+                System.out.println((i + 1) + ". " + nick + " - Motivo: " + motivo);
+            }
+        }
+    }
+    public void whatUserToUnBan(){
+            System.out.println("===========================================");
+            System.out.println("Introduce el número del usuario a desbanear");
+            System.out.println("===========================================");
+    }
+    public void unbbanedUser(String username){
+        System.out.println("Has desbaneado a "+username);
+    }
+    public void noUsersBannedError(){
+        System.out.println("No hay usuarios baneados.");
+    }
+    public void confirmUnban(String confirmation){
+        System.out.println("Para confirmar el desbaneo escribe 'DESBANEAR', para cancelar \npulsa cualquier tecla");
+    }
 
-} //FIN
+}//FIN

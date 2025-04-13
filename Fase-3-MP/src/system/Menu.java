@@ -1,7 +1,10 @@
 package System;
 
 import Entities.Administrator;
+import Entities.Character;
 import Entities.Client;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
@@ -16,13 +19,13 @@ public class Menu {
             switch (option) {
                 case 1:
                     if (client.getCharacter() == null) {
-                        terminal.showFactories();
+                        terminal.showTipesOfCharacters();
                         selectFactory(client);
                     } else {
-                        terminal.deleteCharacter();
+                        terminal.deleteCharacToCreateAnother();
                     }
                     break;
-                case 2:
+                case 2: //borrar personaje
                     if (client.getCharacter() != null) {
                         client.deleteCharacter(client);
                     } else {
@@ -33,20 +36,19 @@ public class Menu {
                     client.selectTeam(client);
                     break;
                 case 4:
-                    // Llamada para leer el archivo de todos los clientes.
                     client.challenge(client);
                     break;
-                case 5:
+                case 5: //consulta de batallas
                     checkFights(client);
                     break;
-                case 6:
-                    checkRanking(client);
+                case 6: //consultar ranking global
+                    client.globalRanking();
                     break;
-                case 7:
+                case 7: //salir
                     terminal.logout();
                     system.selector();
                     break;
-                case 8:
+                case 8: //borrar cuenta
                     client.deleteAccount(client, system);
                     break;
                 default:
@@ -64,13 +66,40 @@ public class Menu {
         // Lógica para ver el ranking del cliente, si es necesario.
     }
 
+    /**
+     * Elección de tipo de personaje a crear
+     * @param client Usuario que creará el personaje x
+     */
     public void selectFactory(Client client) {
-        // Lógica para seleccionar la fábrica, si es necesario.
+        Terminal terminal = new Terminal();
+        Scanner sc = new Scanner(System.in);
+        Character charac = null;
+        int opcion = sc.nextInt();
+        switch (opcion) {
+            case 1 -> charac = client.createVampire();
+            case 2 -> charac = client.createWerewolf();
+            case 3 -> charac = client.createHunter();
+            default -> terminal.error();
+        }
+        client.setCharacter(charac);
+        UserFileReader userFileReader = new UserFileReader();
+        UserFileWriter userFileWriter = new UserFileWriter();
+        ArrayList<Client> clientList = userFileReader.userFileReader();
+
+        for (int userNum = 0; userNum < clientList.size(); userNum++){
+            if (client.getNick().equals(clientList.get(userNum).getNick())){
+                clientList.remove(userNum);
+                clientList.add(client);
+                userFileWriter.rewriteUserFile(clientList);
+                break;
+            }
+        }
     }
 
     public void operatorSelector(Administrator admin, mainSystem system) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
+        Client client = new Client();
         int opcion;
         do {
             terminal.adminMenu();
@@ -83,31 +112,18 @@ public class Menu {
                     admin.validatingChallenge();
                     break;
                 case 3:
-                    admin.unbanUser();
+                    String cause = "";
+                    admin.banUser(client);
                     break;
                 case 4:
+                    admin.unbanUser();
+                    break;
+                case 5:
                     terminal.logout();
                     system.selector();
                     break;
-                case 5:
-                    terminal.confirmDeleteAccount();
-                    int confirm = sc.nextInt();
-                    if (confirm == 1) {
-                        if (admin.getNick() == null || admin.getNick().isEmpty()) {
-                            terminal.showMessage("El nick del administrador no puede ser nulo o vacío.");
-                        } else {
-                            AdministratorFileWriter adminFileWriter = new AdministratorFileWriter();
-                            adminFileWriter.deleteAdmin(admin.getNick());
-                            terminal.logout();
-                            system.selector();
-                        }
-                    } else {
-                        terminal.showMessage("Eliminación de cuenta cancelada.");
-                    }
-                    break;
-                default:
-                    terminal.error();
-                    break;
+                case 6:
+                    admin.deleteAdminAccount(admin, system);
             }
         } while (opcion != 4 && opcion != 5);
     }

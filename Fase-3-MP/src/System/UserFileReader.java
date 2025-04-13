@@ -6,11 +6,14 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class UserFileReader {
+
+    private static final String USER_FILE_PATH = "Fase-3-MP/src/Files/UserRegister.txt";
+
     public ArrayList<Client> userFileReader() {
         ArrayList<Client> listaClient = new ArrayList<>();
         FileReader fr = null;
         try {
-            File archivo = new File("Fase-3-MP/src/Files/UserRegister.txt");
+            File archivo = new File(USER_FILE_PATH);
             if (!archivo.exists()) {
                 archivo.createNewFile();
             }
