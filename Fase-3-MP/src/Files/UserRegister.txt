@@ -1,6 +1,7 @@
-=========== USUARIO ===========
-  NOMBRE: Alonso
-  NICK Nick9
-  PASSWORD 90
-  REGISTRO s12bwgn
-TIPO PERSONAJE  
+========== USUARIO ==========
+NOMBRE Luis
+NICK WELyB1
+PASSWORD 133
+REGISTRO a32iyaf
+TIPO DE PERSONAJE 
+========== FIN USUARIO ==========

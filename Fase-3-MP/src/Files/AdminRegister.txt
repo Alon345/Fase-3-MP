@@ -1,5 +1,5 @@
-========== USUARIO ==========
-NOMBRE Admin007
-NICK Admin
-PASSWORD 123
-========== FIN USUARIO ==========
+========== ADMIN ==========
+NOMBRE AdminMan2
+NICK Admin8899
+PASSWORD 111
+========== FIN ADMIN ==========

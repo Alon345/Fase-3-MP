@@ -245,9 +245,9 @@ public class mainSystem {
         BanFileReader banFileReader = new BanFileReader();
 
         // Verificar si el usuario está baneado
-        if (banFileReader.isBanned(nick)) {
+        if (banFileReader.isUserBanned(nick)) {
             // Comprobar si el baneo ha expirado
-            if (banFileReader.banHasExpired(nick)) {
+            if (banFileReader.isBanExpired(nick)) {
                 // El baneo ha expirado, desbaneamos al usuario
                 banFileReader.removeBannedUser(nick); // Eliminarlo de BanRegister
                 banFileReader.reinstateUser(nick); // Reinsertarlo en UserRegister

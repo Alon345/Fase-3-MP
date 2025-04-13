@@ -17,11 +17,35 @@ public class BanFileWriter {
         try {
             FileWriter fw = new FileWriter(BAN_FILE_PATH, true);
             BufferedWriter bw = new BufferedWriter(fw);
-
-            String linea = client.getNick() + "|" + motivo + "|" + LocalDateTime.now() + "|" + duracionHoras;
-            bw.write(linea);
+            LocalDateTime banStart = LocalDateTime.now();
+            LocalDateTime banEnd = banStart.plusHours(duracionHoras);  // <- Aquí está la suma
             bw.newLine();
-
+            bw.write("========== USUARIO ==========");
+            bw.newLine();
+            bw.write("FECHA Y HORA DEL BANEO: " + banStart.format(formatter));
+            bw.newLine();
+            bw.write("NOMBRE ");
+            bw.write(client.getName());
+            bw.newLine();
+            bw.write("NICK ");
+            bw.write(client.getNick());
+            bw.newLine();
+            bw.write("PASSWORD ");
+            bw.write(client.getPassword());
+            bw.newLine();
+            bw.write("REGISTRO ");
+            bw.write(client.getRegister());
+            bw.newLine();
+            bw.write("TIPO DE PERSONAJE ");
+            bw.newLine();
+            bw.write("MOTIVO DEL BANEO: "+motivo);
+            bw.newLine();
+            bw.write("DURACION HORAS DEL BANEO: "+duracionHoras);
+            bw.newLine();
+            bw.write("FIN DEL BANEO: "+banEnd.format(formatter));
+            bw.newLine();
+            bw.write("========== FIN USUARIO ==========");
+            bw.newLine();
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -66,19 +90,19 @@ public class BanFileWriter {
         return file;
     }
     // Método para reescribir el archivo de baneos
-    public void rewriteBanFile(ArrayList<String> bannedClients) {
-        try {
-            File file = ensureFileExists(); // Asegurarse de que el archivo existe
-            FileWriter fw = new FileWriter(file.getAbsoluteFile(), false); // Sobrescribir el archivo (false para no añadir, sino sobrescribir)
-            BufferedWriter bw = new BufferedWriter(fw);
-
-            // Escribir los usuarios baneados en el archivo
-            for (String bannedClient : bannedClients) {
-                bw.write(bannedClient);
-                bw.newLine(); // Escribir una nueva línea por cada usuario baneado
+    public void rewriteBanFile(ArrayList<Client> bannedClients) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(BAN_FILE_PATH))) {
+            for (Client client : bannedClients) {
+                bw.write("=========== USUARIO BANEADO ===========");
+                bw.newLine();
+                bw.write("NICK: " + client.getNick());
+                bw.newLine();
+                bw.write("NOMBRE: " + client.getName());
+                bw.newLine();
+                // ... resto de campos
+                bw.write("========== FIN USUARIO BANEADO ==========");
+                bw.newLine();
             }
-
-            bw.close(); // Cerrar el BufferedWriter
         } catch (IOException e) {
             e.printStackTrace();
         }

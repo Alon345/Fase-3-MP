@@ -18,7 +18,7 @@ public class AdministratorFileWriter {
             // Se abre en modo adjuntar (true)
             FileWriter fw = new FileWriter(file, true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write("========== USUARIO ==========");
+            bw.write("========== ADMIN ==========");
             bw.newLine();
             bw.write("NOMBRE " + admin.getName());
             bw.newLine();
@@ -26,7 +26,7 @@ public class AdministratorFileWriter {
             bw.newLine();
             bw.write("PASSWORD " + admin.getPassword());
             bw.newLine();
-            bw.write("========== FIN USUARIO ==========");
+            bw.write("========== FIN ADMIN ==========");
             bw.newLine();
             bw.close();
         } catch (Exception e) {
@@ -45,7 +45,7 @@ public class AdministratorFileWriter {
             BufferedWriter bw = new BufferedWriter(fw);
             // Recorre la lista de clientes
             for (Administrator client : clientArrayList) {
-                bw.write("=========== USUARIO ===========");
+                bw.write("=========== ADMIN ===========");
                 bw.newLine();
                 bw.write("NOMBRE " + client.getName());
                 bw.newLine();
@@ -53,7 +53,7 @@ public class AdministratorFileWriter {
                 bw.newLine();
                 bw.write("PASSWORD " + client.getPassword());
                 bw.newLine();
-                bw.write("========== FIN USUARIO ==========");
+                bw.write("========== FIN ADMIN ==========");
                 bw.newLine();
             }
             bw.close();
@@ -87,7 +87,7 @@ public class AdministratorFileWriter {
             int blockStartIndex = -1;
 
             while ((line = br.readLine()) != null) {
-                if (line.startsWith("========== USUARIO ==========")) {
+                if (line.startsWith("========== ADMIN ==========")) {
                     // Inicio de un nuevo bloque
                     blockStartIndex = lines.size(); // Guardamos dónde empieza este bloque
                     insideBlockToDelete = false; // Reseteamos el flag
@@ -100,7 +100,7 @@ public class AdministratorFileWriter {
                     // Eliminamos todas las líneas desde blockStartIndex
                     lines = new ArrayList<>(lines.subList(0, blockStartIndex));
                 }
-                else if (line.startsWith("========== FIN USUARIO ==========")) {
+                else if (line.startsWith("========== FIN ADMIN ==========")) {
                     // Fin de un bloque
                     if (!insideBlockToDelete) {
                         lines.add(line); // Solo añadimos si no estamos borrando

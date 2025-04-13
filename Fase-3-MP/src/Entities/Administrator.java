@@ -1,8 +1,7 @@
 package Entities;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
+
 import System.*;
 
 
@@ -84,16 +83,17 @@ public class Administrator extends User{
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
 
-        // Leer los usuarios y baneos
+        // Leer usuarios y baneados usando el nuevo sistema
         ArrayList<Client> userList = userFileReader.userFileReader();
-        ArrayList<String> bannedClients = banFileReader.bannedReader();
+        ArrayList<Client> bannedClients = banFileReader.readBannedUsers();
 
         if (bannedClients.isEmpty()) {
             terminal.noUsersBannedError();
             return;
         }
 
-        terminal.allBannedUsers(bannedClients);
+        // Mostrar lista de baneados con formato mejorado
+        terminal.showBannedUsers(bannedClients);
         terminal.whatUserToUnBan();
 
         try {
@@ -101,17 +101,17 @@ public class Administrator extends User{
             sc.nextLine();
 
             if (selection == 0) {
+                terminal.cancelOperation();
                 return;
             }
 
             if (selection < 1 || selection > bannedClients.size()) {
-                terminal.invalidSelecction();
+                terminal.noNumberIn();
                 return;
             }
 
-            String bannedUserInfo = bannedClients.get(selection - 1);
-            String[] bannedParts = bannedUserInfo.split("\\|");
-            String bannedNick = bannedParts[0];
+            Client userToUnban = bannedClients.get(selection - 1);
+            String bannedNick = userToUnban.getNick();
 
             terminal.confirmUnban(bannedNick);
             String confirm = sc.nextLine().trim().toUpperCase();
@@ -120,37 +120,29 @@ public class Administrator extends User{
                 // 1. Eliminar de la lista de baneados
                 bannedClients.remove(selection - 1);
 
-                // 2. Buscar el cliente en la lista de usuarios
-                Client unbannedClient = null;
+                // 2. Añadir a usuarios normales (con verificación de existencia)
+                Set<String> existingNicks = new HashSet<>();
                 for (Client client : userList) {
-                    if (client.getNick().equals(bannedNick)) {
-                        unbannedClient = client;
-                        break;
-                    }
+                    existingNicks.add(client.getNick().toLowerCase());
                 }
 
-                if (unbannedClient != null) {
-                    // 3. Verificar si ya está en userList (por si acaso)
-                    boolean alreadyInList = false;
-                    for (Client client : userList) {
-                        if (client.getNick().equals(bannedNick)) {
-                            alreadyInList = true;
-                            break;
-                        }
-                    }
-
-                    if (!alreadyInList) {
-                        userList.add(unbannedClient);
-                    }
-
-                    // 4. Reescribir ambos archivos
-                    userFileWriter.rewriteUserFile(userList); // Esto mantendrá el formato especial
-                    banFileWriter.rewriteBanFile(bannedClients);
-
-                    terminal.unbbanedUser(bannedNick);
+                if (!existingNicks.contains(userToUnban.getNick().toLowerCase())) {
+                    userList.add(userToUnban);
                 } else {
                     terminal.error();
                 }
+
+                // 3. Actualizar archivos
+                userFileWriter.rewriteUserFile(userList);
+                banFileWriter.rewriteBanFile(bannedClients);
+
+                // 4. Eliminar registro de baneo
+                banFileReader.removeBannedUser(bannedNick);
+
+                terminal.unbbanedUser(bannedNick);
+
+                // 5. Limpiar baneos expirados automáticamente
+                banFileReader.removeExpiredBans();
             } else {
                 terminal.cancelOperation();
             }

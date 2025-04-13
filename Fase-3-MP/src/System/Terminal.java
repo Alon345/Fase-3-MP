@@ -331,5 +331,16 @@ public class Terminal {
     public void confirmUnban(String confirmation){
         System.out.println("Para confirmar el desbaneo escribe 'DESBANEAR', para cancelar \npulsa cualquier tecla");
     }
+    public void showBannedUsers(ArrayList<Client> bannedUsers) {
+        System.out.println("\n=== USUARIOS BANEADOS ===");
+        for (int i = 0; i < bannedUsers.size(); i++) {
+            Client user = bannedUsers.get(i);
+            System.out.printf("%d. %s (%s) - Registro: %s\n",
+                    i + 1,
+                    user.getNick(),
+                    user.getName(),
+                    user.getRegister());
+        }
+    }
 
 }//FIN
