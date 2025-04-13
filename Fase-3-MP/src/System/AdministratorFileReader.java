@@ -12,7 +12,6 @@ public class AdministratorFileReader {
 
         FileReader fr = null;
         ArrayList<Administrator> listAdmin = new ArrayList<>();
-
         try {
             File archivo = new File("Fase-3-MP/src/Files/AdminRegister.txt");
             if (!archivo.exists()) {

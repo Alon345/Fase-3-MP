@@ -20,11 +20,11 @@ public class AdministratorFileWriter {
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write("========== USUARIO ==========");
             bw.newLine();
-            bw.write("NOMBRE: " + admin.getName());
+            bw.write("NOMBRE " + admin.getName());
             bw.newLine();
-            bw.write("NICK: " + admin.getNick());
+            bw.write("NICK " + admin.getNick());
             bw.newLine();
-            bw.write("PASSWORD: " + admin.getPassword());
+            bw.write("PASSWORD " + admin.getPassword());
             bw.newLine();
             bw.write("========== FIN USUARIO ==========");
             bw.newLine();
@@ -37,21 +37,21 @@ public class AdministratorFileWriter {
     }
 
     // Reescribe el fichero de usuarios (para clientes)
-    public void rewriteUserFile(ArrayList<Client> clientArrayList) {
+    public void rewriteUserFile(ArrayList<Administrator> clientArrayList) {
         try {
             String ruta = "Fase-3-MP/src/Files/UserRegister.txt"; // Ruta relativa
             File file = new File(ruta);
             FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
             // Recorre la lista de clientes
-            for (Client client : clientArrayList) {
+            for (Administrator client : clientArrayList) {
                 bw.write("=========== USUARIO ===========");
                 bw.newLine();
-                bw.write("NOMBRE: " + client.getName());
+                bw.write("NOMBRE " + client.getName());
                 bw.newLine();
-                bw.write("NICK: " + client.getNick());
+                bw.write("NICK " + client.getNick());
                 bw.newLine();
-                bw.write("PASSWORD: " + client.getPassword());
+                bw.write("PASSWORD " + client.getPassword());
                 bw.newLine();
                 bw.write("========== FIN USUARIO ==========");
                 bw.newLine();

@@ -78,20 +78,23 @@ public class Terminal {
     }
     public void confirmPassword() {System.out.println("Por favor, confirme la contraseña introducida");}
     public void noUsersError(){System.out.println("No hay usuarios registrados en este videojuego \n        !Regístrate para jugar!");}
-    public void nickNotFoundError(){System.out.println("El nick no existe en este videojuego, comprueba los campos");}
+    public void nickNotFoundError(){System.out.println(" El nick no existe en este videojuego, \n" +
+                                                       "         comprueba los campos");}
     public void hiAgainUser(String username){System.out.println("  !Un placer verte de nuevo, "+ username+"!");}
     public void emptyPassword(){System.out.println("!El campo 'Contraseña' no debe estar vacio!");}
     public void emptyNick(){System.out.println("!El campo 'Nick' no debe estar vacio!");}
     public void emptyName(){System.out.println("!El campo 'Nombre' no debe estar vacio!");}
     public void deletedAccountOK(){System.out.println("Tu cuenta ha sido eliminada con éxito...");}
     public void noAccountAvaliable(){System.out.println("No se ha encontrado esta cuenta en el sistema");}
-    public void cancelOperation(){System.out.println("        Operación Cancelada");}
+    public void cancelOperation(){System.out.println("         Operación Cancelada");}
+    public void closedSesion4Security(){System.out.println("Hemos cerrado tu sesión por seguridad.");}
+
     public void advertency(){
         System.out.println("=========================================");
-        System.out.println("IMPORTANTE: La siguiente acción puede ser \nirreversible asegurate de que deseas hacerlo");
+        System.out.println("IMPORTANTE: La siguiente acción puede ser \nirreversible asegurate de que deseas hacerlo.");
         System.out.println("=========================================");
     }
-    public void writeConfirm(){System.out.println("Escriba 'ELIMINAR' para confirmar esta acción, \nsi deseas cancelar pulsa cualquier tecla");}
+    public void writeConfirm(){System.out.println("Escriba 'ELIMINAR' para confirmar esta acción, \nsi deseas cancelar pulsa cualquier tecla.");}
 
     public void confirmNewUser(String username){
         System.out.println("=======================================");
@@ -245,13 +248,13 @@ public class Terminal {
     /**Mensajes de los Administradores**/
     public void adminMenu() {
         System.out.println("=======================================");
-        System.out.println("               MENU ADMIN ");
+        System.out.println("              MENU ADMIN ");
         System.out.println("=======================================");
-        System.out.println(" 1 MODIFICAR PERSONAJE");
-        System.out.println(" 2 VALIDAR DESAFIO");
-        System.out.println(" 3 DESBANEAR USUARIO");
-        System.out.println(" 4 SALIR");
-        System.out.println(" 5 BORRAR CUENTA");
+        System.out.println(" 1 Modificar personaje");
+        System.out.println(" 2 Validar desafío");
+        System.out.println(" 3 Desbanear usuario");
+        System.out.println(" 4 Salir");
+        System.out.println(" 5 Borrar cuenta");
         System.out.println("=======================================");
     }
 
