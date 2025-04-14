@@ -69,13 +69,6 @@ REGISTRO v90w12x
 TIPO PERSONAJE  
 ========== FIN USUARIO ==========
 ========== USUARIO ==========
-NOMBRE User9
-NICK user001
-PASSWORD 1234
-REGISTRO y34z56a
-TIPO PERSONAJE  
-========== FIN USUARIO ==========
-========== USUARIO ==========
 NOMBRE User10
 NICK user001
 PASSWORD 1234
@@ -101,5 +94,12 @@ NOMBRE Lucas
 NICK 23
 PASSWORD 23
 REGISTRO m99cuzf
+TIPO PERSONAJE  
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE 1
+NICK user
+PASSWORD 1
+REGISTRO z96jqqe
 TIPO PERSONAJE  
 ========== FIN USUARIO ==========

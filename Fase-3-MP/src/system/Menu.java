@@ -18,7 +18,7 @@ public class Menu {
             option = sc.nextInt();
             switch (option) {
                 case 1:
-                    if (client.getCharacter() == null) {
+                    if (client.getCharacter() == null) {//crear personaje
                         terminal.showTipesOfCharacters();
                         selectFactory(client);
                     } else {
@@ -32,11 +32,11 @@ public class Menu {
                         terminal.error();
                     }
                     break;
-                case 3:
+                case 3:// armaduras etc
                     client.selectTeam(client);
                     break;
-                case 4:
-                    client.challenge(client);
+                case 4: //desafiar
+                    client.toChallenge(client);
                     break;
                 case 5: //consulta de batallas
                     checkFights(client);
@@ -117,13 +117,13 @@ public class Menu {
                 case 4:
                     admin.unbanUser(client);
                     break;
-                case 5:
+                case 5: //logout
                     terminal.logout();
                     system.selector();
                     break;
-                case 6:
+                case 6: //borrar cuenta
                     admin.deleteAdminAccount(admin, system);
             }
-        } while (opcion != 4 && opcion != 5);
+        } while (opcion != 5 && opcion != 6);
     }
 }

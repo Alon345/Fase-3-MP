@@ -1,4 +1,5 @@
 package Entities;
+import Factories.VampireFactory;
 import System.mainSystem;
 import System.Terminal;
 import java.util.ArrayList;
@@ -61,6 +62,10 @@ public class Client extends User {
 
         return strBuilder;
     }
+    public void toChallenge(Client cliente) { //desafiar -> toChallenge
+        Challenge challenge = new Challenge();
+        challenge.createChallenge(cliente);
+    }
 
     public void deleteCharacter(Client client) {
         Terminal terminal = new Terminal();
@@ -77,9 +82,7 @@ public class Client extends User {
     }
     public void challenge(Client client) {}
 
-    public Vampire createVampire(){
-        return new Vampire();
-    }
+    public Vampire createVampire(){return new Vampire();}
     public Hunter createHunter() {
         return new Hunter();
     }
@@ -143,15 +146,6 @@ public class Client extends User {
 
         // --- Operaciones  ---
         ArrayList<Client> listaAux = new ArrayList<>(lista); // Copia la lista original
-        listaAux.sort((c1, c2) -> {
-            // Maneja casos donde el personaje es null
-            if (c1.getCharacter() == null && c2.getCharacter() == null) return 0;
-            if (c1.getCharacter() == null) return 1;  // Los sin personaje van al final
-            if (c2.getCharacter() == null) return -1;
-            // Orden descendente por oro (mayor a menor)
-            return Integer.compare(c2.getCharacter().getGold(), c1.getCharacter().getGold());
-        });
-        // --- FIN DE MODIFICACIÓN ---
         terminal.showGoldRanking(listaAux);
     }
 }//FIN

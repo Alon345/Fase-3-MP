@@ -49,7 +49,7 @@ public class mainSystem {
                     for (int i = 0; i < listaDesafios.size(); i++) {
                         if (listaDesafios.get(i).isValidated() && listaDesafios.get(i).getRival().getNick().equals(client.getNick())) {
                             NotificationManager notificationManager = new NotificationManager();
-                            notificationManager.notifyChallenge(client, terminal, listaDesafios, i);
+                            //notificationManager.notifyChallenge(client, terminal, listaDesafios, i);
                             i--;
                         }
                     }
@@ -236,7 +236,13 @@ public class mainSystem {
                 encontrado = true;
                 aux = i;
                 break;
-            }
+            } /**si pusieramos else {terminal.nickNotFoundError();
+             return null;} sería erroneo ya que si en la primera
+             iteracion el nick no es el pedido entonces lanza error **/
+        }
+        if (!encontrado) {
+            terminal.nickNotFoundError();
+            return null;
         }
 
         BanFileReader banFileReader = new BanFileReader();

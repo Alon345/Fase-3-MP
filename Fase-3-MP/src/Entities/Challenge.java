@@ -50,7 +50,7 @@ public class Challenge {
         if (clientsLits.size() == 1) {
             terminal.notAvaliableRival();
         } else{
-            terminal.showAvaliableRivals(clientsLits, client);
+            terminal.showAvaliableRivals(clientsLits);
             do {
                 terminal.validNumber();
                 rivalNum = askForNumber();

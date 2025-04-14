@@ -1,5 +1,6 @@
 package System;
 
+import Entities.Challenge;
 import Entities.Client;
 import Entities.Combat;
 import Entities.User;
@@ -10,7 +11,12 @@ public class Terminal {
     public Terminal(){
     }
     /**Mensajes iniciales**/
-    public void wellcome(){System.out.println("       Bienvenido a Shadow Clash!");} //no cambiar
+    public void wellcome() {
+        String boldBlue = "\033[1;34m"; // Azul en negrita
+        String reset = "\033[0m";
+        System.out.println("=======================================");
+        System.out.println("     Bienvenido a " + boldBlue + "Shadow Clash" + reset + "!");
+    }
     public void showStart() {
             System.out.println("=======================================");
             System.out.println("  Por favor, selecciona una opción");
@@ -26,8 +32,10 @@ public class Terminal {
     }
 
     public void showMenu() {
+        String colorCodeGreen = "\033[0;32m"; // Verde
+        String resetCode = "\033[0m";         // Reset de color
         System.out.println("=======================================");
-        System.out.println("               MENU JUGADOR ");
+        System.out.println(colorCodeGreen + "              MENU JUGADOR " + resetCode);
         System.out.println("=======================================");
         System.out.println("  1 Registrar personaje");
         System.out.println("  2 Eliminar personaje");
@@ -44,7 +52,7 @@ public class Terminal {
 
     public void userRegistrerMenu() {
         System.out.println("=======================================");
-        System.out.println("      Registro de nuevo usuario");
+        System.out.println("       Registro de nuevo usuario");
         System.out.println("=======================================");
         System.out.println("  ¿En qué modo desea registrarse?");
         System.out.println("  1 Modo Jugador");
@@ -54,14 +62,47 @@ public class Terminal {
     }
     public void rankingMessage() {
         System.out.println("=======================================");
-        System.out.println("             RANKING GLOBAL");
+        System.out.println("          🏆 RANKING GLOBAL 🏆");
         System.out.println("=======================================");
     }
 
-    public void showGoldRanking(ArrayList<Client> list) {
-        for (int numUser = 0; numUser < list.size(); numUser++) { //recorremos toda la lista de usuarios para mostrarlos a todos
-            System.out.println(numUser + 1 + ": " + list.get(numUser).getNick() + "\t\t" + list.get(numUser).getCharacter().getGold() + " Monedas de Oro");
+    public void showGoldRanking(ArrayList<Client> users) {
+        for (int i = 0; i < users.size(); i++) {
+            Client user = users.get(i);
+            String gold = user.getCharacter() != null ?
+                    String.valueOf(3) : "0"; //aqui va el oro de cada personaje del usuario x
+            // Personalización para los top 3
+            if (i < 3) {
+                String crown = "";
+                String colorCode = "";
+                switch(i) {
+                    case 0: // TOP 1
+                        crown = "👑";
+                        colorCode = "\033[1;33m"; // Amarillo brillante al top 1
+                        break;
+                    case 1: // TOP 2
+                        crown = "🥈";
+                        colorCode = "\033[0;36m"; // Cian
+                        break;
+                    case 2: // TOP 3
+                        crown = "🥉";
+                        colorCode = "\033[0;35m"; // Magenta
+                        break;
+                }
+                System.out.printf(colorCode + "%s%d. %-15s (GOLD %5s)\033[0m\n",
+                        crown,
+                        i+1,
+                        user.getNick(),
+                        gold);
+            } else {
+                // Formato normal para el resto
+                System.out.printf("%d. %-15s (GOLD %5s)\n",
+                        i+1,
+                        user.getNick(),
+                        gold);
+            }
         }
+        System.out.println("=======================================");
     }
 
     /**Mensajes Mini**/
@@ -96,9 +137,11 @@ public class Terminal {
         System.out.println("Debes eliminar a un personaje para volver a crear otro nuevo.");
     }
     public void invalidSelecction(){System.out.println("          Opción invalida");}
-    public void advertency(){
+    public void advertency() {
+        String colorCodeRed = "\033[0;31m"; // Rojo
+        String resetCode = "\033[0m";       // Reset de color
         System.out.println("=========================================");
-        System.out.println("IMPORTANTE: La siguiente acción puede ser \nirreversible, asegurate de que deseas hacerlo.");
+        System.out.println(colorCodeRed + "IMPORTANTE:" + resetCode + " La siguiente acción puede ser \nirreversible, asegúrate de que deseas hacerlo.");
         System.out.println("=========================================");
     }
     public void writeConfirm(){System.out.println("Escriba 'ELIMINAR' para confirmar esta acción, \nsi deseas cancelar pulsa cualquier tecla.");}
@@ -149,18 +192,19 @@ public class Terminal {
         System.out.println("=========================================");
         System.out.println("     BIENVENIDO AL MENU DE DESAFÍOS");
         System.out.println("=========================================");
-        System.out.println("   Rivales disponibles. Escoge a uno. ");
+        System.out.println("    Rivales disponibles. Escoge a uno. ");
+        System.out.println("===========================================");
+
     }
     public void notAvaliableRival() {System.out.println("No hay rivales disponibles en este momento!");}
-    public void showAvaliableRivals(ArrayList<Client> clientArrayList, Client client) {
-        System.out.println("=======================================");
-        System.out.println("0 Cancelar");
-        for (int numClient = 0; numClient < clientArrayList.size(); numClient++) {
-            if (clientArrayList.get(numClient).getCharacter() != null && !clientArrayList.get(numClient).getNick().equals(client.getNick())) {
-                System.out.println((numClient + 1) + ": " + clientArrayList.get(numClient).getNick());
-            }
+    public void showAvaliableRivals(ArrayList<Client> users) {
+        for (int i = 0; i < users.size(); i++) {
+            Client user = users.get(i);
+            System.out.printf("%d %s \n", // 1 nick01
+                    i + 1,
+                    user.getNick());
         }
-        System.out.println("=======================================");
+        System.out.println("===========================================");
     }
     public void validNumber() {
         System.out.println("Elige un numero valido");
@@ -169,6 +213,20 @@ public class Terminal {
         System.out.println("Introduce la cantidad de oro que deseas apostar (>100)");
     }
     public void challengeCreated(){System.out.println("Desafío creado y enviado al rival!");}
+    public void askChallenge(Challenge challenge) {
+        System.out.println("===========================================");
+        System.out.println("             DESAFÍO ENTRANTE");
+        System.out.println("===========================================");
+        System.out.println("El usuario " + challenge.getChallenger().getNick()+" te ha desafiado.");
+        System.out.println("Su apuesta es de " + challenge.getGold() + " Monedas de Oro");
+        System.out.println("===========================================");
+        System.out.println("¿Quieres aceptar el desafio?");
+        System.out.println("  1 SI ACEPTAR");
+        System.out.println("  2 NO ACEPTAR");
+        System.out.println("NOTA: si no aceptas perderás " + challenge.getGold() / 10 + " de tus Monedas de Oro");
+        System.out.println("===========================================");
+
+    }
 
     /**Mensajes de los esbirros**/
     public void askMinionType() {
@@ -210,6 +268,11 @@ public class Terminal {
         System.out.println("=======================================");
         System.out.println("    Introduce el pacto del demonio");
         System.out.println("=======================================");
+    }
+
+    /**Mensajes de los Vampiros**/
+    public void askVampireAge() {
+        System.out.println("¿Qué edad tiene tu vampiro?");
     }
 
     /**Mensajes de los GHOULS**/
@@ -262,8 +325,10 @@ public class Terminal {
 
     /**Mensajes de los Administradores**/
     public void adminMenu() {
+        String colorCodeBlue = "\033[0;34m"; // Azul
+        String resetCode = "\033[0m";        // Reset de color
         System.out.println("=======================================");
-        System.out.println("              MENU ADMIN ");
+        System.out.println("              " + colorCodeBlue + "MENU ADMIN" + resetCode);
         System.out.println("=======================================");
         System.out.println(" 1 Modificar personaje");
         System.out.println(" 2 Validar desafío");
@@ -289,9 +354,11 @@ public class Terminal {
         System.out.println("========================================");
     }
     public void confirmBan(String username){
+        String colorCodeRed = "\033[0;31m"; // Rojo
+        String resetCode = "\033[0m";       // Reset de color
         System.out.println("======================================");
-        System.out.println("               IMPORTANTE");
-        System.out.println("========================================");
+        System.out.println("              " + colorCodeRed + "IMPORTANTE" + resetCode);
+        System.out.println("======================================");
         System.out.println("¿Confirmas que deseas banear a " + username +"?");
         System.out.println("Para confirmar escribe 'BANEAR', para cancelar \npulsa cualquier tecla");
     }
@@ -312,7 +379,7 @@ public class Terminal {
         if (bannedClients.isEmpty()) {
             System.out.println("No hay usuarios baneados.");
         } else {
-            System.out.println("Usuarios baneados:");
+            System.out.println("Usuarios baneados");
             for (int i = 0; i < bannedClients.size(); i++) {
                 String[] parts = bannedClients.get(i).split("\\|");
                 String nick = parts[0];
@@ -334,9 +401,11 @@ public class Terminal {
     }
 
     public void confirmUnban(String username){
-        System.out.println("===========================================");
-        System.out.println("                 IMPORTANTE");
-        System.out.println("===========================================");
+        String colorCodeRed = "\033[0;31m"; // Rojo
+        String resetCode = "\033[0m";       // Reset de color
+        System.out.println("======================================");
+        System.out.println("              " + colorCodeRed + "IMPORTANTE" + resetCode);
+        System.out.println("======================================");
         System.out.println("¿Confirmas que deseas banear a " + username +"?");
         System.out.println("Para confirmar el desbaneo escribe 'DESBANEAR', \npara cancelar pulsa cualquier tecla");
     }
@@ -353,4 +422,5 @@ public class Terminal {
                     user.getRegister());
         }
     }
+
 }//FIN
