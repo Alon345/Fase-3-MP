@@ -112,11 +112,10 @@ public class Menu {
                     admin.validatingChallenge();
                     break;
                 case 3:
-                    String cause = "";
                     admin.banUser(client);
                     break;
                 case 4:
-                    admin.unbanUser();
+                    admin.unbanUser(client);
                     break;
                 case 5:
                     terminal.logout();

@@ -5,8 +5,8 @@ import Entities.Client;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Scanner;
-import java.util.ArrayList;
 
 public class BanFileWriter {
 
@@ -90,23 +90,27 @@ public class BanFileWriter {
         return file;
     }
     // Método para reescribir el archivo de baneos
-    public void rewriteBanFile(ArrayList<Client> bannedClients) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(BAN_FILE_PATH))) {
-            for (Client client : bannedClients) {
-                bw.write("=========== USUARIO BANEADO ===========");
-                bw.newLine();
-                bw.write("NICK: " + client.getNick());
-                bw.newLine();
-                bw.write("NOMBRE: " + client.getName());
-                bw.newLine();
-                // ... resto de campos
-                bw.write("========== FIN USUARIO BANEADO ==========");
-                bw.newLine();
+
+     public void rewriteBanFile(List<Client> bannedClients) {
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(BAN_FILE_PATH))) {
+                for (Client client : bannedClients) {
+                    bw.write("=========== USUARIO BANEADO ===========");
+                    bw.newLine();
+                    bw.write("NICK " + client.getNick());
+                    bw.newLine();
+                    bw.write("NOMBRE " + client.getName());
+                    bw.newLine();
+                    bw.write("PASSWORD " + client.getPassword());
+                    bw.newLine();
+                    bw.write("REGISTRO " + client.getRegister());
+                    bw.newLine();
+                    bw.write("========== FIN USUARIO BANEADO ==========");
+                    bw.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    }
 }//FIN
 
 

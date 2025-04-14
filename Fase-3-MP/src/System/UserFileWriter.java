@@ -54,23 +54,24 @@ public class UserFileWriter {
             BufferedWriter bw = new BufferedWriter(fw);
             //recorre la lista de clientes
             for (int i = 0; i < clientArrayList.size(); i++) {
-
-                bw.write("=========== USUARIO ===========");
+                bw.write("========== USUARIO ==========");
                 bw.newLine();
-                bw.write("  NOMBRE: ");
+                bw.write("NOMBRE ");
                 bw.write(clientArrayList.get(i).getName());
                 bw.newLine();
-                bw.write("  NICK ");
+                bw.write("NICK ");
                 bw.write(clientArrayList.get(i).getNick());
                 bw.newLine();
-                bw.write("  PASSWORD ");
+                bw.write("PASSWORD ");
                 bw.write(clientArrayList.get(i).getPassword());
                 bw.newLine();
-                bw.write("  REGISTRO ");
+                bw.write("REGISTRO ");
                 bw.write(clientArrayList.get(i).getRegister());
                 bw.newLine();
                 if (clientArrayList.get(i).getCharacter() == null) {
                     bw.write("TIPO PERSONAJE  ");
+                    bw.newLine();
+                    bw.write("========== FIN USUARIO ==========");
                     bw.newLine();
                 } else {
                     String tipoPersonaje = clientArrayList.get(i).getCharacter().getType();
@@ -78,6 +79,7 @@ public class UserFileWriter {
                        case "VAMPIRO" -> vampireWriter(clientArrayList, i, bw);
                        case "LICANTROPO" -> licantropWriter(clientArrayList, i, bw);
                        case "CAZADOR" -> hunterWriter(clientArrayList, i, bw);
+
                     }
                 }
             }
@@ -116,6 +118,8 @@ public class UserFileWriter {
         bw.newLine();
         bw.write("NUMERO DE ARMAS ");
         bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getWeapons().size()));
+        bw.newLine();
+        bw.write("========== FIN USUARIO ==========");
         bw.newLine();
 
         for (int weaponVar = 0; weaponVar < (clientArrayList.get(i).getCharacter().getWeapons().size()); weaponVar++) {

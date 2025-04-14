@@ -98,7 +98,7 @@ public class Terminal {
     public void invalidSelecction(){System.out.println("          Opción invalida");}
     public void advertency(){
         System.out.println("=========================================");
-        System.out.println("IMPORTANTE: La siguiente acción puede ser \nirreversible asegurate de que deseas hacerlo.");
+        System.out.println("IMPORTANTE: La siguiente acción puede ser \nirreversible, asegurate de que deseas hacerlo.");
         System.out.println("=========================================");
     }
     public void writeConfirm(){System.out.println("Escriba 'ELIMINAR' para confirmar esta acción, \nsi deseas cancelar pulsa cualquier tecla.");}
@@ -304,6 +304,9 @@ public class Terminal {
     public void notifyBanExpired(){System.out.println("Bienvenido de nuevo, tu baneo ha expirado.");}
     public void invalidNumberOfHours(){System.out.println("Introduce un numero de horas adecuado.");}
     // Método para mostrar la lista de usuarios baneados
+    public void noUsersToBanError(){
+        System.out.println("No hay usuarios en el sistema.");
+    }
     public void allBannedUsers(ArrayList<String> bannedClients) {
         if (bannedClients.isEmpty()) {
             System.out.println("No hay usuarios baneados.");
@@ -342,5 +345,6 @@ public class Terminal {
                     user.getRegister());
         }
     }
+
 
 }//FIN

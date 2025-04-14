@@ -1,5 +1,5 @@
 ========== ADMIN ==========
-NOMBRE AdminMan2
-NICK Admin8899
-PASSWORD 111
+NOMBRE Admin
+NICK admin
+PASSWORD 1
 ========== FIN ADMIN ==========

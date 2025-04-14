@@ -75,7 +75,7 @@ public class Administrator extends User{
 
 
     //DESBANEAR
-    public void unbanUser() {
+    public void unbanUser(Client admin) {
         UserFileReader userFileReader = new UserFileReader();
         UserFileWriter userFileWriter = new UserFileWriter();
         BanFileReader banFileReader = new BanFileReader();
@@ -83,7 +83,7 @@ public class Administrator extends User{
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
 
-        // Leer usuarios y baneados usando el nuevo sistema
+        // Leer usuarios y baneados
         ArrayList<Client> userList = userFileReader.userFileReader();
         ArrayList<Client> bannedClients = banFileReader.readBannedUsers();
 
@@ -92,7 +92,7 @@ public class Administrator extends User{
             return;
         }
 
-        // Mostrar lista de baneados con formato mejorado
+        // Mostrar lista de baneados numerada
         terminal.showBannedUsers(bannedClients);
         terminal.whatUserToUnBan();
 
@@ -117,32 +117,35 @@ public class Administrator extends User{
             String confirm = sc.nextLine().trim().toUpperCase();
 
             if (confirm.equals("DESBANEAR")) {
-                // 1. Eliminar de la lista de baneados
-                bannedClients.remove(selection - 1);
+                // 1. Eliminar del archivo de baneados
+                banFileReader.removeBannedUser(bannedNick);
 
-                // 2. Añadir a usuarios normales (con verificación de existencia)
-                Set<String> existingNicks = new HashSet<>();
-                for (Client client : userList) {
-                    existingNicks.add(client.getNick().toLowerCase());
-                }
+                // 2. Verificar si ya existe en usuarios
+                boolean exists = userList.stream()
+                        .anyMatch(u -> u.getNick().equalsIgnoreCase(bannedNick));
 
-                if (!existingNicks.contains(userToUnban.getNick().toLowerCase())) {
-                    userList.add(userToUnban);
+                if (!exists) {
+                    // 3. Crear nuevo cliente con datos básicos
+                    Client newClient = new Client();
+                    newClient.setName(userToUnban.getName());
+                    newClient.setNick(userToUnban.getNick());
+                    newClient.setPassword(userToUnban.getPassword());
+                    newClient.setRegister(userToUnban.getRegister());
+
+                    // 4. Añadir a la lista de usuarios
+                    userList.add(newClient);
+
+                    // 5. Reescribir archivo de usuarios
+                    userFileWriter.rewriteUserFile(userList);
+
+                    terminal.unbbanedUser(bannedNick);
                 } else {
                     terminal.error();
                 }
 
-                // 3. Actualizar archivos
-                userFileWriter.rewriteUserFile(userList);
-                banFileWriter.rewriteBanFile(bannedClients);
-
-                // 4. Eliminar registro de baneo
-                banFileReader.removeBannedUser(bannedNick);
-
-                terminal.unbbanedUser(bannedNick);
-
-                // 5. Limpiar baneos expirados automáticamente
+                // 6. Limpiar baneos expirados
                 banFileReader.removeExpiredBans();
+
             } else {
                 terminal.cancelOperation();
             }
@@ -154,6 +157,7 @@ public class Administrator extends User{
             e.printStackTrace();
         }
     }
+
     //BANEO
     public void banUser(Client client) {
         UserFileReader userFileReader = new UserFileReader();
@@ -162,6 +166,10 @@ public class Administrator extends User{
         Scanner sc = new Scanner(System.in);
 
         ArrayList<Client> userList = userFileReader.userFileReader();
+        if (userList.isEmpty()) {
+            terminal.noUsersToBanError();
+            return;
+        }
         terminal.allUsers(userList); // Mostrar lista de usuarios
 
         terminal.whatUserToBan(); // Mensaje tipo "¿Qué usuario deseas banear?"

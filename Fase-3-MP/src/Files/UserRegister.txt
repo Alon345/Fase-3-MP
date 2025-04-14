@@ -1,7 +1,63 @@
 ========== USUARIO ==========
+NOMBRE Ana
+NICK Ana123
+PASSWORD 1234
+REGISTRO a12b34c
+TIPO PERSONAJE  
+========== FIN USUARIO ==========
+========== USUARIO ==========
 NOMBRE Luis
-NICK WELyB1
-PASSWORD 133
-REGISTRO a32iyaf
-TIPO DE PERSONAJE 
+NICK Luis456
+PASSWORD 5678
+REGISTRO d56e78f
+TIPO PERSONAJE  
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Marta
+NICK Marta789
+PASSWORD 91011
+REGISTRO g78h90i
+TIPO PERSONAJE  
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Elena
+NICK Elena567
+PASSWORD 6789
+REGISTRO m56n78o
+TIPO PERSONAJE  
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Carlos
+NICK Carlos890
+PASSWORD 11213
+REGISTRO p89q01r
+TIPO PERSONAJE  
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Laura
+NICK Laura345
+PASSWORD 4567
+REGISTRO s34t56u
+TIPO PERSONAJE  
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Sergio
+NICK Sergio678
+PASSWORD 7890
+REGISTRO v67w89x
+TIPO PERSONAJE  
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Isabel
+NICK Isabel901
+PASSWORD 2345
+REGISTRO y90z12a
+TIPO PERSONAJE  
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Alberto
+NICK Alberto234
+PASSWORD 5678
+REGISTRO b23c45d
+TIPO PERSONAJE  
 ========== FIN USUARIO ==========
