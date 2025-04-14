@@ -1,7 +1,6 @@
 package Entities;
 
 import java.util.*;
-
 import System.*;
 
 
@@ -90,7 +89,7 @@ public class Administrator extends User{
         if (bannedClients.isEmpty()) {
             terminal.noUsersBannedError();
             return;
-        }
+            }
 
         // Mostrar lista de baneados numerada
         terminal.showBannedUsers(bannedClients);
@@ -118,7 +117,8 @@ public class Administrator extends User{
 
             if (confirm.equals("DESBANEAR")) {
                 // 1. Eliminar del archivo de baneados
-                banFileReader.removeBannedUser(bannedNick);
+                bannedClients.remove(userToUnban);
+                banFileWriter.rewriteBanFile(bannedClients, "Motivo", 0);
 
                 // 2. Verificar si ya existe en usuarios
                 boolean exists = userList.stream()
@@ -157,6 +157,7 @@ public class Administrator extends User{
             e.printStackTrace();
         }
     }
+
 
     //BANEO
     public void banUser(Client client) {
@@ -197,6 +198,7 @@ public class Administrator extends User{
 
             terminal.whyDoYouBannedThisUser(username);
             String bannedBecause = sc.nextLine().trim();
+            client.setBanMotive(bannedBecause);
 
             terminal.howManyHours();
 
@@ -205,6 +207,8 @@ public class Administrator extends User{
             while (numHours <= 0) {
                 if (sc.hasNextInt()) {
                     numHours = sc.nextInt();
+                    client.setHoursOfBan(numHours);
+
                     sc.nextLine(); // Limpiar buffer después de leer el número
                     if (numHours <= 0) {
                         terminal.invalidNumberOfHours(); // Asegúrate de tener este mensaje en tu Terminal

@@ -221,8 +221,9 @@ public class mainSystem {
         int aux = -1;
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> list = userFileReader.userFileReader();
+
         if (list.isEmpty()) {
-            terminal.noUsersError();
+            terminal.noUsersError(); //no usuarios en sistema
             return null;
         }
         terminal.askNick();
@@ -237,13 +238,16 @@ public class mainSystem {
                 break;
             }
         }
-        if (!encontrado) {
-            terminal.nickNotFoundError();
-            return null;
-        }
 
         BanFileReader banFileReader = new BanFileReader();
+        ArrayList<Client> listClient = banFileReader.readBannedUsers();
 
+        for(Client c : listClient) {
+            if (c.getNick().equals(nick)) {
+                terminal.userIsBanned(nick);
+                return null;
+            }
+        }
         // Verificar si el usuario está baneado
         if (banFileReader.isUserBanned(nick)) {
             // Comprobar si el baneo ha expirado

@@ -303,6 +303,7 @@ public class Terminal {
     public void howManyHours(){System.out.println("¿Cuantas horas deseas banearle (mínimo 1h)?");}
     public void notifyBanExpired(){System.out.println("Bienvenido de nuevo, tu baneo ha expirado.");}
     public void invalidNumberOfHours(){System.out.println("Introduce un numero de horas adecuado.");}
+    public void userIsBanned(String nick){System.out.println("El jugador "+ nick + " ha sido baneado por el Administrador del sistema.");}
     // Método para mostrar la lista de usuarios baneados
     public void noUsersToBanError(){
         System.out.println("No hay usuarios en el sistema.");
@@ -331,20 +332,25 @@ public class Terminal {
     public void noUsersBannedError(){
         System.out.println("No hay usuarios baneados.");
     }
-    public void confirmUnban(String confirmation){
-        System.out.println("Para confirmar el desbaneo escribe 'DESBANEAR', para cancelar \npulsa cualquier tecla");
+
+    public void confirmUnban(String username){
+        System.out.println("===========================================");
+        System.out.println("                 IMPORTANTE");
+        System.out.println("===========================================");
+        System.out.println("¿Confirmas que deseas banear a " + username +"?");
+        System.out.println("Para confirmar el desbaneo escribe 'DESBANEAR', \npara cancelar pulsa cualquier tecla");
     }
     public void showBannedUsers(ArrayList<Client> bannedUsers) {
-        System.out.println("\n=== USUARIOS BANEADOS ===");
+        System.out.println("===========================================");
+        System.out.println("             USUARIOS BANEADOS");
+        System.out.println("===========================================");
         for (int i = 0; i < bannedUsers.size(); i++) {
             Client user = bannedUsers.get(i);
-            System.out.printf("%d. %s (%s) - Registro: %s\n",
+            System.out.printf("%d %s (%s) - Registro: %s\n",
                     i + 1,
                     user.getNick(),
                     user.getName(),
                     user.getRegister());
         }
     }
-
-
 }//FIN

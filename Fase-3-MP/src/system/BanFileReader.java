@@ -3,6 +3,8 @@ package System;
 import Entities.Client;
 
 import java.io.*;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -20,11 +22,11 @@ public class BanFileReader {
             boolean inBannedBlock = false;
 
             while ((line = br.readLine()) != null) {
-                if (line.startsWith("=========== USUARIO BANEADO ===========")) {
+                if (line.startsWith("========== USUARIO BANEADO ==========")) {
                     inBannedBlock = true;
                 } else if (line.startsWith("========== FIN USUARIO BANEADO ==========")) {
                     inBannedBlock = false;
-                } else if (inBannedBlock && line.startsWith("NICK: " + nick)) {
+                } else if (inBannedBlock && line.startsWith("NICK " + nick)) {
                     return true;
                 }
             }
@@ -32,6 +34,59 @@ public class BanFileReader {
             e.printStackTrace();
         }
         return false;
+    }
+    public ArrayList<Client> readBannedUsers() {
+        ArrayList<Client> bannedClients = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(BAN_FILE_PATH))) {
+            Client currentClient = new Client();
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("========== USUARIO BANEADO ==========")) {
+                    currentClient = new Client();
+                } else if (line.startsWith("NICK ")) {
+                    currentClient.setNick(line.substring(5).trim());
+                } else if (line.startsWith("NOMBRE ")) {
+                    currentClient.setName(line.substring(7).trim());
+                } else if (line.startsWith("PASSWORD ")) {
+                    currentClient.setPassword(line.substring(9).trim());
+                } else if (line.startsWith("REGISTRO ")) {
+                    currentClient.setRegister(line.substring(9).trim());
+                } else if (line.startsWith("========== FIN USUARIO BANEADO ==========")) {
+                    bannedClients.add(currentClient);
+                    currentClient = null;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bannedClients;
+    }
+
+    public void removeBannedUser(String nick) {
+        try {
+            List<String> lines = Files.readAllLines(Paths.get(BAN_FILE_PATH));
+            List<String> newLines = new ArrayList<>();
+            boolean skipBlock = false;
+
+            for (String line : lines) {
+                if (line.startsWith("NICK " + nick)) {
+                    skipBlock = true;
+                }
+
+                if (!skipBlock) {
+                    newLines.add(line);
+                }
+
+                if (skipBlock && line.startsWith("========== FIN USUARIO BANEADO ==========")) {
+                    skipBlock = false;
+                }
+            }
+
+            Files.write(Paths.get(BAN_FILE_PATH), newLines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // Comprueba si el baneo ha expirado
@@ -70,7 +125,7 @@ public class BanFileReader {
         try (BufferedReader br = new BufferedReader(new FileReader(BAN_FILE_PATH))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (line.startsWith("=========== USUARIO BANEADO ===========")) {
+                if (line.startsWith("========== USUARIO BANEADO ==========")) {
                     inBlock = true;
                     keepBlock = true;
                     currentBanEnd = null;
@@ -103,41 +158,6 @@ public class BanFileReader {
         }
     }
 
-    // Elimina un usuario específico de la lista de baneados
-    public void removeBannedUser(String nick) {
-        List<String> lines = new ArrayList<>();
-        boolean skipBlock = false;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(BAN_FILE_PATH))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.startsWith("NICK: " + nick)) {
-                    skipBlock = true;
-                }
-
-                if (skipBlock && line.startsWith("========== FIN USUARIO BANEADO ==========")) {
-                    skipBlock = false;
-                    continue;
-                }
-
-                if (!skipBlock) {
-                    lines.add(line);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Reescribir archivo
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(BAN_FILE_PATH))) {
-            for (String line : lines) {
-                bw.write(line);
-                bw.newLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     // Reinserta un usuario en UserRegister
     public void reinstateUser(String nick) {
@@ -150,7 +170,7 @@ public class BanFileReader {
             boolean inBlock = false;
 
             while ((line = br.readLine()) != null) {
-                if (line.startsWith("=========== USUARIO BANEADO ===========")) {
+                if (line.startsWith("========== USUARIO BANEADO ==========")) {
                     inBlock = true;
                 } else if (line.startsWith("========== FIN USUARIO BANEADO ==========")) {
                     inBlock = false;
@@ -178,46 +198,4 @@ public class BanFileReader {
             e.printStackTrace();
         }
     }
-
-    public ArrayList<Client> readBannedUsers() {
-        ArrayList<Client> bannedClients = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(BAN_FILE_PATH))) {
-            String line;
-            Client currentClient = null;
-            boolean inBannedBlock = false;
-
-            while ((line = br.readLine()) != null) {
-                if (line.startsWith("=========== USUARIO BANEADO ===========")) {
-                    // Inicio de bloque de usuario baneado
-                    currentClient = new Client();
-                    inBannedBlock = true;
-                }
-                else if (line.startsWith("========== FIN USUARIO BANEADO ==========")) {
-                    // Fin de bloque, añadir a la lista
-                    if (currentClient != null && currentClient.getNick() != null) {
-                        bannedClients.add(currentClient);
-                    }
-                    currentClient = null;
-                    inBannedBlock = false;
-                }
-                else if (inBannedBlock && currentClient != null) {
-                    // Parsear campos del usuario
-                    if (line.startsWith("NICK: ")) {
-                        currentClient.setNick(line.substring(6).trim());
-                    }
-                    else if (line.startsWith("NOMBRE: ")) {
-                        currentClient.setName(line.substring(8).trim());
-                    }
-                    else if (line.startsWith("REGISTRO: ")) {
-                        currentClient.setRegister(line.substring(10).trim());
-                    }
-                    // Añadir más campos según sea necesario
-                }
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bannedClients;
-    }
-}
+}//FIN
