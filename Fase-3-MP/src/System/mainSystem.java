@@ -240,10 +240,6 @@ public class mainSystem {
              return null;} sería erroneo ya que si en la primera
              iteracion el nick no es el pedido entonces lanza error **/
         }
-        if (!encontrado) {
-            terminal.nickNotFoundError();
-            return null;
-        }
 
         BanFileReader banFileReader = new BanFileReader();
         ArrayList<Client> listClient = banFileReader.readBannedUsers();
@@ -253,6 +249,10 @@ public class mainSystem {
                 terminal.userIsBanned(nick);
                 return null;
             }
+        }
+        if (!encontrado) {
+            terminal.nickNotFoundError();
+            return null;
         }
         // Verificar si el usuario está baneado
         if (banFileReader.isUserBanned(nick)) {

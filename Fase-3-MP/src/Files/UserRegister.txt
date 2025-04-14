@@ -1,11 +1,4 @@
 ========== USUARIO ==========
-NOMBRE Alberto
-NICK Alberto234
-PASSWORD 5678
-REGISTRO b23c45d
-TIPO PERSONAJE  
-========== FIN USUARIO ==========
-========== USUARIO ==========
 NOMBRE Pedro
 NICK PedritoJugon
 PASSWORD 23
@@ -31,13 +24,6 @@ NOMBRE User3
 NICK user001
 PASSWORD 1234
 REGISTRO g90h12i
-TIPO PERSONAJE  
-========== FIN USUARIO ==========
-========== USUARIO ==========
-NOMBRE User4
-NICK user001
-PASSWORD 1234
-REGISTRO j34k56l
 TIPO PERSONAJE  
 ========== FIN USUARIO ==========
 ========== USUARIO ==========
@@ -101,5 +87,12 @@ NOMBRE 1
 NICK user
 PASSWORD 1
 REGISTRO z96jqqe
+TIPO PERSONAJE  
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Alberto
+NICK Alberto234
+PASSWORD 5678
+REGISTRO b23c45d
 TIPO PERSONAJE  
 ========== FIN USUARIO ==========
