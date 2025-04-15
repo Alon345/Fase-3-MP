@@ -3,7 +3,6 @@ package System;
 import Entities.Challenge;
 import Entities.Client;
 import Entities.Combat;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
