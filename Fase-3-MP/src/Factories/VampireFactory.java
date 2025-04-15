@@ -218,6 +218,16 @@ public class VampireFactory {
             return false;
         }
     }
+    public boolean initializeBlood(Vampire vampire) {
+        Scanner sc = new Scanner(System.in);
+        int blood = sc.nextInt();
+        if (blood >= 0 && blood <= 10) {
+            vampire.setBlood(blood);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public boolean initializePower(Vampire vampire) {
         Scanner sc = new Scanner(System.in);

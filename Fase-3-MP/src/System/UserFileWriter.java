@@ -52,7 +52,7 @@ public class UserFileWriter {
             File file = new File(USER_FILE_PATH);
             FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
-            //recorre la lista de clientes
+            //recorre la lista de usuarios
             for (int i = 0; i < clientArrayList.size(); i++) {
                 bw.write("========== USUARIO ==========");
                 bw.newLine();
@@ -69,16 +69,16 @@ public class UserFileWriter {
                 bw.write(clientArrayList.get(i).getRegister());
                 bw.newLine();
                 if (clientArrayList.get(i).getCharacter() == null) {
-                    bw.write("TIPO PERSONAJE  ");
+                    bw.write("TIPO PERSONAJE  null");
                     bw.newLine();
                     bw.write("========== FIN USUARIO ==========");
                     bw.newLine();
                 } else {
-                    String tipoPersonaje = clientArrayList.get(i).getCharacter().getType();
-                    switch (tipoPersonaje) {
-                       case "VAMPIRO" -> vampireWriter(clientArrayList, i, bw);
-                       case "LICANTROPO" -> licantropWriter(clientArrayList, i, bw);
-                       case "CAZADOR" -> hunterWriter(clientArrayList, i, bw);
+                    String characterType = clientArrayList.get(i).getCharacter().getType();
+                    switch (characterType) {
+                       case "VAMPIRO" -> vampireWriter(clientArrayList, i, bw); //escribimos y guardamos los atributos de los vampiros
+                       case "LICANTROPO" -> licantropWriter(clientArrayList, i, bw); //idem.
+                       case "CAZADOR" -> hunterWriter(clientArrayList, i, bw); //idem.
 
                     }
                 }
@@ -95,14 +95,14 @@ public class UserFileWriter {
 
         Vampire vampire = (Vampire) clientArrayList.get(i).getCharacter();
         Discipline discipline = (Discipline) vampire.getAbility();
-        bw.write("=========== TIPO DE PERSONAJE ===========");
+        bw.write("TIPO DE PERSONAJE ");
         bw.write(clientArrayList.get(i).getCharacter().getType());
         bw.newLine();
         bw.write("NOMBRE DE PERSONAJE ");
         bw.write(clientArrayList.get(i).getCharacter().getName());
         bw.newLine();
         bw.write("SANGRE ");
-        //bw.write("0");
+        bw.write(((Vampire) clientArrayList.get(i).getCharacter()).getBlood());
         bw.newLine();
         bw.write("NOMBRE DE LA HABILIDAD ");
         bw.write(discipline.getName());
@@ -119,9 +119,6 @@ public class UserFileWriter {
         bw.write("NUMERO DE ARMAS ");
         bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getWeapons().size()));
         bw.newLine();
-        bw.write("========== FIN USUARIO ==========");
-        bw.newLine();
-
         for (int weaponVar = 0; weaponVar < (clientArrayList.get(i).getCharacter().getWeapons().size()); weaponVar++) {
             Weapon weapon = vampire.getWeapons().get(weaponVar);
             bw.write("NOMBRE DEL ARMA ");
@@ -233,13 +230,11 @@ public class UserFileWriter {
             bw.write(String.valueOf(weakness.getValue()));
             bw.newLine();
         }
-        //ESBIRROS
         bw.write("NUMERO DE ESBIRROS  ");
         bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getMinions().size()));
         bw.newLine();
-        //ESBIRROS
-       // minionsWriter(clientArrayList, i, vampire, bw); Faltaría un mimions Writer
-        bw.write("------ FIN USUARIO ------");
+        minionsWriter(clientArrayList, i, vampire, bw);
+        bw.write("========== FIN USUARIO ==========");
         bw.newLine();
     }
 
@@ -388,7 +383,7 @@ public class UserFileWriter {
         bw.write(String.valueOf(clientArrayList.get(i).getCharacter().getMinions().size()));
         bw.newLine();
        // minionsWriter(clientArrayList, i, licantrop, bw); Faltaría un mimions Writer
-        bw.write("------- FIN USUARIO ------");
+        bw.write("========== FIN USUARIO ==========");
         bw.newLine();
     }
 
@@ -551,11 +546,10 @@ public class UserFileWriter {
         minionsWriter(clientArrayList, i, hunter, bw);
 
 
-        bw.write("----- FIN USUARIO ----");
+        bw.write("========== FIN USUARIO ==========");
         bw.newLine();
         bw.close();
     }
-
 
     private void minionsWriter(ArrayList<Client> clientArrayList, int i, Character normalPerson, BufferedWriter bw) throws IOException {
         for (int j = 0; j < (clientArrayList.get(i).getCharacter().getMinions().size()); j++) {

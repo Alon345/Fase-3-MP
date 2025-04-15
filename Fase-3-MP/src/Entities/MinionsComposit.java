@@ -63,7 +63,6 @@ public class MinionsComposit {
         }
         return null;
     }
-
     private Human createHuman() {
         Terminal terminal = new Terminal();
         Human human = new Human();
@@ -94,8 +93,6 @@ public class MinionsComposit {
         human.setType("HUMANO");
         return human;
     }
-
-
     private Ghoul createGhoul() {
         Terminal terminal = new Terminal();
         Ghoul ghoul = new Ghoul();
@@ -118,7 +115,6 @@ public class MinionsComposit {
         ghoul.setType("GHOUL");
         return ghoul;
     }
-
     private Demon createDemon(ArrayList<MinionsComposit> minions, boolean isVampiro) {
         Terminal terminal = new Terminal();
         Demon demon = new Demon();

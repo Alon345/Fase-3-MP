@@ -3,6 +3,7 @@ import Factories.VampireFactory;
 import System.mainSystem;
 import System.Terminal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import System.UserFileReader;
 import System.UserFileWriter;
@@ -42,15 +43,9 @@ public class Client extends User {
         String strBuilder = null;
         boolean valid = false;
 
-        while (!valid) {
+        while (!valid) { //FORMATO LNNLL
             strBuilder = String.valueOf(getLetter()) +
-                    getNumber() +
-                    getNumber() +
-                    getLetter() +
-                    getLetter() +
-                    getLetter() +
-                    getLetter();
-
+                    getNumber() + getNumber() + getLetter() + getLetter();
             valid = true; // asumimos que es válido hasta que se demuestre lo contrario
 
             for (Client client : list) {
@@ -59,7 +54,6 @@ public class Client extends User {
                 }
             }
         }
-
         return strBuilder;
     }
     public void toChallenge(Client cliente) { //desafiar -> toChallenge
@@ -82,7 +76,188 @@ public class Client extends User {
     }
     public void challenge(Client client) {}
 
-    public Vampire createVampire(){return new Vampire();}
+    /**
+     * Creación de los Vampiros
+     * @return vampire
+     */
+    public Vampire createVampire(){
+        boolean[] aux1 = new boolean[]{true, true};
+        boolean[] aux2 = new boolean[]{true, false};
+        boolean rightValue;
+
+        Client client = new Client();
+        VampireFactory vampireFactory = new VampireFactory();
+        Terminal terminal = new Terminal();
+        Vampire vampire = new Vampire();
+        Discipline discipline = new Discipline();
+        ArrayList<Weapon> armas = new ArrayList<>();
+        ArrayList<Weapon> armasActivas = new ArrayList<>();
+        ArrayList<Armor> armaduras = new ArrayList<>();
+        Weakness weakness = new Weakness();
+        Strength strength = new Strength();
+        ArrayList<Weakness> debilidades = new ArrayList<>();
+        ArrayList<Strength> fortalezas = new ArrayList<>();
+        Armor armor = new Armor();
+        ArrayList<MinionsComposit> minionsComposits = new ArrayList<>();
+
+        setNameNDAbilityVampire(vampireFactory, terminal, vampire, discipline);
+        setAllWeaponsVampire(aux1, aux2, vampireFactory, terminal, vampire, armas, armasActivas);
+        setAllArmorsVampire(vampireFactory, terminal, vampire, armaduras, armor);
+        setGoldPowerHPVampire(vampireFactory, terminal, vampire);
+        setVampireModifiers(vampireFactory, terminal, vampire, weakness, strength, debilidades, fortalezas);
+        terminal.askVampireAge();
+        vampireFactory.setAge(vampire);
+       /** do {
+            terminal.askVampireBlood();
+            rightValue = vampireFactory.initializeBlood(vampire);
+        } while (!rightValue);**/
+        setVampireMinions(vampireFactory, terminal, vampire, minionsComposits);
+        vampire.setType("VAMPIRO");
+        //client.setCharacter(vampire);
+        return vampire;
+    }
+    private void setVampireMinions(VampireFactory vampireFactory, Terminal terminal, Vampire vampire, ArrayList<MinionsComposit> minionsComposits) {
+        terminal.askForMinionsNum();
+        int numEsbirros = vampireFactory.askNumber();
+        for (int iterator = 1; iterator <= numEsbirros; iterator++) {
+            MinionsComposit minion = new MinionsComposit();
+            minion = minion.createMinion(true);
+            minionsComposits.add(minion);
+        }
+        vampire.setMinions(minionsComposits);
+    }
+
+    private void setVampireModifiers(VampireFactory vampireFactory, Terminal terminal, Vampire vampire, Weakness weakness, Strength strength, ArrayList<Weakness> weaknesses, ArrayList<Strength> strengths) {
+        terminal.askNumWeakness();
+        int numDebilidades = vampireFactory.askNumber();
+        for (int iterator = 1; iterator <= numDebilidades; iterator++) {
+            terminal.askWeaknessName();
+            vampireFactory.initializeWeaknessName(weakness);
+            terminal.askWeaknessValue();
+            vampireFactory.initializeWeaknessValue(weakness);
+            vampireFactory.addWeakness(weaknesses, weakness);
+        }
+        vampireFactory.setWeaknesses(vampire, weaknesses);
+        terminal.askNumStrengths();
+        int numFortalezas = vampireFactory.askNumber();
+        for (int iterator = 1; iterator <= numFortalezas; iterator++) {
+            terminal.askStrengthName();
+            vampireFactory.initializeStrengthName(strength);
+            terminal.askStrengthValue();
+            vampireFactory.initializeStrengthValue(strength);
+            vampireFactory.addStrength(strengths, strength);
+        }
+        vampireFactory.setStrengths(vampire, strengths);
+    }
+
+    private void setGoldPowerHPVampire(VampireFactory vampireFactory, Terminal terminal, Vampire vampire) {
+        boolean rightValue;
+        do {
+            terminal.askGold();
+            rightValue = vampireFactory.initializeGold(vampire);
+        } while (!rightValue);
+        do {
+            terminal.askForHp();
+            rightValue = vampireFactory.initializeHP(vampire);
+        } while (!rightValue);
+        do {
+            terminal.askPower();
+            rightValue = vampireFactory.initializePower(vampire);
+        } while (!rightValue);
+    }
+
+    private void setAllArmorsVampire(VampireFactory vampireFactory, Terminal terminal, Vampire vampire, ArrayList<Armor> armors, Armor armor) {
+        boolean rightValue;
+        int numArmors;
+        do {
+            terminal.askNumArmors();
+            numArmors = vampireFactory.askNumber();
+        } while (numArmors < 1);
+        for (int i = 1; i <= numArmors; i++) {
+            armor = new Armor();
+            terminal.askNameArmors();
+            vampireFactory.initializeArmorName(armor);
+            do {
+                terminal.askForDefenceArmor();
+                rightValue = vampireFactory.initializeArmorDefense(armor);
+            } while (!rightValue);
+            do {
+                terminal.askForAttackeArmor();
+                rightValue = vampireFactory.initializeArmorAttack(armor);
+            } while (!rightValue);
+            vampireFactory.addArmor(armor, armors);
+        }
+        vampireFactory.setArmors(vampire, armors);
+        do {
+            terminal.showArmors(armors);
+            rightValue = vampireFactory.addActiveArmor(vampire, armor, armors);
+        } while (!rightValue);
+    }
+
+    private void setAllWeaponsVampire(boolean[] aux1, boolean[] aux2, VampireFactory vampireFactory, Terminal terminal, Vampire vampire, ArrayList<Weapon> weapons, ArrayList<Weapon> activeWeapons) {
+        boolean[] rightWeapon;
+        boolean rightValue;
+        int numArmas;
+        do {
+            terminal.askNumWeapons();
+            numArmas = vampireFactory.askNumber();
+        } while (numArmas < 1);
+        for (int iterator = 1; iterator <= numArmas; iterator++) {
+            Weapon weapon = new Weapon();
+            terminal.askWeapName();
+            vampireFactory.initializeWeaponName(weapon);
+            do {
+                terminal.askWeapAttack();
+                rightValue = vampireFactory.initializeWeaponAttack(weapon);
+            } while (!rightValue);
+            do {
+                terminal.askWeapDefence();
+                rightValue = vampireFactory.initializeWeaponDefense(weapon);
+            } while (!rightValue);
+            do {
+                terminal.isWeaponSingleHanded();
+                rightValue = vampireFactory.initializeWeaponSingleHand(weapon);
+            } while (!rightValue);
+            vampireFactory.addWeapon(weapons, weapon);
+        }
+        vampireFactory.setWeapons(vampire, weapons);
+        do {
+            terminal.showWeapons(weapons);
+            rightWeapon = vampireFactory.addActiveWeapon(weapons, activeWeapons);
+        } while (!Arrays.equals(rightWeapon, aux1) && !Arrays.equals(rightWeapon, aux2));
+        if (Arrays.equals(rightWeapon, aux1)) {
+            do {
+                terminal.anotherWeapon(weapons, activeWeapons.getFirst());
+                rightValue = vampireFactory.addActiveWeapon2(weapons, activeWeapons);
+                if (!rightValue) {
+                    terminal.noCorrectNumSelecction();
+                }
+            } while (!rightValue);
+        }
+        vampireFactory.setActiveWeapons(vampire, activeWeapons);
+    }
+
+    private void setNameNDAbilityVampire(VampireFactory vampireFactory, Terminal terminal, Vampire vampire, Discipline discipline) {
+        boolean rightValue;
+        terminal.askVampireName();
+        vampireFactory.initializeName(vampire);
+        terminal.askAbilityName();
+        vampireFactory.initializeAbilityName(discipline);
+        do {
+            terminal.askAbilityAttack();
+            rightValue = vampireFactory.initializeAbilityAttack(discipline);
+        } while (!rightValue);
+        do {
+            terminal.askAbilityDefence();
+            rightValue = vampireFactory.initializeAbilityDefense(discipline);
+        } while (!rightValue);
+        do {
+            terminal.askCostAbility();
+            rightValue = vampireFactory.initializeAbilityCost(discipline);
+        } while (!rightValue);
+        vampireFactory.setAbility(vampire, discipline);
+    }
+
     public Hunter createHunter() {
         return new Hunter();
     }
@@ -145,7 +320,8 @@ public class Client extends User {
         ArrayList<Client> lista = userFileReader.userFileReader();
 
         // --- Operaciones  ---
-        ArrayList<Client> listaAux = new ArrayList<>(lista); // Copia la lista original
+        ArrayList<Client> listaAux = new ArrayList<>(lista); // falta Copiar la lista original
         terminal.showGoldRanking(listaAux);
     }
+
 }//FIN

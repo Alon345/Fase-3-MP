@@ -1,11 +1,9 @@
 package System;
 
-import Entities.Challenge;
-import Entities.Client;
-import Entities.Combat;
-import Entities.User;
+import Entities.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Terminal {
     public Terminal(){
@@ -23,13 +21,9 @@ public class Terminal {
             System.out.println("  1 Registrarse");
             System.out.println("  2 Iniciar sesión como Jugador");
             System.out.println("  3 Iniciar sesión como Administrador");
-            System.out.println("  4 Salir");
+            System.out.println("  4 Salir del Sistema");
             System.out.println("=======================================");
         }
-
-    public void showMessage(String message) {
-        System.out.println(message);
-    }
 
     public void showMenu() {
         String colorCodeGreen = "\033[0;32m"; // Verde
@@ -117,15 +111,32 @@ public class Terminal {
         System.out.println("Introduce tu nick de usuario");
     }
     public void nickExists() {System.out.println("El nick introducido ya existe");}
-    public void reenterNewNick() {System.out.println("Introduce otro nick de usuario");}
-    public void askPassword() {
-        System.out.println("Introduce la contraseña de tu cuenta");
-    }
+
+    public void askWeaknessValue() {System.out.println("Introduce el valor de la debilidad ");}
+    public void askNumWeakness() {System.out.println("Introduce el numero de debilidades a añadir ");}
+    public void askWeaknessName() {System.out.println("Introduce el nombre de la debilidad ");}
+
+    public void askStrengthValue() {System.out.println("Introduce el valor de la fortaleza ");}
+    public void askNumStrengths() {System.out.println("Introduce el numero de fortalezas a añadir ");}
+    public void askStrengthName() {System.out.println("Introduce el nombre de la fortaleza ");}
+
+    public void askNumArmors() {System.out.println("Introduce el número de armaduras a equipar ");}
+    public void askNameArmors() {System.out.println("Introduce el nombre de la armadura ");}
+    public void askForDefenceArmor() {System.out.println("Introduce la defensa máxima de la armadura, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos), si no tiene defensa escribe 0 ");}
+    public void askForAttackeArmor() {System.out.println("Introduce el ataque máximo de la armadura, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos), si no tiene ataque escribe 0 ");}
+
+    public void askNumWeapons() {System.out.println("Introduce el número de armas a equipar ");}
+    public void askWeapName() {System.out.println("Introduce el nombre del arma ");}
+    public void askWeapAttack() {System.out.println("Introduce el ataque máximo del arma, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos)");}
+    public void askWeapDefence() {System.out.println("Introduce la defensa máxima del arma, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos), si no tiene defensa escribe 0 ");}
+
+    public void askGold(){System.out.println("Introduce la cantidad de Monedas de Oro del personaje, \nNOTA: debe ser mayor o igual a 0");}
+    public void askPassword() {System.out.println("Introduce la contraseña de tu cuenta");}
     public void confirmPassword() {System.out.println("Por favor, confirme la contraseña introducida");}
     public void noUsersError(){System.out.println("No hay usuarios registrados en este videojuego \n        !Regístrate para jugar!");}
     public void nickNotFoundError(){System.out.println(" El nick no existe en este videojuego, \n" +
                                                        "         comprueba los campos");}
-    public void hiAgainUser(String username){System.out.println("  !Un placer verte de nuevo, "+ username+"!");}
+    public void hiAgainUser(String username){System.out.println("    !Un placer verte de nuevo, "+ username+"!");}
     public void emptyPassword(){System.out.println("!El campo 'Contraseña' no debe estar vacio!");}
     public void emptyNick(){System.out.println("!El campo 'Nick' no debe estar vacio!");}
     public void emptyName(){System.out.println("!El campo 'Nombre' no debe estar vacio!");}
@@ -133,6 +144,38 @@ public class Terminal {
     public void noAccountAvaliable(){System.out.println("No se ha encontrado esta cuenta en el sistema");}
     public void cancelOperation(){System.out.println("         Operación Cancelada");}
     public void closedSesion4Security(){System.out.println("Hemos cerrado tu sesión por seguridad.");}
+    public void noCorrectNumSelecction() {
+        System.out.println("El numero introducido no es válido ");
+    }
+    public void anotherWeapon(List<Weapon> weapons, Weapon weapon) {
+        System.out.println("==========================================");
+        System.out.println("¿Quiere equipar otro arma de una sola mano?");
+        System.out.println("==========================================");
+        System.out.println("0 Ahora no");
+        for (int numWeap = 0; numWeap < weapons.size(); numWeap++) {
+            if (weapons.get(numWeap).isSingleHand() && weapons.get(numWeap) != weapon) {
+                System.out.println(numWeap + 1 + " " + weapons.get(numWeap).getName());
+            }
+        }
+        System.out.println("==========================================");
+    }
+    public void showWeapons(List<Weapon> weapons) { //mostramos lista de armas que tiene el personaje
+        System.out.println("=======================================");
+        System.out.println("      ¿Que arma quieres equipar?");
+        System.out.println("=======================================");
+        for (int numArma = 0; numArma < weapons.size(); numArma++) {
+            System.out.println(numArma + 1 + " " + weapons.get(numArma).getName());
+        }
+        System.out.println("=======================================");
+    }
+    public void isWeaponSingleHanded() {
+        System.out.println("========================================");
+        System.out.println("¿El arma se puede usar con un sola mano?");
+        System.out.println("========================================");
+        System.out.println(" 1 Si");
+        System.out.println(" 2 No");
+        System.out.println("========================================");
+    }
     public void deleteCharacToCreateAnother() {
         System.out.println("Debes eliminar a un personaje para volver a crear otro nuevo.");
     }
@@ -178,12 +221,13 @@ public class Terminal {
 
     public void showTipesOfCharacters() {
         System.out.println("=========================================");
-        System.out.println("        CREACIÓN DE PERSONAJE");
+        System.out.println("         CREACIÓN DE PERSONAJE");
         System.out.println("=========================================");
         System.out.println(" ¿Qué tipo de Personaje quieres crear");
         System.out.println("  1 Vampiro");
         System.out.println("  2 Licantropo");
         System.out.println("  3 Cazador");
+        System.out.println("=========================================");
     }
 
     /**Mensajes de los desafíos**/
@@ -214,17 +258,18 @@ public class Terminal {
     }
     public void challengeCreated(){System.out.println("Desafío creado y enviado al rival!");}
     public void askChallenge(Challenge challenge) {
-        System.out.println("===========================================");
-        System.out.println("             DESAFÍO ENTRANTE");
-        System.out.println("===========================================");
+        System.out.println("=======================================");
+        System.out.println("           DESAFÍO ENTRANTE");
+        System.out.println("=======================================");
         System.out.println("El usuario " + challenge.getChallenger().getNick()+" te ha desafiado.");
         System.out.println("Su apuesta es de " + challenge.getGold() + " Monedas de Oro");
-        System.out.println("===========================================");
-        System.out.println("¿Quieres aceptar el desafio?");
+        System.out.println("=======================================");
+        System.out.println("     ¿Quieres aceptar el desafio?");
+        System.out.println("=======================================");
         System.out.println("  1 SI ACEPTAR");
         System.out.println("  2 NO ACEPTAR");
         System.out.println("NOTA: si no aceptas perderás " + challenge.getGold() / 10 + " de tus Monedas de Oro");
-        System.out.println("===========================================");
+        System.out.println("=======================================");
 
     }
 
@@ -241,13 +286,9 @@ public class Terminal {
     public void askMinionName() {
         System.out.println("Introduce el nombre del esbirro ");
     }
-    public void askForHp() {
-        System.out.println("Introduce la cantidad de vida (0-3)");
-    }
-    public void askForMinionsNum() {
-        System.out.println("Introduce el numero de esbirros que deseas");
-    }
-
+    public void askForHp() {System.out.println("Introduce la cantidad de vida, \nNOTA: Debe ser un valor entre 0 y 3 (incluídos)");}
+    public void askForMinionsNum() {System.out.println("Introduce el numero de esbirros que deseas, \nNOTA: Debe ser un valor entre 0 y 3 (incluídos)");}
+    public void askPower(){System.out.println("Introduce su poder, \nNOTA: Debe ser un valor entre 1 y 5 (incluídos)");}
 
     /**Mensajes de los Humanos**/
     public void errorHuman() {
@@ -272,8 +313,16 @@ public class Terminal {
 
     /**Mensajes de los Vampiros**/
     public void askVampireAge() {
-        System.out.println("¿Qué edad tiene tu vampiro?");
+        System.out.println("=======================================");
+        System.out.println("     ¿Qué edad tiene tu vampiro?");
+        System.out.println("=======================================");
     }
+    public void askVampireBlood() {System.out.println("Introduce la cantidad de sangre del vampiro ");}
+    public void askVampireName() {System.out.println("Introduce el nombre del vampiro ");}
+    public void askAbilityName() {System.out.println("Introduce el nombre de la habilidad ");}
+    public void askAbilityAttack() {System.out.println("Introduce el valor máximo de ataque de la habilidad, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos) ");}
+    public void askAbilityDefence() {System.out.println("Introduce el valor máximo de defensa de la habilidad, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos) ");}
+    public void askCostAbility() {System.out.println("Introduce el coste máximo de la habilidad, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos) ");}
 
     /**Mensajes de los GHOULS**/
     public void askForDependency() {
@@ -360,7 +409,7 @@ public class Terminal {
         System.out.println("              " + colorCodeRed + "IMPORTANTE" + resetCode);
         System.out.println("======================================");
         System.out.println("¿Confirmas que deseas banear a " + username +"?");
-        System.out.println("Para confirmar escribe 'BANEAR', para cancelar \npulsa cualquier tecla");
+        System.out.println("Para confirmar escribe '"+colorCodeRed+"BANEAR"+resetCode+"', para cancelar \npulsa cualquier tecla");
     }
     public void banned(String username){
         System.out.println("El usuario "+username+" ha sido baneado con éxito");
@@ -370,7 +419,19 @@ public class Terminal {
     public void howManyHours(){System.out.println("¿Cuantas horas deseas banearle (mínimo 1h)?");}
     public void notifyBanExpired(){System.out.println("Bienvenido de nuevo, tu baneo ha expirado.");}
     public void invalidNumberOfHours(){System.out.println("Introduce un numero de horas adecuado.");}
-    public void userIsBanned(String nick){System.out.println("El jugador "+ nick + " ha sido baneado por el Administrador del sistema.");}
+    public void userIsBanned(String nick){
+        String colorCodeRed = "\033[0;31m"; // Rojo
+        String resetCode = "\033[0m";
+        System.out.println("El jugador '"+ nick + "' ha sido"+colorCodeRed+" baneado "+resetCode+"por el Administrador del sistema.");}
+    public void showArmors(List<Armor> armors) {
+        System.out.println("========================================");
+        System.out.println("    ¿Que armadura quieres equipar?");
+        System.out.println("========================================");
+        for (int numArmor = 0; numArmor < armors.size(); numArmor++) {
+            System.out.println(numArmor + 1 + " " + armors.get(numArmor).getName());
+        }
+        System.out.println("========================================");
+    }
     // Método para mostrar la lista de usuarios baneados
     public void noUsersToBanError(){
         System.out.println("No hay usuarios en el sistema.");
@@ -407,7 +468,7 @@ public class Terminal {
         System.out.println("              " + colorCodeRed + "IMPORTANTE" + resetCode);
         System.out.println("======================================");
         System.out.println("¿Confirmas que deseas banear a " + username +"?");
-        System.out.println("Para confirmar el desbaneo escribe 'DESBANEAR', \npara cancelar pulsa cualquier tecla");
+        System.out.println("Para confirmar el desbaneo escribe '"+colorCodeRed+"BANEAR"+resetCode+"', \npara cancelar pulsa cualquier tecla");
     }
     public void showBannedUsers(ArrayList<Client> bannedUsers) {
         System.out.println("===========================================");
