@@ -118,8 +118,8 @@ public class Client extends User {
     }
     private void setVampireMinions(VampireFactory vampireFactory, Terminal terminal, Vampire vampire, ArrayList<MinionsComposit> minionsComposits) {
         terminal.askForMinionsNum();
-        int numEsbirros = vampireFactory.askNumber();
-        for (int iterator = 1; iterator <= numEsbirros; iterator++) {
+        int minionsNum = vampireFactory.askNumber();
+        for (int i = 1; i <= minionsNum; i++) {
             MinionsComposit minion = new MinionsComposit();
             minion = minion.createMinion(true);
             minionsComposits.add(minion);
@@ -129,8 +129,8 @@ public class Client extends User {
 
     private void setVampireModifiers(VampireFactory vampireFactory, Terminal terminal, Vampire vampire, Weakness weakness, Strength strength, ArrayList<Weakness> weaknesses, ArrayList<Strength> strengths) {
         terminal.askNumWeakness();
-        int numDebilidades = vampireFactory.askNumber();
-        for (int iterator = 1; iterator <= numDebilidades; iterator++) {
+        int weaknessNum = vampireFactory.askNumber();
+        for (int i = 1; i <= weaknessNum; i++) {
             terminal.askWeaknessName();
             vampireFactory.initializeWeaknessName(weakness);
             terminal.askWeaknessValue();
@@ -197,12 +197,12 @@ public class Client extends User {
     private void setAllWeaponsVampire(boolean[] aux1, boolean[] aux2, VampireFactory vampireFactory, Terminal terminal, Vampire vampire, ArrayList<Weapon> weapons, ArrayList<Weapon> activeWeapons) {
         boolean[] rightWeapon;
         boolean rightValue;
-        int numArmas;
+        int weaponNum;
         do {
             terminal.askNumWeapons();
-            numArmas = vampireFactory.askNumber();
-        } while (numArmas < 1);
-        for (int iterator = 1; iterator <= numArmas; iterator++) {
+            weaponNum = vampireFactory.askNumber();
+        } while (weaponNum < 1);
+        for (int i = 1; i <= weaponNum; i++) {
             Weapon weapon = new Weapon();
             terminal.askWeapName();
             vampireFactory.initializeWeaponName(weapon);

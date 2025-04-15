@@ -18,7 +18,7 @@ public class Menu {
             option = sc.nextInt();
             switch (option) {
                 case 1:
-                    if (client.getCharacter() == null) {//crear personaje
+                    if (client.getCharacter() == null) { //crear personaje
                         terminal.showTipesOfCharacters();
                         selectFactory(client);
                     } else {
@@ -76,9 +76,9 @@ public class Menu {
         Character charac = null;
         int opcion = sc.nextInt();
         switch (opcion) {
-            case 1 -> charac = client.createVampire();
-            case 2 -> charac = client.createWerewolf();
-            case 3 -> charac = client.createHunter();
+            case 1 -> charac = client.createVampire(); // 1 Vampiro
+            case 2 -> charac = client.createWerewolf();// 2 Licantropo
+            case 3 -> charac = client.createHunter(); //  3 Cazador
             default -> terminal.error();
         }
         client.setCharacter(charac);

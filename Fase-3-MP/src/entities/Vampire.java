@@ -16,7 +16,7 @@ public class Vampire extends Character {
         this.blood = blood;
     }
     public int getAge() {
-        System.out.println("El vampiro tien  " + this.age + " años");
+        System.out.println("El vampiro tiene " + this.age + " años");
         return this.age;
     }
     public void setAge(int age) {

@@ -414,6 +414,10 @@ public class Terminal {
     public void banned(String username){
         System.out.println("El usuario "+username+" ha sido baneado con éxito");
     }
+    public void allusersAreBanned(){
+        String colorCodeRed = "\033[0;31m"; // Rojo
+        String resetCode = "\033[0m";
+        System.out.println("Todos los usuarios del sistema han sido" +colorCodeRed+" baneados"+resetCode+ "\nNOTA: para acceder puedes registrarte como nuevo usuario\no, por otro lado, esperar a cumplir la condena.");}
     public void noNumberIn(){System.out.println("Debes introducir un número de usuario");}
     public void whyDoYouBannedThisUser(String username){System.out.println("¿Por qué se ha baneado a "+username+"? (opcional)");}
     public void howManyHours(){System.out.println("¿Cuantas horas deseas banearle (mínimo 1h)?");}

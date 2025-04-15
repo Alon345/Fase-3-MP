@@ -220,11 +220,18 @@ public class mainSystem {
         Terminal terminal = new Terminal();
         int aux = -1;
         UserFileReader userFileReader = new UserFileReader();
+        BanFileReader banFileReader = new BanFileReader();
         ArrayList<Client> list = userFileReader.userFileReader();
+        ArrayList<Client> listBanneds = banFileReader.readBannedUsers();
 
         if (list.isEmpty()) {
-            terminal.noUsersError(); //no usuarios en sistema
-            return null;
+            if (listBanneds.isEmpty()) {
+                terminal.noUsersError(); //no usuarios en sistema
+                return null;
+            }else {
+                terminal.allusersAreBanned(); //no users in UserReg but users in BanReg
+                return null;
+            }
         }
         terminal.askNick();
         String nick = sc.nextLine();
@@ -241,10 +248,7 @@ public class mainSystem {
              iteracion el nick no es el pedido entonces lanza error **/
         }
 
-        BanFileReader banFileReader = new BanFileReader();
-        ArrayList<Client> listClient = banFileReader.readBannedUsers();
-
-        for(Client c : listClient) {
+        for(Client c : listBanneds) {
             if (c.getNick().equals(nick)) {
                 terminal.userIsBanned(nick);
                 return null;

@@ -1,98 +1,84 @@
 ========== USUARIO ==========
-NOMBRE Pedro
-NICK PedritoJugon
-PASSWORD 23
-REGISTRO g88mips
-TIPO PERSONAJE  
-========== FIN USUARIO ==========
-========== USUARIO ==========
-NOMBRE User1
-NICK user001
-PASSWORD 1234
-REGISTRO a12b34c
-TIPO PERSONAJE  
-========== FIN USUARIO ==========
-========== USUARIO ==========
-NOMBRE User2
-NICK user001
-PASSWORD 1234
-REGISTRO d56e78f
-TIPO PERSONAJE  
-========== FIN USUARIO ==========
-========== USUARIO ==========
 NOMBRE User3
 NICK user001
 PASSWORD 1234
-REGISTRO g90h12i
-TIPO PERSONAJE  
+REGISTRO g90hf
+TIPO PERSONAJE  null
 ========== FIN USUARIO ==========
 ========== USUARIO ==========
 NOMBRE User5
 NICK user001
 PASSWORD 1234
-REGISTRO m78n90o
-TIPO PERSONAJE  
+REGISTRO m78nw
+TIPO PERSONAJE  null
 ========== FIN USUARIO ==========
 ========== USUARIO ==========
 NOMBRE User6
 NICK user001
 PASSWORD 1234
-REGISTRO p12q34r
-TIPO PERSONAJE  
+REGISTRO p12qq
+TIPO PERSONAJE  null
 ========== FIN USUARIO ==========
 ========== USUARIO ==========
 NOMBRE User7
 NICK user001
 PASSWORD 1234
-REGISTRO s56t78u
-TIPO PERSONAJE  
+REGISTRO s56tk
+TIPO PERSONAJE  null
 ========== FIN USUARIO ==========
 ========== USUARIO ==========
 NOMBRE User8
 NICK user001
 PASSWORD 1234
-REGISTRO v90w12x
-TIPO PERSONAJE  
+REGISTRO v90wp
+TIPO PERSONAJE  null
 ========== FIN USUARIO ==========
 ========== USUARIO ==========
 NOMBRE User10
 NICK user001
 PASSWORD 1234
-REGISTRO b78c90d
-TIPO PERSONAJE  
+REGISTRO b78co
+TIPO PERSONAJE  null
 ========== FIN USUARIO ==========
 ========== USUARIO ==========
 NOMBRE Sergio678
 NICK 7890
 PASSWORD 3
-REGISTRO q80cpji
-TIPO PERSONAJE  
-========== FIN USUARIO ==========
-========== USUARIO ==========
-NOMBRE Carlos
-NICK Carlos890
-PASSWORD 11213
-REGISTRO p89q01r
-TIPO PERSONAJE  
+REGISTRO q80cp
+TIPO PERSONAJE  null
 ========== FIN USUARIO ==========
 ========== USUARIO ==========
 NOMBRE Lucas
 NICK 23
 PASSWORD 23
-REGISTRO m99cuzf
-TIPO PERSONAJE  
-========== FIN USUARIO ==========
-========== USUARIO ==========
-NOMBRE 1
-NICK user
-PASSWORD 1
-REGISTRO z96jqqe
-TIPO PERSONAJE  
+REGISTRO m99cu
+TIPO PERSONAJE  null
 ========== FIN USUARIO ==========
 ========== USUARIO ==========
 NOMBRE Alberto
 NICK Alberto234
 PASSWORD 5678
-REGISTRO b23c45d
-TIPO PERSONAJE  
+REGISTRO b23ch
+TIPO PERSONAJE  null
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Alum
+NICK 2er
+PASSWORD e
+REGISTRO p68ke
+TIPO PERSONAJE  null
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Carlos
+NICK Carlos890
+PASSWORD 11213
+REGISTRO p89qy
+TIPO PERSONAJE  null
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE 1
+NICK user
+PASSWORD 1
+REGISTRO z96jq
+TIPO PERSONAJE  null
 ========== FIN USUARIO ==========
