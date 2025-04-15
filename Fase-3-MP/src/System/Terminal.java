@@ -468,7 +468,7 @@ public class Terminal {
         System.out.println("              " + colorCodeRed + "IMPORTANTE" + resetCode);
         System.out.println("======================================");
         System.out.println("¿Confirmas que deseas banear a " + username +"?");
-        System.out.println("Para confirmar el desbaneo escribe '"+colorCodeRed+"BANEAR"+resetCode+"', \npara cancelar pulsa cualquier tecla");
+        System.out.println("Para confirmar el desbaneo escribe '"+colorCodeRed+"DESBANEAR"+resetCode+"', \npara cancelar pulsa cualquier tecla");
     }
     public void showBannedUsers(ArrayList<Client> bannedUsers) {
         System.out.println("===========================================");
