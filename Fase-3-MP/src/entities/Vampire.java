@@ -15,16 +15,12 @@ public class Vampire extends Character {
     public void setBlood(int blood) {
         this.blood = blood;
     }
+
     public int getAge() {
         System.out.println("El vampiro tiene " + this.age + " años");
         return this.age;
     }
     public void setAge(int age) {
         this.age = age;
-    }
-
-    /**A continuación se definen las operaciones**/
-    public void selectCharacter() {
-        System.out.println("1 Elige un personaje");
     }
 }

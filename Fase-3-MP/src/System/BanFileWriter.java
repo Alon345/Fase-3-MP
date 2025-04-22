@@ -126,8 +126,6 @@ public class BanFileWriter {
             e.printStackTrace();
         }
     }
-
-
 }//FIN
 
 
