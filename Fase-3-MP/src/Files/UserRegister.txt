@@ -36,3 +36,17 @@ NUMERO DE FORTALEZAS 0
 NUMERO DE DEBILIDADES 0
 NUMERO DE ESBIRROS  0
 ========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE new
+NICK new
+PASSWORD 1
+REGISTRO q69vl
+TIPO DE PERSONAJE null
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE loco
+NICK 1
+PASSWORD 1
+REGISTRO p91wp
+TIPO DE PERSONAJE null
+========== FIN USUARIO ==========

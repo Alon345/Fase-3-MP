@@ -52,6 +52,52 @@ public class UserFileWriter {
     public void rewriteUserFile(ArrayList<Client> clientArrayList) {
         try {
             File file = new File(USER_FILE_PATH);
+            FileWriter fw = new FileWriter(file, true); //<-- sin append borra toda la bd de user
+            BufferedWriter bw = new BufferedWriter(fw);
+            //recorre la lista de usuarios
+            for (int i = 0; i < clientArrayList.size(); i++) {
+                bw.write("========== USUARIO ==========");
+                bw.newLine();
+                bw.write("NOMBRE ");
+                bw.write(clientArrayList.get(i).getName());
+                bw.newLine();
+                bw.write("NICK ");
+                bw.write(clientArrayList.get(i).getNick());
+                bw.newLine();
+                bw.write("PASSWORD ");
+                bw.write(clientArrayList.get(i).getPassword());
+                bw.newLine();
+                bw.write("REGISTRO ");
+                bw.write(clientArrayList.get(i).getRegister());
+                bw.newLine();
+                if (clientArrayList.get(i).getCharacter() == null) {
+                    bw.write("TIPO PERSONAJE null");
+                    bw.newLine();
+                } else {
+                    String characterType = clientArrayList.get(i).getCharacter().getType();
+                    bw.write("TIPO PERSONAJE ");
+                    bw.write(characterType);
+                    bw.newLine();
+                    switch (characterType) {
+                       case "VAMPIRO" -> vampireWriter(clientArrayList, i, bw,clientArrayList.get(i)); //escribimos y guardamos los atributos de los vampiros
+                       case "LICANTROPO" -> licantropWriter(clientArrayList, i, bw,clientArrayList.get(i)); //idem.
+                       case "CAZADOR" -> hunterWriter(clientArrayList, i, bw,clientArrayList.get(i)); //idem.
+
+                    }
+                }
+            }
+            bw.write("========== FIN USUARIO ==========");
+            bw.close();
+        } catch (Exception exception) {
+            mainSystem system = new mainSystem();
+            system.selector();
+            exception.printStackTrace();
+        }
+    }
+
+    public void rewriteUserFileForDeleteCharacter(ArrayList<Client> clientArrayList) {
+        try {
+            File file = new File(USER_FILE_PATH);
             FileWriter fw = new FileWriter(file); //<-- sin append borra toda la bd de user
             BufferedWriter bw = new BufferedWriter(fw);
             //recorre la lista de usuarios
@@ -73,17 +119,15 @@ public class UserFileWriter {
                 if (clientArrayList.get(i).getCharacter() == null) {
                     bw.write("TIPO PERSONAJE null");
                     bw.newLine();
-                    bw.write("========== FIN USUARIO ==========");
-                    bw.newLine();
                 } else {
                     String characterType = clientArrayList.get(i).getCharacter().getType();
                     bw.write("TIPO PERSONAJE ");
                     bw.write(characterType);
                     bw.newLine();
                     switch (characterType) {
-                       case "VAMPIRO" -> vampireWriter(clientArrayList, i, bw,clientArrayList.get(i)); //escribimos y guardamos los atributos de los vampiros
-                       case "LICANTROPO" -> licantropWriter(clientArrayList, i, bw,clientArrayList.get(i)); //idem.
-                       case "CAZADOR" -> hunterWriter(clientArrayList, i, bw,clientArrayList.get(i)); //idem.
+                        case "VAMPIRO" -> vampireWriter(clientArrayList, i, bw,clientArrayList.get(i)); //escribimos y guardamos los atributos de los vampiros
+                        case "LICANTROPO" -> licantropWriter(clientArrayList, i, bw,clientArrayList.get(i)); //idem.
+                        case "CAZADOR" -> hunterWriter(clientArrayList, i, bw,clientArrayList.get(i)); //idem.
 
                     }
                 }

@@ -208,12 +208,14 @@ public class Terminal {
         System.out.println("Para crear un personaje nuevo antes tienes que eliminar el existente");
     }
     public void confirmDeleteCharacter() {
-        System.out.println("=========================================");
-        System.out.println("       ELIMINACIÓN DE PERSONAJE");
-        System.out.println("=========================================");
-        System.out.println(" ¿Seguro que desea eliminar el personaje?");
-        System.out.println("   1 Si");
-        System.out.println("   2 No");
+        String colorCodeRed = "\033[0;31m"; // Rojo
+        String resetCode = "\033[0m";       // Reset de color
+        System.out.println("============================================");
+        System.out.println("         " + colorCodeRed + "ELIMINACIÓN DE PERSONAJE" + resetCode);
+        System.out.println("============================================");
+        System.out.println("¿Confirmas que deseas eliminar el personaje?");
+        System.out.println("Para confirmar escribe '"+colorCodeRed+"ELIMINAR"+resetCode+"', \npara cancelar pulsa cualquier tecla");
+        System.out.println("============================================");
     }
     public void deletedCharacter() {
         System.out.println("Personaje eliminado correctamente");
