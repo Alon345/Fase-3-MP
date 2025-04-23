@@ -2,15 +2,16 @@ package Entities;
 import Factories.VampireFactory;
 import System.mainSystem;
 import System.Terminal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
+
+import java.util.*;
+
 import System.UserFileReader;
 import System.UserFileWriter;
 
 public class Client extends User {
 
     /**A continuación se definen atributos**/
+    private final String USER_FILE_PATH = "Fase-3-MP/src/Files/UserRegister.txt";
     private String register;
     private Character character;
 
@@ -313,33 +314,19 @@ public class Client extends User {
         }
     }
 
-    public void globalRanking(Client client) {
+    public void globalRanking() {
         Terminal terminal = new Terminal();
         terminal.rankingMessage();
-
-        // Leemos todos los usuarios desde archivo
-        UserFileReader userFileReader = new UserFileReader();
-        ArrayList<Client> lista = userFileReader.userFileReader();
-
-        // Verificamos que cada cliente tenga personaje y oro válido (debug opcional)
-        for (Client c : lista) {
-            if (c.getCharacter() != null) {
-                System.out.println("Usuario: " + c.getName() + " - Oro: " + c.getCharacter().getGold());
-            } else {
-                System.out.println("Usuario: " + c.getName() + " - Sin personaje");
-            }
-        }
-
-        // Copiamos la lista original y la ordenamos por cantidad de oro (de mayor a menor)
-        ArrayList<Client> listaAux = new ArrayList<>(lista);
-        listaAux.sort((c1, c2) -> {
-            int gold1 = c1.getCharacter() != null ? c1.getCharacter().getGold() : 0;
-            int gold2 = c2.getCharacter() != null ? c2.getCharacter().getGold() : 0;
-            return Integer.compare(gold2, gold1); // orden descendente
+        // Usamos directamente el lector basado en Map.Entry<String, Integer>
+        List<Map.Entry<String, Integer>> lista = UserFileReader.goldReaderForRanking(USER_FILE_PATH);
+        // Ordenamos por oro descendente (los que no tienen oro, se consideran 0)
+        lista.sort((a, b) -> {
+            int oro1 = (a.getValue() != null) ? a.getValue() : 0;
+            int oro2 = (b.getValue() != null) ? b.getValue() : 0;
+            return Integer.compare(oro2, oro1); // descendente
         });
-
-        // Mostramos el ranking
-        terminal.showGoldRanking(listaAux);
+        // Mostrar ranking con formato bonito
+        terminal.showGoldRankingSimple(lista);
     }
 
 }//FIN

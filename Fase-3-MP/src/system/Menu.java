@@ -42,7 +42,7 @@ public class Menu {
                     checkFights(client);
                     break;
                 case 6: //consultar ranking global
-                    client.globalRanking(client);
+                    client.globalRanking();
                     break;
                 case 7: //salir
                     terminal.logout();

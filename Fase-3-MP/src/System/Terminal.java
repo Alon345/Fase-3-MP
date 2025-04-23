@@ -66,7 +66,6 @@ public class Terminal {
             Map.Entry<String, Integer> user = usuarios.get(i);
             String nombre = user.getKey();
             String oro = user.getValue() != null ? String.valueOf(user.getValue()) : "0";
-
             // Personalización para los top 3
             if (i < 3) {
                 String crown = "";
@@ -77,21 +76,21 @@ public class Terminal {
                         colorCode = "\033[1;33m"; // Amarillo brillante
                         break;
                     case 1:
-                        crown = "🥈";
+                        crown = "";
                         colorCode = "\033[0;36m"; // Cian
                         break;
                     case 2:
-                        crown = "🥉";
+                        crown = "";
                         colorCode = "\033[0;35m"; // Magenta
                         break;
                 }
-                System.out.printf(colorCode + "%s%d. %-15s (GOLD %5s)\033[0m\n",
+                System.out.printf(colorCode + "%s%d %-15s (GOLD %5s)\033[0m\n",
                         crown,
                         i + 1,
                         nombre,
                         oro);
             } else {
-                System.out.printf("%d. %-15s (GOLD %5s)\n",
+                System.out.printf("%d %-15s (GOLD %5s)\n",
                         i + 1,
                         nombre,
                         oro);
