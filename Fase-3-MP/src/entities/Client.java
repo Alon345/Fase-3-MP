@@ -71,6 +71,7 @@ public class Client extends User {
             terminal.deletedCharacter();
         }
     }
+
     public void selectTeam(Client client) {
         // A implementar
     }
@@ -80,12 +81,10 @@ public class Client extends User {
      * Creación de los Vampiros
      * @return vampire
      */
-    public Vampire createVampire(){
+    public Vampire createVampire(Client client) {
         boolean[] aux1 = new boolean[]{true, true};
         boolean[] aux2 = new boolean[]{true, false};
         boolean rightValue;
-
-        Client client = new Client();
         VampireFactory vampireFactory = new VampireFactory();
         Terminal terminal = new Terminal();
         Vampire vampire = new Vampire();
@@ -107,13 +106,14 @@ public class Client extends User {
         setVampireModifiers(vampireFactory, terminal, vampire, weakness, strength, debilidades, fortalezas);
         terminal.askVampireAge();
         vampireFactory.setAge(vampire);
-       /** do {
+       do {
             terminal.askVampireBlood();
             rightValue = vampireFactory.initializeBlood(vampire);
-        } while (!rightValue);**/
+        } while (!rightValue);
+
         setVampireMinions(vampireFactory, terminal, vampire, minionsComposits);
         vampire.setType("VAMPIRO");
-        //client.setCharacter(vampire);
+        client.setCharacter(vampire);
         return vampire;
     }
     private void setVampireMinions(VampireFactory vampireFactory, Terminal terminal, Vampire vampire, ArrayList<MinionsComposit> minionsComposits) {
@@ -313,14 +313,32 @@ public class Client extends User {
         }
     }
 
-    public void globalRanking() {
+    public void globalRanking(Client client) {
         Terminal terminal = new Terminal();
         terminal.rankingMessage();
+
+        // Leemos todos los usuarios desde archivo
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> lista = userFileReader.userFileReader();
 
-        // --- Operaciones  ---
-        ArrayList<Client> listaAux = new ArrayList<>(lista); // falta Copiar la lista original
+        // Verificamos que cada cliente tenga personaje y oro válido (debug opcional)
+        for (Client c : lista) {
+            if (c.getCharacter() != null) {
+                System.out.println("Usuario: " + c.getName() + " - Oro: " + c.getCharacter().getGold());
+            } else {
+                System.out.println("Usuario: " + c.getName() + " - Sin personaje");
+            }
+        }
+
+        // Copiamos la lista original y la ordenamos por cantidad de oro (de mayor a menor)
+        ArrayList<Client> listaAux = new ArrayList<>(lista);
+        listaAux.sort((c1, c2) -> {
+            int gold1 = c1.getCharacter() != null ? c1.getCharacter().getGold() : 0;
+            int gold2 = c2.getCharacter() != null ? c2.getCharacter().getGold() : 0;
+            return Integer.compare(gold2, gold1); // orden descendente
+        });
+
+        // Mostramos el ranking
         terminal.showGoldRanking(listaAux);
     }
 

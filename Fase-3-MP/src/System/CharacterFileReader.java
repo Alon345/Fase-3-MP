@@ -10,227 +10,263 @@ import java.util.ArrayList;
 public class CharacterFileReader {
 
     public Vampire lecturaVampire(BufferedReader br) {
-        Vampire Vampire = new Vampire();
-        Discipline Discipline = new Discipline();
-
+        Vampire vampire = new Vampire();
+        Discipline discipline = new Discipline();
         FileReader fr = null;
+
         try {
-            // Lectura del fichero
             String linea;
-            linea = br.readLine();
 
-            while (!linea.equals("FIN_USUARIO")) {
-                //NOMBRE Vampire
-                String[] spaceBtwText = linea.split(" "  );
-                Vampire.setType("Vampire");
-                Vampire.setName(spaceBtwText[1]);
+            // Leer hasta encontrar el inicio de la sección de CHARACTER
+            while ((linea = br.readLine()) != null) {
+                linea = linea.trim();  // Limpiar espacios al inicio y al final
 
-                //SANGRE Vampire
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Vampire.setBlood(Integer.parseInt(spaceBtwText[1]));
-
-                //NOMBRE HABILIDAD
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Discipline.setName(spaceBtwText[1]);
-
-                //VALOR ATAQUE
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Discipline.setAttack(Integer.parseInt(spaceBtwText[1]));
-
-                //VALOR DEFENSA
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Discipline.setDefense(Integer.parseInt(spaceBtwText[1]));
-
-                //COSTE HABILIDAD
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Discipline.setCost(Integer.parseInt(spaceBtwText[1]));
-
-                Vampire.setAbility(Discipline);
-
-                //NUMERO DE WeaponS
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                ArrayList<Weapon> Weapons = new ArrayList<>();
-                int tope = Integer.parseInt(spaceBtwText[1]);
-                for (int i = 0; i < tope; i++) {
-
-                    Weapon Weapon = new Weapon();
-
-                    //NOMBRE Weapon
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Weapon.setName(spaceBtwText[1]);
-
-                    //NIVEL ATAQUE Weapon
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Weapon.setAttackModifier((Integer.parseInt(spaceBtwText[1])));
-
-                    //NIVEL DEFENSA Weapon
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Weapon.setDefenseModifier((Integer.parseInt(spaceBtwText[1])));
-
-                    //EMPUÑADURA DE Weapon: si es de 1 o 2 manos
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Weapon.setSingleHand(spaceBtwText[1].equals("true"));
-
-                    Weapons.add(Weapon);
+                // Saltar líneas vacías
+                if (linea.isEmpty()) {
+                    continue;
                 }
-                Vampire.setWeapons(Weapons);
 
-                ArrayList<Weapon> WeaponsActivas = new ArrayList<>();
-                //NUMERO DE WeaponS ACTIVAS
-                br.readLine();
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                tope = Integer.parseInt(spaceBtwText[1]);
-                for (int i = 0; i < tope; i++) {
+                // Si encontramos el separador de inicio de character, comenzamos a leer el personaje
+                if (linea.equals("========== CHARACTER ==========")) {
+                    // Continuamos leyendo la información del personaje
 
-                    Weapon Weapon = new Weapon();
+                    // Leer Registro de Usuario
+                    linea = br.readLine();
+                    String[] spaceBtwText = linea.split(" ");
+                    String registroUsuario = spaceBtwText[1];  // Usamos el valor de registro, si lo necesitas
+
+                    // Leer Tipo de Personaje
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    String tipoPersonaje = spaceBtwText[3];  // Usamos el tipo de personaje (VAMPIRO, etc.)
+                    vampire.setType(tipoPersonaje);
+
+                    // Leer Nombre de Personaje
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    vampire.setName(spaceBtwText[3]);
+
+                    // Leer Sangre
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    vampire.setBlood(Integer.parseInt(spaceBtwText[2]));
+
+                    // Leer Habilidad
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    discipline.setName(spaceBtwText[4]);
+
+                    // Valor de Ataque
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    discipline.setAttack(Integer.parseInt(spaceBtwText[3]));
+
+                    // Valor de Defensa
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    discipline.setDefense(Integer.parseInt(spaceBtwText[3]));
+
+                    // Coste de la habilidad
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    discipline.setCost(Integer.parseInt(spaceBtwText[4]));
+
+                    vampire.setAbility(discipline);
+
+                    // Leer número de armas
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    int numWeapons = Integer.parseInt(spaceBtwText[3]);
+                    ArrayList<Weapon> weapons = new ArrayList<>();
+                    for (int i = 0; i < numWeapons; i++) {
+                        Weapon weapon = new Weapon();
+
+                        // Leer nombre del arma
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        weapon.setName(spaceBtwText[3]);
+
+                        // Leer ataque del arma
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        weapon.setAttackModifier(Integer.parseInt(spaceBtwText[4]));
+
+                        // Leer defensa del arma
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        weapon.setDefenseModifier(Integer.parseInt(spaceBtwText[3]));
+
+                        // Leer empuñadura del arma
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        weapon.setSingleHand(spaceBtwText[2].equals("true"));
+
+                        weapons.add(weapon);
+                    }
+
+                    vampire.setWeapons(weapons);
+
+                    // Leer número de armas activas
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    int numActiveWeapons = Integer.parseInt(spaceBtwText[4]);
+                    ArrayList<Weapon> activeWeapons = new ArrayList<>();
+                    for (int i = 0; i < numActiveWeapons; i++) {
+                        Weapon activeWeapon = new Weapon();
+
+                        // Leer nombre del arma activa
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        activeWeapon.setName(spaceBtwText[4]);
+
+                        // Leer ataque del arma activa
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        activeWeapon.setAttackModifier(Integer.parseInt(spaceBtwText[4]));
+
+                        // Leer defensa del arma activa
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        activeWeapon.setDefenseModifier(Integer.parseInt(spaceBtwText[4]));
+
+                        // Leer empuñadura del arma activa
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        activeWeapon.setSingleHand(spaceBtwText[2].equals("true"));
+
+                        activeWeapons.add(activeWeapon);
+                    }
+
+                    vampire.setActiveWeapons(activeWeapons);
+
+                    // Leer número de armaduras
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    int numArmors = Integer.parseInt(spaceBtwText[3]);
+                    ArrayList<Armor> armors = new ArrayList<>();
+                    for (int i = 0; i < numArmors; i++) {
+                        Armor armor = new Armor();
+
+                        // Leer nombre de la armadura
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        armor.setName(spaceBtwText[3]);
+
+                        // Leer defensa de la armadura
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        armor.setDefenseModifier(Integer.parseInt(spaceBtwText[4]));
+
+                        // Leer ataque de la armadura
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        armor.setAttackModifier(Integer.parseInt(spaceBtwText[4]));
+
+                        armors.add(armor);
+                    }
+
+                    vampire.setArmors(armors);
+
+                    // Leer armadura activa
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    Armor activeArmor = new Armor();
+                    activeArmor.setName(spaceBtwText[4]);
 
                     linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Weapon.setName(spaceBtwText[1]);
+                    spaceBtwText = linea.split(" ");
+                    activeArmor.setDefenseModifier(Integer.parseInt(spaceBtwText[4]));
 
                     linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Weapon.setAttackModifier((Integer.parseInt(spaceBtwText[1])));
+                    spaceBtwText = linea.split(" ");
+                    activeArmor.setAttackModifier(Integer.parseInt(spaceBtwText[4]));
 
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Weapon.setDefenseModifier((Integer.parseInt(spaceBtwText[1])));
+                    vampire.setActiveArmor(activeArmor);
 
+                    // Leer oro disponible
                     linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Weapon.setSingleHand(spaceBtwText[1].equals("true"));
-                    WeaponsActivas.add(Weapon);
+                    spaceBtwText = linea.split(" ");
+                    vampire.setGold(Integer.parseInt(spaceBtwText[3]));
+
+                    // Leer edad del vampiro
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    vampire.setAge(Integer.parseInt(spaceBtwText[3]));
+
+                    // Leer HP
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    vampire.setHp(Integer.parseInt(spaceBtwText[1]));
+
+                    // Leer poder
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    vampire.setPower(Integer.parseInt(spaceBtwText[2]));
+
+                    // Leer fortalezas
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    int numStrengths = Integer.parseInt(spaceBtwText[3]);
+                    ArrayList<Strength> strengths = new ArrayList<>();
+                    for (int i = 0; i < numStrengths; i++) {
+                        Strength strength = new Strength();
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        strength.setName(spaceBtwText[3]);
+
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        strength.setValue(Integer.parseInt(spaceBtwText[3]));
+
+                        strengths.add(strength);
+                    }
+
+                    vampire.setStrengths(strengths);
+
+                    // Leer debilidades
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    int numWeaknesses = Integer.parseInt(spaceBtwText[3]);
+                    ArrayList<Weakness> weaknesses = new ArrayList<>();
+                    for (int i = 0; i < numWeaknesses; i++) {
+                        Weakness weakness = new Weakness();
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        weakness.setName(spaceBtwText[3]);
+
+                        linea = br.readLine();
+                        spaceBtwText = linea.split(" ");
+                        weakness.setValue(Integer.parseInt(spaceBtwText[3]));
+
+                        weaknesses.add(weakness);
+                    }
+
+                    vampire.setWeaknesses(weaknesses);
+
+                    // Leer número de esbirros
+                    linea = br.readLine();
+                    spaceBtwText = linea.split(" ");
+                    int numMinions = Integer.parseInt(spaceBtwText[3]);
+                    ArrayList<MinionsComposit> minions = new ArrayList<>();
+                    for (int i = 0; i < numMinions; i++) {
+                        MinionsComposit minion = minionsFile(linea, br, spaceBtwText);
+                        minions.add(minion);
+                    }
+                    vampire.setMinions(minions);
                 }
-                Vampire.setActiveWeapons(WeaponsActivas);
-
-                //ArmorS
-                br.readLine();
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                ArrayList<Armor> Armors = new ArrayList<>();
-                tope = Integer.parseInt(spaceBtwText[1]);
-                for (int i = 0; i < tope; i++) {
-
-                    Armor Armor = new Armor();
-
-                    //NOMBRE Weapon
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Armor.setName(spaceBtwText[1]);
-
-                    //NIVEL DEFENSA Weapon
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Armor.setDefenseModifier((Integer.parseInt(spaceBtwText[1])));
-
-                    //NIVEL ATAQUE Weapon
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Armor.setAttackModifier((Integer.parseInt(spaceBtwText[1])));
-
-                    Armors.add(Armor);
-                }
-                Vampire.setArmors(Armors);
-
-                br.readLine();
-                Armor Armor = new Armor();
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Armor.setName(spaceBtwText[1]);
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Armor.setDefenseModifier((Integer.parseInt(spaceBtwText[1])));
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Armor.setAttackModifier((Integer.parseInt(spaceBtwText[1])));
-
-                Vampire.setActiveArmor(Armor);
-
-                br.readLine();
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Vampire.setGold(Integer.parseInt(spaceBtwText[1]));
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Vampire.setAge(Integer.parseInt(spaceBtwText[1]));
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Vampire.setHp(Integer.parseInt(spaceBtwText[1]));
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                Vampire.setPower(Integer.parseInt(spaceBtwText[1]));
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                tope = Integer.parseInt(spaceBtwText[1]);
-                ArrayList<Strength> Strengths = new ArrayList<>();
-                for (int i = 0; i < tope; i++) {
-
-                    Strength Strength = new Strength();
-
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Strength.setName(spaceBtwText[1]);
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Strength.setValue((Integer.parseInt(spaceBtwText[1])));
-
-                    Strengths.add(Strength);
-                }
-                Vampire.setStrengths(Strengths);
-
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                tope = Integer.parseInt(spaceBtwText[1]);
-                ArrayList<Weakness> Weaknesses = new ArrayList<>();
-                for (int i = 0; i < tope; i++) {
-
-                    Weakness Weakness = new Weakness();
-
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Weakness.setName((spaceBtwText[1]));
-                    linea = br.readLine();
-                    spaceBtwText = linea.split(" "  );
-                    Weakness.setValue((Integer.parseInt(spaceBtwText[1])));
-
-                    Weaknesses.add(Weakness);
-                }
-                Vampire.setWeaknesses(Weaknesses);
-                ArrayList<MinionsComposit> listaEsbirros = new ArrayList<>();
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
-                tope = Integer.parseInt(spaceBtwText[1]);
-                for (int i = 0; i < tope; i++) {
-                    MinionsComposit esbirro = minionsFile(linea, br, spaceBtwText);
-                    listaEsbirros.add(esbirro);
-                }
-                Vampire.setMinions(listaEsbirros);
-                linea = "FIN_USUARIO";
             }
-
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {// En el finally cerramos el fichero
+            e.printStackTrace(); // Si algo falla durante la lectura, imprimimos el error
+        } finally {
             try {
-                if (null != fr) {
-                    fr.close();
+                if (fr != null) {
+                    fr.close(); // Cerramos el archivo si fue abierto
                 }
             } catch (Exception e2) {
-                e2.printStackTrace();
+                e2.printStackTrace(); // En caso de que falle el cierre, imprimimos el error
             }
         }
-        return Vampire;
+        return vampire; // Devolvemos el objeto Vampire con todos los datos leídos
     }
 
     public Hunter lecturaHunter(BufferedReader br) {
@@ -243,7 +279,7 @@ public class CharacterFileReader {
             String linea;
             linea = br.readLine();
 
-            while (!linea.equals("FIN_USUARIO")) {
+            while (!linea.equals("========== FIN CHARACTER ==========")) {
                 String[] spaceBtwText = linea.split(" "  );
                 Hunter.setType("Hunter");
                 Hunter.setName(spaceBtwText[1]);
@@ -421,7 +457,7 @@ public class CharacterFileReader {
                     listaEsbirros.add(esbirro);
                 }
                 Hunter.setMinions(listaEsbirros);
-                linea = "FIN_USUARIO";
+                linea = "========== FIN CHARACTER ==========";
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -448,7 +484,7 @@ public class CharacterFileReader {
 
             linea = br.readLine();
 
-            while (!linea.equals("FIN_USUARIO")) {
+            while (!linea.equals("========== FIN CHARACTER ==========")) {
 
                 linea = br.readLine();
                 System.out.println(linea);
@@ -608,7 +644,7 @@ public class CharacterFileReader {
                     listaEsbirros.add(esbirro);
                 }
                 Werewolf.setMinions(listaEsbirros);
-                linea = "FIN_USUARIO";
+                linea = "========== FIN CHARACTER ==========";
             }
         } catch (Exception e) {
             e.printStackTrace();

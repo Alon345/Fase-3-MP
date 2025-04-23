@@ -1,12 +1,1050 @@
 package System;
 
-import Entities.Combat;
+import Entities.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CombatFileReader {
-    public ArrayList<Combat> readCombatFile(){
-        ArrayList<Combat> combats = new ArrayList<>();
-        return combats;
+
+    private final String COMBAT_FILE_PATH = "Fase-3-MP/src/Files/CombatRegister.txt";
+
+    public ArrayList<Combat> readCombatFile() {
+        File archivo = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+
+        ArrayList<Combat> listaCombat = new ArrayList<>();
+
+        try {
+            archivo = new File(COMBAT_FILE_PATH);
+            if (!archivo.exists()) {
+                archivo.createNewFile();
+            }
+            fr = new FileReader(archivo);
+            br = new BufferedReader(fr);
+
+            // Lectura del fichero
+            String linea;
+            br.readLine();
+
+            linea = br.readLine();
+
+            while (linea != null) {
+                Combat Combat = new Combat();
+                Client Client = new Client();
+
+                //NOMBRE
+                String[] textoSeparado = linea.split(" ");
+                Client.setName((textoSeparado[1]));
+
+                //NICK
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Client.setNick((textoSeparado[1]));
+
+                //PASSWORD
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Client.setPassword((textoSeparado[1]));
+
+                //NUMERO_REGISTRO
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Client.setRegister(textoSeparado[1]);
+
+                //PERSONAJE
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+
+                if (!textoSeparado[1].equals("null")) {
+                    //LECTURA SI ES DE TIPO Vampire
+                    switch (textoSeparado[1]) {
+                        case "VAMPIRO" -> {
+                            Vampire Vampire = lecturaVampireCombat(br);
+                            Client.setCharacter(Vampire);
+                        }
+                        //LECTURA SI ES DE TIPO Werewolf
+                        case "LICANTROPO" -> {
+                            Werewolf Werewolf = lecturaWerewolfCombat(br);
+                            Client.setCharacter(Werewolf);
+                        }
+                        //LECTURA SI ES DE TIPO Hunter
+                        case "CAZADOR" -> {
+                            Hunter Hunter = lecturaHunterCombat(br);
+                            Client.setCharacter(Hunter);
+                        }
+                    }
+                }
+
+                Combat.setChallenger(Client);
+
+                Client Client2 = new Client();
+
+                do{
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                } while(linea.equals("") || !textoSeparado[0].equals("CONTRINCANTE"));
+                //NOMBRE
+                textoSeparado = linea.split(" ");
+                Client2.setName((textoSeparado[1]));
+
+                //NICK
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Client2.setNick((textoSeparado[1]));
+
+                //PASSWORD
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Client2.setPassword((textoSeparado[1]));
+
+                //NUMERO_REGISTRO
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Client2.setRegister(textoSeparado[1]);
+
+                //PERSONAJE
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+
+                if (!textoSeparado[1].equals("null")) {
+                    //LECTURA SI ES DE TIPO Vampire
+                    switch (textoSeparado[1]) {
+                        case "VAMPIRO" -> {
+                            Vampire Vampire = lecturaVampireCombat(br);
+                            Client2.setCharacter(Vampire);
+                        }
+                        //LECTURA SI ES DE TIPO Werewolf
+                        case "LICANTROPO" -> {
+                            Werewolf Werewolf = lecturaWerewolfCombat(br);
+                            Client2.setCharacter(Werewolf);
+                        }
+                        //LECTURA SI ES DE TIPO Hunter
+                        case "CAZADOR" -> {
+                            Hunter Hunter = lecturaHunterCombat(br);
+                            Client2.setCharacter(Hunter);
+                        }
+                    }
+                }
+
+                Combat.setRival(Client2);
+
+                //RoundS
+                do {
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                } while(linea.equals("") || !textoSeparado[0].equals("RONDAS"));
+                ArrayList<Round> Rounds = new ArrayList<>();
+                int tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++){
+                    Round Round = new Round();
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Round.setHpRivalEnd(Integer.parseInt(textoSeparado[1]));
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Round.setHpChallengerEnd(Integer.parseInt(textoSeparado[1]));
+                    Rounds.add(Round);
+                }
+                Combat.setRounds(Rounds);
+
+                br.readLine();
+                //date
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Date date = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(textoSeparado[1]);
+                Combat.setDate(date);
+
+                //VENCEDOR
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                if (!textoSeparado[1].equals("null")) {
+                    Client = new Client();
+                    Client.setNick(textoSeparado[1]);
+                    Combat.setWinner(Client);
+                } else {
+                    Combat.setWinner(null);
+                }
+
+                //ESBIRRO DESAFIANTE
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Combat.setChallengerMinion(textoSeparado[1].equals("true"));
+
+                //ESBIRRO CONTRINCANTE
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Combat.setRivalMinion(textoSeparado[1].equals("true"));
+
+                //ORO
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Combat.setGold(Integer.parseInt(textoSeparado[1]));
+
+                //Modifier
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                tope = Integer.parseInt(textoSeparado[1]);
+                ArrayList<Modifier> Modifieres = new ArrayList<>();
+                for (int i = 0; i < tope; i++) {
+
+                    Modifier Modifier = new Modifier();
+
+                    //NOMBRE 
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Modifier.setName(textoSeparado[1]);
+
+                    //VALOR
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Modifier.setValue((Integer.parseInt(textoSeparado[1])));
+
+                    Modifieres.add(Modifier);
+                }
+                Combat.setModifiers(Modifieres);
+                br.readLine();
+
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Combat.setRegister(textoSeparado[1]);
+
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Combat.setSeen(textoSeparado[1].equals("true"));
+
+                listaCombat.add(Combat);
+                br.readLine();
+                br.readLine();
+                br.readLine();
+                linea = br.readLine();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return listaCombat; //devolver la lista de Client
+
+    }
+
+    private Vampire lecturaVampireCombat(BufferedReader br) {
+        Vampire Vampire = new Vampire();
+        Discipline Discipline = new Discipline();
+
+        FileReader fr = null;
+        try {
+            // Lectura del fichero
+            String linea;
+            linea = br.readLine();
+
+            while (!linea.equals("FIN_USUARIO")) {
+
+                //TIPO USUARIO
+                String[] textoSeparado = linea.split(" ");
+                Vampire.setType("Vampire");
+
+                //NOMBRE Vampire
+                Vampire.setName(textoSeparado[1]);
+
+                //SANGRE
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Vampire.setBlood(Integer.parseInt(textoSeparado[1]));
+
+                //NOMBRE HABILIDAD
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Discipline.setName(textoSeparado[1]);
+
+                //VALOR ATAQUE
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Discipline.setAttack(Integer.parseInt(textoSeparado[1]));
+
+                //VALOR DEFENSA
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Discipline.setDefense(Integer.parseInt(textoSeparado[1]));
+
+                //COSTE HABILIDAD
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Discipline.setCost(Integer.parseInt(textoSeparado[1]));
+
+                Vampire.setAbility(Discipline);
+
+                //NUMERO DE WeaponS
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                ArrayList<Weapon> Weapons = new ArrayList<>();
+                int tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+
+                    Weapon Weapon = new Weapon();
+
+                    //NOMBRE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setName(textoSeparado[1]);
+
+                    //NIVEL ATAQUE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                    //NIVEL DEFENSA Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                    //EMPUÑADURA DE Weapon: si es de 1 o 2 manos
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setSingleHand(textoSeparado[1].equals("true"));
+                    Weapons.add(Weapon);
+                }
+                Vampire.setWeapons(Weapons);
+                br.readLine();
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+
+                //NUMERO DE WeaponS ACTIVAS
+                ArrayList<Weapon> ActiveWeapons = new ArrayList<>();
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+
+                    Weapon Weapon = new Weapon();
+
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setName(textoSeparado[1]);
+
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setSingleHand(textoSeparado[1].equals("true"));
+                    ActiveWeapons.add(Weapon);
+                }
+                Vampire.setActiveWeapons(ActiveWeapons);
+
+                //ArmorS
+                br.readLine();
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                ArrayList<Armor> Armors = new ArrayList<>();
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+
+                    Armor Armor = new Armor();
+
+                    //NOMBRE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Armor.setName(textoSeparado[1]);
+
+                    //NIVEL DEFENSA Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Armor.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                    //NIVEL ATAQUE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Armor.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                    Armors.add(Armor);
+                }
+                Vampire.setArmors(Armors);
+
+                //Armor ACTIVA
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor Armor = new Armor();
+
+                //NOMBRE Armor
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor.setName(textoSeparado[1]);
+
+                //NIVEL DEFENSA Armor
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                //NIVEL ATAQUE Armor
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                Vampire.setActiveArmor(Armor);
+                br.readLine();
+
+                //EDAD Vampire
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Vampire.setAge(Integer.parseInt(textoSeparado[1]));
+
+                //METODO ESBIRRO
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                ArrayList<MinionsComposit> listaEsbirros = new ArrayList<>();
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    MinionsComposit esbirro = esbirroFichero(linea, br, textoSeparado);
+                    listaEsbirros.add(esbirro);
+                }
+                Vampire.setMinions(listaEsbirros);
+
+                //CANTIDAD ORO
+                do {
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                } while (!textoSeparado[0].equals("CANTIDAD_ORO"));
+                Vampire.setGold(Integer.parseInt(textoSeparado[1]));
+
+                //CANTIDAD VIDA
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Vampire.setHp(Integer.parseInt(textoSeparado[1]));
+
+                //PODER
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Vampire.setPower(Integer.parseInt(textoSeparado[1]));
+
+                // NUMERO DE WeaknessES
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                tope = Integer.parseInt(textoSeparado[1]);
+                ArrayList<Weakness> Weaknesses = new ArrayList<>();
+                for (int i = 0; i < tope; i++) {
+
+                    Weakness Weakness = new Weakness();
+
+                    //NOMBRE DE DEBILIADAD
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weakness.setName((textoSeparado[1]));
+
+                    //VALOR Weakness
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weakness.setValue((Integer.parseInt(textoSeparado[1])));
+
+                    Weaknesses.add(Weakness);
+                }
+                Vampire.setWeaknesses(Weaknesses);
+                br.readLine();
+                // StrengthS
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                tope = Integer.parseInt(textoSeparado[1]);
+                ArrayList<Strength> Strengths = new ArrayList<>();
+                for (int i = 0; i < tope; i++) {
+                    Strength Strength = new Strength();
+
+                    //NOMBRE Strength
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Strength.setName(textoSeparado[1]);
+
+                    //VALOR Strength
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Strength.setValue((Integer.parseInt(textoSeparado[1])));
+
+                    Strengths.add(Strength);
+                }
+                Vampire.setStrengths(Strengths);
+                br.readLine();
+                linea = br.readLine();
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return Vampire;
+    }
+
+    private Hunter lecturaHunterCombat(BufferedReader br) {
+        Hunter Hunter = new Hunter();
+        Talent Talent = new Talent();
+
+        FileReader fr = null;
+        ArrayList<Client> listaHunter = new ArrayList<>();
+        try {
+            // Lectura del fichero
+            String linea;
+            linea = br.readLine();
+
+            while (!linea.equals("FIN_USUARIO")) {
+
+                //TIPO PERSONAJE
+                String[] textoSeparado = linea.split(" ");
+                Hunter.setType(textoSeparado[1]);
+
+                //NOMBRE PERSONAJE
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Hunter.setName(textoSeparado[1]);
+
+                //VOLUNTAD Hunter
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Hunter.setName(textoSeparado[1]);
+
+                //NOMBRE HABILIDAD
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Talent.setName(textoSeparado[1]);
+
+                //VALOR ATAQUE
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Talent.setAttack(Integer.parseInt(textoSeparado[1]));
+
+                //VALOR DEFENSA
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Talent.setDefense(Integer.parseInt(textoSeparado[1]));
+
+                //EDAD HABILIDAD
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Talent.setAge(Integer.parseInt(textoSeparado[1]));
+
+                Hunter.setAbility(Talent);
+
+                //NUMERO DE WeaponS
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                int tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+
+                    Weapon Weapon = new Weapon();
+
+                    //NOMBRE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setName(textoSeparado[1]);
+
+                    //NIVEL ATAQUE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                    //NIVEL DEFENSA Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                    //EMPUÑADURA DE Weapon: si es de 1 o 2 manos
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setSingleHand(textoSeparado[1].equals("true"));
+
+                    Hunter.getWeapons().add(Weapon);
+                }
+
+                //NUMERO DE WeaponS ACTIVAS
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    Weapon Weapon = new Weapon();
+
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setName(textoSeparado[1]);
+
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setSingleHand(textoSeparado[1].equals("true"));
+                    Hunter.getActiveWeapons().add(Weapon);
+                }
+
+                //ArmorS
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    Armor Armor = new Armor();
+
+                    //NOMBRE Armor
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Armor.setName(textoSeparado[1]);
+
+                    //NIVEL DEFENSA Armor
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Armor.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                    //NIVEL ATAQUE Armor
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Armor.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                    Hunter.getArmors().add(Armor);
+                }
+
+                //Armor ACTIVA
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor Armor = new Armor();
+
+                //NOMBRE Armor
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor.setName(textoSeparado[1]);
+
+                //NIVEL DEFENSA Weapon
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                //NIVEL ATAQUE Weapon
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                Hunter.setActiveArmor(Armor);
+
+                //CANTIDAD ORO
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Hunter.setGold(Integer.parseInt(textoSeparado[1]));
+
+                //CANTIDAD VIDA
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Hunter.setHp(Integer.parseInt(textoSeparado[1]));
+
+                //PODER
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Hunter.setPower(Integer.parseInt(textoSeparado[1]));
+
+                // NUMERO DE WeaknessES
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    Weakness Weakness = new Weakness();
+
+                    //NOMBRE DE DEBILIADAD
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weakness.setName((textoSeparado[1]));
+
+                    //VALOR Weakness
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weakness.setValue((Integer.parseInt(textoSeparado[1])));
+
+                    Hunter.getWeaknesses().add(Weakness);
+                }
+
+                // StrengthS
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    Strength Strength = new Strength();
+
+                    //NOMBRE Strength
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Strength.setName(textoSeparado[1]);
+
+                    //VALOR Strength
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Strength.setValue((Integer.parseInt(textoSeparado[1])));
+
+                    Hunter.getStrengths().add(Strength);
+                }
+
+                //METODO ESBIRRO
+                ArrayList<MinionsComposit> listaEsbirros = new ArrayList<>();
+
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    MinionsComposit esbirro = esbirroFichero(linea, br, textoSeparado);
+                    listaEsbirros.add(esbirro);
+                }
+                Hunter.setMinions(listaEsbirros);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return Hunter;
+    }
+
+    private Werewolf lecturaWerewolfCombat(BufferedReader br) {
+        Werewolf Werewolf = new Werewolf();
+        Don don = new Don();
+
+        FileReader fr = null;
+        ArrayList<Client> listaVampire = new ArrayList<>();
+        try {
+            // Lectura del fichero
+            String linea;
+
+            linea = br.readLine();
+
+            while (!linea.equals("FIN_USUARIO")) {
+
+                //TIPO PERSONAJE
+                String[] textoSeparado = linea.split(" ");
+                Werewolf.setType(textoSeparado[1]);
+
+                //NOMBRE PERSONAJE
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Werewolf.setName(textoSeparado[1]);
+
+                //RABIA Werewolf
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Werewolf.setRage(Integer.parseInt(textoSeparado[1]));
+
+                //NOMBRE HABILIDAD
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                don.setName(textoSeparado[1]);
+
+                //VALOR ATAQUE
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                don.setAttack(Integer.parseInt(textoSeparado[1]));
+
+                //VALOR DEFENSA
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                don.setDefense(Integer.parseInt(textoSeparado[1]));
+
+                //NUMERO DE WeaponS
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                int tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    Weapon Weapon = new Weapon();
+
+                    //NOMBRE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setName(textoSeparado[1]);
+
+                    //NIVEL ATAQUE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                    //NIVEL DEFENSA Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                    //EMPUÑADURA DE Weapon: si es de 1 o 2 manos
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setSingleHand(textoSeparado[1].equals("true"));
+
+                    Werewolf.getWeapons().add(Weapon);
+                }
+
+                //NUMERO DE WeaponS ACTIVAS
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    Weapon Weapon = new Weapon();
+                    //NOMBRE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setName(textoSeparado[1]);
+                    //VALOR ATAQUE
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+                    //VALOR DEFENSA
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+                    //EMPULADURA DE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weapon.setSingleHand(textoSeparado[1].equals("true"));
+                    Werewolf.getActiveWeapons().add(Weapon);
+                }
+
+                //ArmorS
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    Armor Armor = new Armor();
+
+                    //NOMBRE Armor
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Armor.setName(textoSeparado[1]);
+
+                    //NIVEL DEFENSA Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Armor.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                    //NIVEL ATAQUE Weapon
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Armor.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                    Werewolf.getArmors().add(Armor);
+                }
+
+                //Armor ACTIVA
+                Armor Armor = new Armor();
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+
+                //NOMBRE Armor      *********MIRAR ESTO***** POSIBLEMENTE SE ME HAYA COLADO Y HAY QUE QUITARLO
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor.setName(textoSeparado[1]);
+
+                //NIVEL DEFENSA Weapon
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor.setDefenseModifier((Integer.parseInt(textoSeparado[1])));
+
+                //NIVEL ATAQUE Weapon
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Armor.setAttackModifier((Integer.parseInt(textoSeparado[1])));
+
+                Werewolf.setActiveArmor(Armor);
+
+                //CANTIDAD ORO
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Werewolf.setGold(Integer.parseInt(textoSeparado[1]));
+
+                //CANTIDAD VIDA
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Werewolf.setHp(Integer.parseInt(textoSeparado[1]));
+
+                //PODER
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                Werewolf.setPower(Integer.parseInt(textoSeparado[1]));
+
+                // NUMERO DE WeaknessES
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    Weakness Weakness = new Weakness();
+
+                    //NOMBRE DE DEBILIADAD
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weakness.setName((textoSeparado[1]));
+
+                    //VALOR Weakness
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Weakness.setValue((Integer.parseInt(textoSeparado[1])));
+
+                    Werewolf.getWeaknesses().add(Weakness);
+                }
+
+                // StrengthS
+                linea = br.readLine();
+                textoSeparado = linea.split(" ");
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    Strength Strength = new Strength();
+
+                    //NOMBRE Strength
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Strength.setName(textoSeparado[1]);
+
+                    //VALOR Strength
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Strength.setValue((Integer.parseInt(textoSeparado[1])));
+
+                    Werewolf.getStrengths().add(Strength);
+                }
+
+                //METODO ESBIRRO
+                ArrayList<MinionsComposit> listaEsbirros = new ArrayList<>();
+
+                tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    MinionsComposit esbirro = esbirroFichero(linea, br, textoSeparado);
+                    listaEsbirros.add(esbirro);
+                }
+                Werewolf.setMinions(listaEsbirros);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // En el finally cerramos el fichero, para asegurarnos
+            // que se cierra tanto si todo va bien como si salta
+            // una excepcion.
+            try {
+                if (null != fr) {
+                    fr.close();
+                }
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
+        }
+        return Werewolf;
+    }
+
+    private MinionsComposit esbirroFichero(String linea, BufferedReader br, String[] textoSeparado) throws IOException {
+        // ESBIRROS
+        int tope = Integer.parseInt(textoSeparado[1]);
+        for (int i = 0; i < tope; i++) {
+            linea = br.readLine();
+            textoSeparado = linea.split(" ");
+            switch (textoSeparado[1]) {
+                case "HUMANO" -> {  //BORRAR PARA VampireS
+
+                    Human human = new Human();
+
+                    //TIPO ESBIRRO
+                    human.setType(textoSeparado[1]);
+
+                    //NOMBRE ESBIRRO
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    human.setName(textoSeparado[1]);
+
+                    //VIDA ESBIRRO
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    human.setHp((Integer.parseInt(textoSeparado[1])));
+
+                    //VALOR LEALTAD     TIPOS: ALTA, MEDIO, BAJO que coresponde a 0,1,2
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    if (textoSeparado[1].equals("ALTA")) {
+                        human.setLoyalty(Human.Loyalty.ALTA);
+                    } else if (textoSeparado[1].equals("MEDIA")) {
+                        human.setLoyalty(Human.Loyalty.MEDIA);
+                    } else {
+                        human.setLoyalty(Human.Loyalty.BAJA);
+                    }
+                    return human;
+                }
+                case "GHOUL" -> {
+                    Ghoul ghoul = new Ghoul();
+
+                    //TIPO ESBIRRO
+                    ghoul.setType(textoSeparado[1]);
+
+                    //NOMBRE ESBIRRO
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    ghoul.setName(textoSeparado[1]);
+
+                    //VIDA ESBIRRO
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    ghoul.setHp((Integer.parseInt(textoSeparado[1])));
+
+                    //DEPENDENCIA
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    ghoul.setDependency((Integer.parseInt(textoSeparado[1])));
+                    return ghoul;
+                }
+                case "DEMONIOS" -> {
+                    Demon Demon = new Demon();
+
+                    //TIPO ESBIRRO
+                    Demon.setType(textoSeparado[1]);
+
+                    //NOMBRE ESBIRRO
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Demon.setName(textoSeparado[1]);
+
+                    //VIDA ESBIRRO
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Demon.setHp((Integer.parseInt(textoSeparado[1])));
+
+                    //DESCRIPCION
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    Demon.setDescripcion(textoSeparado[1]);
+                    linea = br.readLine();
+                    textoSeparado = linea.split(" ");
+                    ArrayList<MinionsComposit> esbirrosDemon = new ArrayList<>();
+                    tope = Integer.parseInt(textoSeparado[1]);
+                    for (int j = 0; j < tope; j++) {
+                        MinionsComposit esbirro = esbirroFichero(linea, br, textoSeparado);
+                        esbirrosDemon.add(esbirro);
+                    }
+                    Demon.setMinionsComposites(esbirrosDemon);
+                    return Demon;
+                }
+            }
+        }
+        return null;
     }
 }

@@ -19,15 +19,7 @@ public class Character {
     private String type;
     private ArrayList<MinionsComposit> minionsComposit;
 
-
     /**A continuación se definen los setters y getters**/
-    public Character() {
-        this.weapons = new ArrayList<>();
-        this.activeWeapons = new ArrayList<>();
-        this.armors = new ArrayList<>();
-        this.weaknesses = new ArrayList<>();
-        this.strengths = new ArrayList<>();
-    }
 
     public String getName() {
         return this.name;
