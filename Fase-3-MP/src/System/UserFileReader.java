@@ -3,7 +3,10 @@ package System;
 import Entities.*;
 
 import java.io.*;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class UserFileReader {
 
@@ -110,6 +113,45 @@ public class UserFileReader {
             }
         }
         return listaClient;
+    }
+
+    public static List<Map.Entry<String, Integer>> goldReaderForRanking(String archivo) {
+        List<Map.Entry<String, Integer>> clientes = new ArrayList<>();
+        String nombre = null;
+        Integer oro = null;
+        boolean dentroUsuario = false;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                linea = linea.trim();
+
+                if (linea.equals("========== USUARIO ==========")) {
+                    dentroUsuario = true;
+                    nombre = null;
+                    oro = null;
+                } else if (linea.equals("========== FIN USUARIO ==========")) {
+                    if (nombre != null) {
+                        clientes.add(new AbstractMap.SimpleEntry<>(nombre, oro));
+                    }
+                    dentroUsuario = false;
+                } else if (dentroUsuario) {
+                    if (linea.startsWith("NOMBRE ") && nombre == null) {
+                        nombre = linea.substring(7).trim();
+                    } else if (linea.startsWith("ORO ")) {
+                        try {
+                            oro = Integer.parseInt(linea.substring(4).trim());
+                        } catch (NumberFormatException e) {
+                            oro = null; // por si oro no es un número válido
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return clientes;
     }
 
     //LECTURA PERSONAJES

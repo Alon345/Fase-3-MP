@@ -4,6 +4,7 @@ import Entities.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Terminal {
     public Terminal(){
@@ -60,40 +61,40 @@ public class Terminal {
         System.out.println("=======================================");
     }
 
-    public void showGoldRanking(ArrayList<Client> users) {
-        for (int i = 0; i < users.size(); i++) {
-            Client user = users.get(i);
-            String gold = user.getCharacter() != null ?
-                    String.valueOf(3) : "0"; //aqui va el oro de cada personaje del usuario x
+    public void showGoldRankingSimple(List<Map.Entry<String, Integer>> usuarios) {
+        for (int i = 0; i < usuarios.size(); i++) {
+            Map.Entry<String, Integer> user = usuarios.get(i);
+            String nombre = user.getKey();
+            String oro = user.getValue() != null ? String.valueOf(user.getValue()) : "0";
+
             // Personalización para los top 3
             if (i < 3) {
                 String crown = "";
                 String colorCode = "";
                 switch(i) {
-                    case 0: // TOP 1
+                    case 0:
                         crown = "👑";
-                        colorCode = "\033[1;33m"; // Amarillo brillante al top 1
+                        colorCode = "\033[1;33m"; // Amarillo brillante
                         break;
-                    case 1: // TOP 2
+                    case 1:
                         crown = "🥈";
                         colorCode = "\033[0;36m"; // Cian
                         break;
-                    case 2: // TOP 3
+                    case 2:
                         crown = "🥉";
                         colorCode = "\033[0;35m"; // Magenta
                         break;
                 }
                 System.out.printf(colorCode + "%s%d. %-15s (GOLD %5s)\033[0m\n",
                         crown,
-                        i+1,
-                        user.getNick(),
-                        gold);
+                        i + 1,
+                        nombre,
+                        oro);
             } else {
-                // Formato normal para el resto
                 System.out.printf("%d. %-15s (GOLD %5s)\n",
-                        i+1,
-                        user.getNick(),
-                        gold);
+                        i + 1,
+                        nombre,
+                        oro);
             }
         }
         System.out.println("=======================================");
