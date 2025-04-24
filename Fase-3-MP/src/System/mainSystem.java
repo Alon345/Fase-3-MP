@@ -2,8 +2,12 @@ package System;
 
 import Entities.Challenge;
 import Entities.Client;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.io.Console;
+import java.util.Optional;
 import java.util.Scanner;
 import Entities.Administrator;
 import Entities.Combat;
@@ -220,79 +224,56 @@ public class mainSystem {
     public Client loginClient(Client client) {
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
-        int aux = -1;
         UserFileReader userFileReader = new UserFileReader();
-        BanFileReader banFileReader = new BanFileReader();
-        ArrayList<Client> list = userFileReader.userFileReader();
-        ArrayList<Client> listBanneds = banFileReader.readBannedUsers();
+        BanFileReader banFileReader   = new BanFileReader();
 
-        if (list.isEmpty()) {
-            if (listBanneds.isEmpty()) {
-                terminal.noUsersError(); //no usuarios en sistema
-                return null;
-            }else {
-                terminal.allusersAreBanned(); //no users in UserReg but users in BanReg
-                return null;
-            }
+        // 1) Cargar listas
+        ArrayList<Client> users       = userFileReader.userFileReader();
+        ArrayList<Client> bannedUsers = banFileReader.readBannedUsers();
+
+        if (users.isEmpty()) {
+            terminal.noUsersError();
+            return null;
         }
+
+        // 2) Pedir y buscar nick
         terminal.askNick();
-        String nick = sc.nextLine();
-        boolean encontrado = false;
+        String nick = sc.nextLine().trim();
+        Optional<Client> maybeUser = users.stream()
+                .filter(u -> u.getNick().equalsIgnoreCase(nick))
+                .findFirst();
 
-        // Comparar nick con lista de clientes en archivos
-        for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getNick().equals(nick)) {
-                encontrado = true;
-                aux = i;
-                break;
-            } /**si pusieramos else {terminal.nickNotFoundError();
-             return null;} sería erroneo ya que si en la primera
-             iteracion el nick no es el pedido entonces lanza error **/
-        }
-
-        for(Client c : listBanneds) {
-            if (c.getNick().equals(nick)) {
-                terminal.userIsBanned(nick);
-                return null;
-            }
-        }
-        if (!encontrado) {
+        if (maybeUser.isEmpty()) {
             terminal.nickNotFoundError();
             return null;
         }
-        // Verificar si el usuario está baneado
-        if (banFileReader.isUserBanned(nick)) {
-            // Comprobar si el baneo ha expirado
-            if (banFileReader.isBanExpired(nick)) {
-                // El baneo ha expirado, desbaneamos al usuario
-                banFileReader.removeBannedUser(nick); // Eliminarlo de BanRegister
-                banFileReader.reinstateUser(nick); // Reinsertarlo en UserRegister
+        Client foundUser = maybeUser.get();
 
-                terminal.notifyBanExpired();
-            } else {
-                // Si el baneo no ha expirado
-                NotificationManager notificationManager = new NotificationManager();
-                notificationManager.notifyBan();
-                return null;
-            }
+        // 3) Verificar baneo
+        boolean isBanned = bannedUsers.stream()
+                .map(Client::getNick)
+                .anyMatch(bannedNick -> bannedNick.equalsIgnoreCase(nick));
+
+        if (isBanned) {
+            terminal.userIsBanned(nick);
+            new NotificationManager().notifyBan();
+            return null;
         }
 
-        boolean passCorrect;
-        do {
+        // 4) Verificar contraseña
+        while (true) {
             terminal.askPassword();
-            String password = sc.nextLine();
-            passCorrect = list.get(aux).getPassword().equals(password);
-            if (!passCorrect) {
+            String attempt = sc.nextLine();
+            if (foundUser.getPassword().equals(attempt)) {
+                break;
+            } else {
                 terminal.errorPassword();
             }
-        } while (!passCorrect);
-
-        client = list.get(aux);
-        if (passCorrect && encontrado) {
-            String name = client.getName();
-            terminal.hiAgainUser(name);
         }
-        return client;
+
+        // 5) Éxito
+        terminal.hiAgainUser(foundUser.getName());
+        return foundUser;
     }
 
     public Administrator loginOperator(Administrator admin) {

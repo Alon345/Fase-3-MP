@@ -117,7 +117,7 @@ public class UserFileWriter {
         bw.newLine();
         //PUNTOS DE SANGRE
         bw.write("SANGRE ");
-        bw.write("0");
+        bw.write(String.valueOf(vampiro.getBlood()));
         bw.newLine();
         //NOMBRE DE HABILIDAD
         bw.write("NOMNRE-HABILIDAD ");

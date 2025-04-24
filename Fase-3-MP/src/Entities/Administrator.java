@@ -1,6 +1,9 @@
 package Entities;
 
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import System.*;
 
 
@@ -74,9 +77,8 @@ public class Administrator extends User{
 
 
     //DESBANEAR
-    public void unbanUser(Client admin) {
+    public void unbanUser() {
         UserFileReader userFileReader = new UserFileReader();
-        UserFileWriter userFileWriter = new UserFileWriter();
         BanFileReader banFileReader = new BanFileReader();
         BanFileWriter banFileWriter = new BanFileWriter();
         Terminal terminal = new Terminal();
@@ -118,27 +120,9 @@ public class Administrator extends User{
             if (confirm.equals("DESBANEAR")) {
                 // 1. Eliminar del archivo de baneados
                 bannedClients.remove(userToUnban);
-                banFileWriter.rewriteBanFile(bannedClients, "Motivo", 0);
-
-                // 2. Verificar si ya existe en usuarios
-                boolean exists = userList.stream()
-                        .anyMatch(u -> u.getNick().equalsIgnoreCase(bannedNick));
-
-                if (!exists) {
-                    // 3. Crear nuevo cliente con datos básicos
-                    Client newClient = new Client();
-                    newClient.setName(userToUnban.getName());
-                    newClient.setNick(userToUnban.getNick());
-                    newClient.setPassword(userToUnban.getPassword());
-                    newClient.setRegister(userToUnban.getRegister());
-
-                    terminal.unbbanedUser(bannedNick);
-                } else {
-                    terminal.error();
-                }
-
-                // 6. Limpiar baneos expirados
-                banFileReader.removeExpiredBans();
+                userToUnban.setBanMotive("");
+                banFileWriter.rewriteBanFile(bannedClients);
+                terminal.unbbanedUser(bannedNick);
 
             } else {
                 terminal.cancelOperation();
@@ -152,82 +136,86 @@ public class Administrator extends User{
         }
     }
 
-
     //BANEO
     public void banUser(Client client) {
         UserFileReader userFileReader = new UserFileReader();
-        UserFileWriter userFileWriter = new UserFileWriter();
-        Terminal terminal = new Terminal();
-        Scanner sc = new Scanner(System.in);
+        BanFileReader  banFileReader  = new BanFileReader();
+        BanFileWriter  banWriter      = new BanFileWriter();
+        Terminal       terminal       = new Terminal();
+        Scanner        sc             = new Scanner(System.in);
 
-        ArrayList<Client> userList = userFileReader.userFileReader();
-        if (userList.isEmpty()) {
-            terminal.noUsersToBanError();
+        // 1) Cargo todas las listas
+        ArrayList<Client> allUsers      = userFileReader.userFileReader();
+        ArrayList<Client> bannedClients = banFileReader.readBannedUsers();
+
+        // 2) Preparo la lista de candidatos a banear (todos - ya baneados)
+        Set<String> bannedNicks = bannedClients.stream()
+                .map(Client::getNick)
+                .filter(Objects::nonNull)
+                .map(String::toLowerCase)
+                .collect(Collectors.toSet());
+
+        ArrayList<Client> toBan = allUsers.stream()
+                .filter(u -> {
+                    String nick = u.getNick();
+                    return nick != null && !bannedNicks.contains(nick.toLowerCase());
+                })
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        if (toBan.isEmpty()) {
+            terminal.noUsersToBanError();  // “No hay usuarios disponibles para banear”
             return;
         }
-        terminal.allUsers(userList); // Mostrar lista de usuarios
 
-        terminal.whatUserToBan(); // Mensaje tipo "¿Qué usuario deseas banear?"
-        int selection;
+        // 3) Muestro sólo los no baneados
+        terminal.allUsers(toBan);
+        terminal.whatUserToBan();
 
         try {
-            selection = sc.nextInt();
-            sc.nextLine(); // Limpiar buffer
+            int selection = sc.nextInt();
+            sc.nextLine();
 
             if (selection == 0) {
                 terminal.cancelOperation();
                 return;
             }
-
-            if (selection < 1 || selection > userList.size()) {
+            if (selection < 1 || selection > toBan.size()) {
                 terminal.invalidSelecction();
                 return;
             }
 
-            Client userToBan = userList.get(selection - 1);
-            String username = userToBan.getNick();
+            Client userToBan = toBan.get(selection - 1);
+            String nick     = userToBan.getNick();
 
-            terminal.confirmBan(username);
+            terminal.confirmBan(nick);
             String confirm = sc.nextLine().trim().toUpperCase();
-
-            terminal.whyDoYouBannedThisUser(username);
-            String bannedBecause = sc.nextLine().trim();
-            client.setBanMotive(bannedBecause);
-
-            terminal.howManyHours();
-
-            int numHours = -1;
-            // Validar que el número de horas sea positivo
-            while (numHours <= 0) {
-                if (sc.hasNextInt()) {
-                    numHours = sc.nextInt();
-                    client.setHoursOfBan(numHours);
-
-                    sc.nextLine(); // Limpiar buffer después de leer el número
-                    if (numHours <= 0) {
-                        terminal.invalidNumberOfHours(); // Asegúrate de tener este mensaje en tu Terminal
-                    }
-                } else {
-                    terminal.invalidNumberOfHours(); // Mensaje para cuando el valor no es un número
-                    sc.nextLine(); // Limpiar buffer
-                }
-            }
-
-            if (confirm.equals("BANEAR")) {
-                BanFileWriter banWriter = new BanFileWriter();
-                banWriter.banUser(userToBan, bannedBecause, numHours);
-
-                terminal.banned(username);
-            } else {
+            if (!confirm.equals("BANEAR")) {
                 terminal.cancelOperation();
+                return;
             }
+
+            // Razón del baneo
+            terminal.whyDoYouBannedThisUser(nick);
+            String motivo = sc.nextLine().trim();
+            if (motivo.isEmpty()) motivo = "Sin motivo especificado";
+
+            // Fijamos datos de baneo
+            userToBan.setBanMotive(motivo);
+            LocalDateTime ahora = LocalDateTime.now();
+            userToBan.setBanDateTime(ahora);
+
+            // 4) Añadimos al fichero de baneos
+            banWriter.banUser(userToBan);
+
+            terminal.banned(nick);
 
         } catch (InputMismatchException e) {
             terminal.noNumberIn();
-            sc.nextLine(); // Limpiar input inválido
+            sc.nextLine();
         } catch (Exception e) {
             terminal.error();
             e.printStackTrace();
         }
     }
+
 }
