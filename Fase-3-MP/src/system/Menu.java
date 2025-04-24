@@ -115,7 +115,7 @@ public class Menu {
                     admin.banUser(client);
                     break;
                 case 4:
-                    admin.unbanUser(client);
+                    admin.unbanUser();
                     break;
                 case 5: //logout
                     terminal.logout();

@@ -44,30 +44,33 @@ public class Challenge {
         ArrayList<Client> clientsList = userFileReader.userFileReader();
         terminal.welcomeChallenge();
         int goldAmount = -1;
-        int rivalNum = -1;
+        int rivalNum = -1; //será una especie de indice que busque al rival en la lista.
 
         if (clientsList.size() == 1) {
             terminal.notAvaliableRival();
         } else {
             terminal.showAvaliableRivals(clientsList);
             do {
+
                 try {
                     terminal.validNumber();
-                    rivalNum = askForNumber();
+                    rivalNum = askForNumber(); //return sc.nextInt();
                 } catch (NumberFormatException e) {
                     terminal.invalidInput();
                 }
+
             } while (rivalNum < 0 || rivalNum > clientsList.size() || clientsList.get(rivalNum - 1).getCharacter() == null);
 
             setRival(clientsList.get(rivalNum - 1));
-            terminal.askForGoldBet();
+            terminal.askForGoldBet(client);
             do {
+
                 try {
-                    terminal.validNumber();
                     goldAmount = askForNumber();
                 } catch (NumberFormatException e) {
                     terminal.invalidInput();
                 }
+
             } while (goldAmount <= 0 || goldAmount > client.getCharacter().getGold());
 
             setGold(goldAmount);
@@ -98,14 +101,14 @@ public class Challenge {
     }
 
     public int askForNumber() {
-        try (Scanner sc = new Scanner(System.in)) {
-            while (!sc.hasNextInt()) {
-                System.out.println("Por favor, ingrese un número válido.");
-                sc.next(); // Descartar entrada inválida
-            }
-            return sc.nextInt();
+        Scanner sc = new Scanner(System.in); // Crea el scanner solo cuando sea necesario
+        while (!sc.hasNextInt()) {
+            System.out.println("Por favor, ingrese un número válido.");
+            sc.next(); // Descartar entrada inválida
         }
+        return sc.nextInt();
     }
+
 
     public String generateRegisterNumber() {
         return "CHALLENGE-" + System.currentTimeMillis();

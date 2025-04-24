@@ -259,8 +259,8 @@ public class Terminal {
     public void validNumber() {
         System.out.println("Elige un numero valido");
     }
-    public void askForGoldBet() {
-        System.out.println("Introduce la cantidad de oro que deseas apostar (>100)");
+    public void askForGoldBet(Client client) {
+        System.out.println("Introduce la cantidad de oro que deseas apostar (>100) \nNOTA: Tu oro actual es de " + client.getCharacter().getGold() + " Monedas de Oro");
     }
     public void challengeCreated(){System.out.println("Desafío creado y enviado al rival!");}
     public void askChallenge(Challenge challenge) {

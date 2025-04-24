@@ -1,12 +1,14 @@
 package Entities;
 
+import java.time.LocalDateTime;
+
 public class User {
     /**A continuación se definen los atributos**/
     private String name;
     private String nick;
     private String password;
     private String banMotive;
-    private int bannedForHours; //baneado x horas
+    private LocalDateTime banDateTime;
 
     /**A continuación se definen los Getters y Setters**/
     public String getName() {
@@ -33,9 +35,7 @@ public class User {
     public String getBanMotive(){return banMotive;}
     public void setBanMotive(String banMotive) {this.banMotive = banMotive;}
 
-    public int getBannedForHours(){return bannedForHours;}
-    public void setHoursOfBan(int bannedForHours){
-        this.bannedForHours = bannedForHours;
-    }
+    public void setBanDateTime(LocalDateTime banDateTime) {this.banDateTime = banDateTime;}
+    public LocalDateTime getBanDateTime() {return banDateTime;}
 }//FIN
 
