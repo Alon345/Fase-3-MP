@@ -125,8 +125,10 @@ public class mainSystem {
                         password = sc.nextLine().trim();
                         if (password.isEmpty()) {
                             terminal.emptyPassword(); // Mensaje específico para contraseña vacía
-                        }
-                    } while (password.isEmpty());
+                        } /**else if (password.length() < 8 || password.length() > 12) {
+                            terminal.passwordTooShort(); // Mensaje específico para contraseña corta
+                        }**/
+                    } while (password.isEmpty()); //||password.length() < 8 || password.length() > 12);
 
                     terminal.confirmPassword();
                     confirm = sc.nextLine().trim();

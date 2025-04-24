@@ -21,6 +21,7 @@ public class UserFileWriter {
             if (!file.exists()) {
                 file.createNewFile();
             }
+
             FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
             BufferedWriter bw = new BufferedWriter(fw);
             bw.write("========== USUARIO ==========");
@@ -37,10 +38,11 @@ public class UserFileWriter {
             bw.write("REGISTRO ");
             bw.write(client.getRegister());
             bw.newLine();
-            bw.write("TIPO DE PERSONAJE null");
+            bw.write("TIPO PERSONAJE null");
             bw.newLine();
             bw.write("========== FIN USUARIO ==========");
             bw.newLine();
+
             bw.close();
         } catch (Exception e) {
             mainSystem system = new mainSystem();
@@ -52,87 +54,40 @@ public class UserFileWriter {
     public void rewriteUserFile(ArrayList<Client> clientArrayList) {
         try {
             File file = new File(USER_FILE_PATH);
-            FileWriter fw = new FileWriter(file, true); //<-- sin append borra toda la bd de user
+            FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
             //recorre la lista de usuarios
-            for (int i = 0; i < clientArrayList.size(); i++) {
+            for (Client client : clientArrayList) {
+
                 bw.write("========== USUARIO ==========");
                 bw.newLine();
                 bw.write("NOMBRE ");
-                bw.write(clientArrayList.get(i).getName());
+                bw.write(client.getName());
                 bw.newLine();
                 bw.write("NICK ");
-                bw.write(clientArrayList.get(i).getNick());
+                bw.write(client.getNick());
                 bw.newLine();
                 bw.write("PASSWORD ");
-                bw.write(clientArrayList.get(i).getPassword());
+                bw.write(client.getPassword());
                 bw.newLine();
                 bw.write("REGISTRO ");
-                bw.write(clientArrayList.get(i).getRegister());
+                bw.write(client.getRegister());
                 bw.newLine();
-                if (clientArrayList.get(i).getCharacter() == null) {
-                    bw.write("TIPO PERSONAJE null");
+                if (client.getCharacter() == null) {
+                    bw.write("TIPO-PERSONAJE null");
+                    bw.newLine();
+                    bw.write("========== FIN USUARIO ==========");
                     bw.newLine();
                 } else {
-                    String characterType = clientArrayList.get(i).getCharacter().getType();
-                    bw.write("TIPO PERSONAJE ");
-                    bw.write(characterType);
-                    bw.newLine();
+                    String characterType = client.getCharacter().getType();
                     switch (characterType) {
-                       case "VAMPIRO" -> vampireWriter(clientArrayList, i, bw,clientArrayList.get(i)); //escribimos y guardamos los atributos de los vampiros
-                       case "LICANTROPO" -> licantropWriter(clientArrayList, i, bw,clientArrayList.get(i)); //idem.
-                       case "CAZADOR" -> hunterWriter(clientArrayList, i, bw,clientArrayList.get(i)); //idem.
+                       case "VAMPIRO" -> vampireWriter(clientArrayList, clientArrayList.indexOf(client), bw); //escribimos y guardamos los atributos de los vampiros
+                       case "LICANTROPO" -> werewolfWriter(clientArrayList, clientArrayList.indexOf(client), bw,clientArrayList.get(0)); //idem.
+                       case "CAZADOR" -> hunterWriter(clientArrayList, clientArrayList.indexOf(client), bw,clientArrayList.get(0)); //idem.
 
                     }
                 }
             }
-            bw.write("========== FIN USUARIO ==========");
-            bw.close();
-        } catch (Exception exception) {
-            mainSystem system = new mainSystem();
-            system.selector();
-            exception.printStackTrace();
-        }
-    }
-
-    public void rewriteUserFileForDeleteCharacter(ArrayList<Client> clientArrayList) {
-        try {
-            File file = new File(USER_FILE_PATH);
-            FileWriter fw = new FileWriter(file); //<-- sin append borra toda la bd de user
-            BufferedWriter bw = new BufferedWriter(fw);
-            //recorre la lista de usuarios
-            for (int i = 0; i < clientArrayList.size(); i++) {
-                bw.write("========== USUARIO ==========");
-                bw.newLine();
-                bw.write("NOMBRE ");
-                bw.write(clientArrayList.get(i).getName());
-                bw.newLine();
-                bw.write("NICK ");
-                bw.write(clientArrayList.get(i).getNick());
-                bw.newLine();
-                bw.write("PASSWORD ");
-                bw.write(clientArrayList.get(i).getPassword());
-                bw.newLine();
-                bw.write("REGISTRO ");
-                bw.write(clientArrayList.get(i).getRegister());
-                bw.newLine();
-                if (clientArrayList.get(i).getCharacter() == null) {
-                    bw.write("TIPO PERSONAJE null");
-                    bw.newLine();
-                } else {
-                    String characterType = clientArrayList.get(i).getCharacter().getType();
-                    bw.write("TIPO PERSONAJE ");
-                    bw.write(characterType);
-                    bw.newLine();
-                    switch (characterType) {
-                        case "VAMPIRO" -> vampireWriter(clientArrayList, i, bw,clientArrayList.get(i)); //escribimos y guardamos los atributos de los vampiros
-                        case "LICANTROPO" -> licantropWriter(clientArrayList, i, bw,clientArrayList.get(i)); //idem.
-                        case "CAZADOR" -> hunterWriter(clientArrayList, i, bw,clientArrayList.get(i)); //idem.
-
-                    }
-                }
-            }
-            bw.write("========== FIN USUARIO ==========");
             bw.close();
         } catch (Exception exception) {
             mainSystem system = new mainSystem();
@@ -147,124 +102,254 @@ public class UserFileWriter {
         bw.write(value);
         bw.newLine();
     }
-    public void vampireWriter(ArrayList<Client> clientArrayList, int i,BufferedWriter bw, Client client) throws IOException {
+    public void vampireWriter(ArrayList<Client> listaCliente, int i, BufferedWriter bw) throws IOException {
 
-        Character character = clientArrayList.get(i).getCharacter();
-        Vampire vampire = (Vampire) character;
-        Discipline discipline = (Discipline) vampire.getAbility();
+        Vampire vampiro = (Vampire) listaCliente.get(i).getCharacter();
+        Discipline disciplina = (Discipline) vampiro.getAbility();
 
-            writeLine(bw, "NOMBRE DE PERSONAJE ", character.getName());
-            writeLine(bw, "SANGRE ", Integer.toString(vampire.getBlood()));
-            writeLine(bw, "NOMBRE DE LA HABILIDAD ", discipline.getName());
-            writeLine(bw, "VALOR DE ATAQUE ", String.valueOf(discipline.getAttack()));
-            writeLine(bw, "VALOR DE DEFENSA ", String.valueOf(discipline.getDefense()));
-            writeLine(bw, "COSTE DE LA HABILIDAD ", String.valueOf(discipline.getCost()));
+        //TIPO PERSONAJE
+        bw.write("TIPO-PERSONAJE ");
+        bw.write(listaCliente.get(i).getCharacter().getType());
+        bw.newLine();
+        //NOMBRE PERSONAJE
+        bw.write("NOMBRE-PERSONAJE ");
+        bw.write(listaCliente.get(i).getCharacter().getName());
+        bw.newLine();
+        //PUNTOS DE SANGRE
+        bw.write("SANGRE ");
+        bw.write("0");
+        bw.newLine();
+        //NOMBRE DE HABILIDAD
+        bw.write("NOMNRE-HABILIDAD ");
+        bw.write(disciplina.getName());
+        bw.newLine();
 
-            writeLine(bw, "NUMERO DE ARMAS ", String.valueOf(character.getWeapons().size()));
-            for (Weapon weapon : vampire.getWeapons()) {
-                writeLine(bw, "NOMBRE DEL ARMA ", weapon.getName());
-                writeLine(bw, "ATAQUE DEL ARMA ", String.valueOf(weapon.getAttackModifier()));
-                writeLine(bw, "DEFENSA DEL ARMA ", String.valueOf(weapon.getDefenseModifier()));
-                writeLine(bw, "EMPUÑADURA ", weapon.isSingleHand() ? "true" : "false");
+        //VALOR ATAQUE
+        bw.write("VALOR-ATAQUE ");
+        bw.write(String.valueOf(disciplina.getAttack()));
+        bw.newLine();
+
+        //VALOR DEFENSA
+        bw.write("VALOR-DEFENSA ");
+        bw.write(String.valueOf(disciplina.getDefense()));
+        bw.newLine();
+
+        //COSTE HABILIDAD
+        bw.write("COSTE-HABILIDAD ");
+        bw.write(String.valueOf(disciplina.getCost()));
+        bw.newLine();
+
+        //ARMAS
+        bw.write("NUMERO-ARMAS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getWeapons().size()));
+        bw.newLine();
+
+        for (int variableArma = 0; variableArma < (listaCliente.get(i).getCharacter().getWeapons().size()); variableArma++) {
+            Weapon arma = vampiro.getWeapons().get(variableArma);
+            bw.write("NOMBRE-ARMA ");
+            bw.write(arma.getName());
+            bw.newLine();
+
+            bw.write("ATAQUE-ARMA ");
+            bw.write(String.valueOf(arma.getAttackModifier()));
+            bw.newLine();
+
+            bw.write("DEFENSA-ARMA ");
+            bw.write(String.valueOf(arma.getDefenseModifier()));
+            bw.newLine();
+
+            //si es true es de 1 mano, si es false es de dos manos
+            bw.write("EMPUÑADURA ");
+            if (arma.isSingleHand()) {
+                bw.write("true");
+            } else {
+                bw.write("false");
             }
+            bw.newLine();
 
-            writeLine(bw, "", ""); // Línea en blanco
-            writeLine(bw, "NUMERO DE ARMAS ACTIVAS ", String.valueOf(character.getActiveWeapons().size()));
-            for (Weapon weapon : vampire.getActiveWeapons()) {
-                writeLine(bw, "NOMBRE DE LAS ARMAS ACTIVAS ", weapon.getName());
-                writeLine(bw, "ATAQUE DE LAS ARMA ACTIVAS ", String.valueOf(weapon.getAttackModifier()));
-                writeLine(bw, "DEFENSA DEL ARMA ACTIVAS ", String.valueOf(weapon.getDefenseModifier()));
-                writeLine(bw, "EMPUÑADURA ", weapon.isSingleHand() ? "true" : "false");
+        }
+        bw.newLine();
+
+        //NUMERO DE ARMAS ACTIVAS
+        bw.write("NUMERO-ARMAS-ACTIVAS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getActiveWeapons().size()));
+        bw.newLine();
+        for (int variableArmaActiva = 0; variableArmaActiva < (listaCliente.get(i).getCharacter().getActiveWeapons().size()); variableArmaActiva++) {
+            Weapon armaActiva = vampiro.getActiveWeapons().get(variableArmaActiva);
+
+            bw.write("NOMBRE-ARMAS-ACTIVAS ");
+            bw.write(armaActiva.getName());
+            bw.newLine();
+
+            bw.write("ATAQUE-ARMA-ACTIVAS ");
+            bw.write(String.valueOf(armaActiva.getAttackModifier()));
+            bw.newLine();
+
+            bw.write("DEFENSA-ARMA-ACTIVAS ");
+            bw.write(String.valueOf(armaActiva.getDefenseModifier()));
+            bw.newLine();
+
+            //si es true es de 1 mano, si es false es de dos manos
+            bw.write("EMPUÑADURA ");
+            if (armaActiva.isSingleHand()) {
+                bw.write("true");
+            } else {
+                bw.write("false");
             }
+            bw.newLine();
+        }
+        bw.newLine();
 
-            writeLine(bw, "NUMERO DE ARMADURAS  ", String.valueOf(character.getArmors().size()));
-            for (Armor armor : vampire.getArmors()) {
-                writeLine(bw, "NOMBRE DE LA ARMADURA ", armor.getName());
-                writeLine(bw, "DEFENSA DE LA ARMADURA ", String.valueOf(armor.getDefenseModifier()));
-                writeLine(bw, "ATAQUE DE LA ARMADURA ", String.valueOf(armor.getAttackModifier()));
-            }
+        //ARMADURAS
+        //NUMERO DE ARMADURAS
+        bw.write("NUMERO-ARMADURAS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getArmors().size()));
+        bw.newLine();
+        for (int j = 0; j < (listaCliente.get(i).getCharacter().getArmors().size()); j++) {
+            Armor armadura = (Armor) vampiro.getArmors().get(j);
+            bw.write("NOMBRE-ARMADURA ");
+            bw.write(armadura.getName());
+            bw.newLine();
 
-            Armor activeArmor = vampire.getActiveArmor();
-            writeLine(bw, "NOMBRE DE LA ARMADURA ACTIVA ", activeArmor.getName());
-            writeLine(bw, "DEFENSA DE LA ARMADURA ACTIVA ", String.valueOf(activeArmor.getDefenseModifier()));
-            writeLine(bw, "ATAQUE DE LA ARMADURA ACTIVA ", String.valueOf(activeArmor.getAttackModifier()));
+            bw.write("DEFENSA-ARMADURA ");
+            bw.write(String.valueOf(armadura.getDefenseModifier()));
+            bw.newLine();
 
-            writeLine(bw, "ORO ", String.valueOf(vampire.getGold()));
-            writeLine(bw, "EDAD DEL VAMPIRO ", String.valueOf(vampire.getAge()));
-            writeLine(bw, "HP ", String.valueOf(vampire.getHp()));
-            writeLine(bw, "PODER ", String.valueOf(vampire.getPower()));
+            bw.write("ATAQUE-ARMADURA ");
+            bw.write(String.valueOf(armadura.getAttackModifier()));
+            bw.newLine();
+        }
+        bw.newLine();
 
-            writeLine(bw, "NUMERO DE FORTALEZAS ", String.valueOf(vampire.getStrengths().size()));
-            for (Strength s : character.getStrengths()) {
-                writeLine(bw, "  -NOMBRE DE LA FORTALEZA ", s.getName());
-                writeLine(bw, "  -VALOR DE LA FORTALEZA ", String.valueOf(s.getValue()));
-            }
+        bw.write("NOMBRE-ARMADURA-ACTIVA ");
+        bw.write(vampiro.getActiveArmor().getName());
+        bw.newLine();
 
-            writeLine(bw, "NUMERO DE DEBILIDADES ", String.valueOf(vampire.getWeaknesses().size()));
-            for (Weakness w : character.getWeaknesses()) {
-                writeLine(bw, "NOMBRE DE LA DEBILIDAD ", w.getName());
-                writeLine(bw, "VALOR DE LA DEBILIDAD ", String.valueOf(w.getValue()));
-            }
+        bw.write("DEFENSA-ARMADURA-ACTIVA ");
+        bw.write(String.valueOf(vampiro.getActiveArmor().getDefenseModifier()));
+        bw.newLine();
 
-            writeLine(bw, "NUMERO DE ESBIRROS  ", String.valueOf(character.getMinions().size()));
-            minionsWriter(clientArrayList, i, vampire, bw);
-            client.setCharacter(vampire);
+        bw.write("ATAQUE-ARMADURA-ACTIVA ");
+        bw.write(String.valueOf(vampiro.getActiveArmor().getAttackModifier()));
+        bw.newLine();
+
+        bw.newLine();
+
+        //ORO
+        bw.write("ORO ");
+        bw.write(String.valueOf(vampiro.getGold()));
+        bw.newLine();
+
+        //EDAD VAMPIRO
+        bw.write("EDAD-VAMPIRO ");
+        bw.write(String.valueOf(vampiro.getAge()));
+        bw.newLine();
+
+        bw.write("HP ");
+        bw.write(String.valueOf(vampiro.getHp()));
+        bw.newLine();
+
+        bw.write("PODER ");
+        bw.write(String.valueOf(vampiro.getPower()));
+        bw.newLine();
+
+        bw.write("NUMERO-FORTALEZAS ");
+        bw.write(String.valueOf(vampiro.getStrengths().size()));
+        bw.newLine();
+
+        for (int j = 0; j < (listaCliente.get(i).getCharacter().getStrengths().size()); j++) {
+            Strength fortaleza = listaCliente.get(i).getCharacter().getStrengths().get(j);
+            bw.write("NOMBRE-FORTALEZA ");
+            bw.write(fortaleza.getName());
+            bw.newLine();
+
+            bw.write("VALOR-FORTALEZA ");
+            bw.write(String.valueOf(fortaleza.getValue()));
+            bw.newLine();
+        }
+
+        bw.write("NUMERO-DEBILIDADES ");
+        bw.write(String.valueOf(vampiro.getWeaknesses().size()));
+        bw.newLine();
+
+        for (int j = 0; j < (listaCliente.get(i).getCharacter().getWeaknesses().size()); j++) {
+            Weakness debilidad = listaCliente.get(i).getCharacter().getWeaknesses().get(j);
+            bw.write("NOMBRE-DEBILIDAD ");
+            bw.write(debilidad.getName());
+            bw.newLine();
+
+            bw.write("VALOR-DEBILIDAD ");
+            bw.write(String.valueOf(debilidad.getValue()));
+            bw.newLine();
+        }
+
+        //ESBIRROS
+        //NUMERO DE ESBIRROS
+        bw.write("NUMERO-ESBIRROS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getMinions().size()));
+        bw.newLine();
+
+        //ESBIRROS
+        minionsWriter(listaCliente, i, vampiro, bw);
+
+        bw.write("========== FIN USUARIO ==========");
+        bw.newLine();
     }
 
     private void writeWeapon(BufferedWriter bw, Weapon weapon, String tipo) throws IOException {
-        bw.write("NOMBRE DEL " + tipo + " ");
+        bw.write("NOMBRE-DEL-" + tipo + " ");
         bw.write(weapon.getName());
         bw.newLine();
 
-        bw.write("ATAQUE DEL " + tipo + " ");
+        bw.write("ATAQUE-DEL-" + tipo + " ");
         bw.write(String.valueOf(weapon.getAttackModifier()));
         bw.newLine();
 
-        bw.write("DEFENSA DEL " + tipo + " ");
+        bw.write("DEFENSA-DEL-" + tipo + " ");
         bw.write(String.valueOf(weapon.getDefenseModifier()));
         bw.newLine();
 
         bw.write("EMPUÑADURA ");
-        bw.write(weapon.isSingleHand() ? "true" : "false");
+        bw.write(weapon.isSingleHand() ? "true": "false");
         bw.newLine();
     }
 
     private void writeArmor(BufferedWriter bw, Armor armor, String tipo) throws IOException {
-        bw.write("NOMBRE DE LA " + tipo + " ");
+        bw.write("NOMBRE-DE-LA-" + tipo + " ");
         bw.write(armor.getName());
         bw.newLine();
 
-        bw.write("DEFENSA DE LA " + tipo + " ");
+        bw.write("DEFENSA-DE-LA-" + tipo + " ");
         bw.write(String.valueOf(armor.getDefenseModifier()));
         bw.newLine();
 
-        bw.write("ATAQUE DE LA " + tipo + " ");
+        bw.write("ATAQUE-DE-LA-" + tipo + " ");
         bw.write(String.valueOf(armor.getAttackModifier()));
         bw.newLine();
     }
 
     private void writeWeakness(BufferedWriter bw, Weakness w) throws IOException {
-        bw.write("NOMBRE DE LA DEBILIDAD ");
+        bw.write("NOMBRE-DE-LA-DEBILIDAD ");
         bw.write(w.getName());
         bw.newLine();
-        bw.write("VALOR DE LA DEBILIDAD ");
+        bw.write("VALOR-DE-LA-DEBILIDAD ");
         bw.write(String.valueOf(w.getValue()));
         bw.newLine();
     }
 
     private void writeStrength(BufferedWriter bw, Strength s) throws IOException {
-        bw.write("NOMBRE DE LA FORTALEZA ");
+        bw.write("NOMBRE-DE-LA-FORTALEZA ");
         bw.write(s.getName());
         bw.newLine();
-        bw.write("VALOR DE LA FORTALEZA ");
+        bw.write("VALOR-DE-LA-FORTALEZA ");
         bw.write(String.valueOf(s.getValue()));
         bw.newLine();
     }
 
-    public void licantropWriter(ArrayList<Client> clientArrayList, int i, BufferedWriter bw,Client client) throws IOException {
+    public void werewolfWriter(ArrayList<Client> clientArrayList, int i, BufferedWriter bw,Client client) throws IOException {
         Werewolf licantrop = (Werewolf) clientArrayList.get(i).getCharacter();
 
-            writeLine(bw, "REGISTRO_USUARIO ", client.getRegister()); //para saber de qué usuario es
+            writeLine(bw, "REGISTRO-USUARIO ", client.getRegister()); //para saber de qué usuario es
             bw.write("------ TIPO DE PERSONAJE ------");
             bw.write(licantrop.getType());
             bw.newLine();
@@ -302,7 +387,7 @@ public class UserFileWriter {
         Hunter hunter = (Hunter) clientArrayList.get(i).getCharacter();
         Talent talent = (Talent) hunter.getAbility();
 
-            writeLine(bw, "REGISTRO_USUARIO ", client.getRegister()); //para saber de qué usuario es
+            writeLine(bw, "REGISTRO-USUARIO ", client.getRegister()); //para saber de qué usuario es
             bw.write("TIPO DE PERSONAJE "); bw.write(hunter.getType()); bw.newLine();
             bw.write("NOMBRE DE PERSONAJE "); bw.write(hunter.getName()); bw.newLine();
             bw.write("NOMBRE DE LA HABILIDAD "); bw.write(hunter.getAbility().getName()); bw.newLine();

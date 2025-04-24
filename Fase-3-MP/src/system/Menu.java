@@ -76,7 +76,7 @@ public class Menu {
         Character charac = null;
         int opcion = sc.nextInt();
         switch (opcion) {
-            case 1 -> charac = client.createVampire(client); // 1 Vampiro
+            case 1 -> charac = client.createVampire(); // 1 Vampiro
             case 2 -> charac = client.createWerewolf();// 2 Licantropo
             case 3 -> charac = client.createHunter(); //  3 Cazador
             default -> terminal.error();

@@ -291,6 +291,9 @@ public class Terminal {
     public void askForHp() {System.out.println("Introduce la cantidad de vida, \nNOTA: Debe ser un valor entre 0 y 3 (incluídos)");}
     public void askForMinionsNum() {System.out.println("Introduce el numero de esbirros que deseas, \nNOTA: Debe ser un valor entre 0 y 3 (incluídos)");}
     public void askPower(){System.out.println("Introduce su poder, \nNOTA: Debe ser un valor entre 1 y 5 (incluídos)");}
+    public void passwordTooShort(){
+        System.out.println("Ups!, La contraseña debe ser de mínimo 8 caracteres y máximo 12.");
+    }
 
     /**Mensajes de los Humanos**/
     public void errorHuman() {

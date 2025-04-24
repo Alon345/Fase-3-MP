@@ -57,6 +57,7 @@ public class Client extends User {
         }
         return strBuilder;
     }
+
     public void toChallenge(Client cliente) { //desafiar -> toChallenge
         Challenge challenge = new Challenge();
         challenge.createChallenge(cliente);
@@ -64,12 +65,25 @@ public class Client extends User {
 
     public void deleteCharacter(Client client) {
         Terminal terminal = new Terminal();
-        terminal.confirmDeleteCharacter();
         Scanner sc = new Scanner(System.in);
-        boolean delete = sc.nextInt() == 1;
-        if (delete) {
-            client.setCharacter(null);
+        UserFileReader userFileReader = new UserFileReader();
+        ArrayList<Client> clientList = userFileReader.userFileReader();
+        UserFileWriter userFileWriter = new UserFileWriter();
+
+        terminal.confirmDeleteCharacter();
+        String confirmation = sc.nextLine().trim();
+        if (confirmation.equalsIgnoreCase("ELIMINAR")) {
+            // Buscar y actualizar el personaje del cliente dentro de la lista
+            for (Client c : clientList) {
+                if (c.getName().equals(client.getName())) {
+                    c.setCharacter(null);
+                    break;
+                }
+            }
+            userFileWriter.rewriteUserFile(clientList);
             terminal.deletedCharacter();
+        } else {
+            terminal.error();
         }
     }
 
@@ -82,10 +96,11 @@ public class Client extends User {
      * Creación de los Vampiros
      * @return vampire
      */
-    public Vampire createVampire(Client client) {
+    public Vampire createVampire() {
         boolean[] aux1 = new boolean[]{true, true};
         boolean[] aux2 = new boolean[]{true, false};
         boolean rightValue;
+
         VampireFactory vampireFactory = new VampireFactory();
         Terminal terminal = new Terminal();
         Vampire vampire = new Vampire();
@@ -111,10 +126,8 @@ public class Client extends User {
             terminal.askVampireBlood();
             rightValue = vampireFactory.initializeBlood(vampire);
         } while (!rightValue);
-
         setVampireMinions(vampireFactory, terminal, vampire, minionsComposits);
         vampire.setType("VAMPIRO");
-        client.setCharacter(vampire);
         return vampire;
     }
     private void setVampireMinions(VampireFactory vampireFactory, Terminal terminal, Vampire vampire, ArrayList<MinionsComposit> minionsComposits) {
