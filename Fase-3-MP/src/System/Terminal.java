@@ -208,9 +208,6 @@ public class Terminal {
 
     /**Mensajes de los personajes y lo relacionado a ellos**/
 
-    public void deleteCharacter() {
-        System.out.println("Para crear un personaje nuevo antes tienes que eliminar el existente");
-    }
     public void confirmDeleteCharacter() {
         String colorCodeRed = "\033[0;31m"; // Rojo
         String resetCode = "\033[0m";       // Reset de color
@@ -250,7 +247,7 @@ public class Terminal {
     public void showAvaliableRivals(ArrayList<Client> users) {
         for (int i = 0; i < users.size(); i++) {
             Client user = users.get(i);
-            System.out.printf("%d %s \n", // 1 nick01
+            System.out.printf(" %d %s \n", // 1 nick01
                     i + 1,
                     user.getNick());
         }
@@ -277,6 +274,15 @@ public class Terminal {
         System.out.println("NOTA: si no aceptas perderás " + challenge.getGold() / 10 + " de tus Monedas de Oro");
         System.out.println("=======================================");
 
+    }
+   public void invalidQuantity(Client client) {
+       System.out.println("Cantidad inválida. Introduce un valor entre 1 y " + client.getCharacter().getGold());
+    }
+    public void noCharacter(){
+        System.out.println("El rival seleccionado no tiene personaje válido.");
+    }
+    public void autoRival(){
+        System.out.println("Se ha seleccionado automáticamente al único rival disponible.");
     }
 
     /**Mensajes de los esbirros**/
@@ -429,10 +435,7 @@ public class Terminal {
         System.out.println("Todos los usuarios del sistema han sido" +colorCodeRed+" baneados"+resetCode+ "\nNOTA: para acceder puedes registrarte como nuevo usuario\no, por otro lado, esperar a cumplir la condena.");}
     public void noNumberIn(){System.out.println("Debes introducir un número de usuario");}
     public void whyDoYouBannedThisUser(String username){System.out.println("¿Por qué se ha baneado a "+username+"? (opcional)");}
-    public void howManyHours(){System.out.println("¿Cuantas horas deseas banearle (mínimo 1h)?");}
-    public void notifyBanExpired(){System.out.println("Bienvenido de nuevo, tu baneo ha expirado.");}
-    public void invalidNumberOfHours(){System.out.println("Introduce un numero de horas adecuado.");}
-    public void userIsBanned(String nick){
+   public void userIsBanned(String nick){
         String colorCodeRed = "\033[0;31m"; // Rojo
         String resetCode = "\033[0m";
         System.out.println("El jugador '"+ nick + "' ha sido"+colorCodeRed+" baneado "+resetCode+"por el Administrador del sistema.");}
@@ -496,5 +499,4 @@ public class Terminal {
                     user.getRegister());
         }
     }
-
 }//FIN

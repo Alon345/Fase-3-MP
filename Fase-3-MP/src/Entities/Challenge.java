@@ -2,6 +2,7 @@ package Entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Scanner;
 import System.*;
 
@@ -46,12 +47,22 @@ public class Challenge {
         int goldAmount = -1;
         int rivalNum = -1; //será una especie de indice que busque al rival en la lista.
 
-        if (clientsList.size() == 1) {
+        //debemos eliminar de la lista el cliente que está creando el desafío
+        String myNick = client.getNick();
+        Iterator<Client> iterator = clientsList.iterator();
+        while (iterator.hasNext()) {
+            Client current = iterator.next();
+            if (current.getNick().equals(myNick)) {
+                iterator.remove();
+                break; // Si solo quieres eliminarte a ti mismo, puedes salir del bucle
+            }
+        }
+
+        if (clientsList.isEmpty()) {
             terminal.notAvaliableRival();
         } else {
             terminal.showAvaliableRivals(clientsList);
             do {
-
                 try {
                     terminal.validNumber();
                     rivalNum = askForNumber(); //return sc.nextInt();
@@ -109,8 +120,8 @@ public class Challenge {
         return sc.nextInt();
     }
 
-
     public String generateRegisterNumber() {
         return "CHALLENGE-" + System.currentTimeMillis();
     }
+
 }//FIN

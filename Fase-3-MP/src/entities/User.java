@@ -37,5 +37,6 @@ public class User {
 
     public void setBanDateTime(LocalDateTime banDateTime) {this.banDateTime = banDateTime;}
     public LocalDateTime getBanDateTime() {return banDateTime;}
+
 }//FIN
 
