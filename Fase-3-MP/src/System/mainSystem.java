@@ -121,7 +121,7 @@ public class mainSystem {
                 } while (nickExists);
                 client.setNick(nick);
 
-                // Validación contraseña (no vacía y coincidente)
+                // Validación contraseña (no vacía, coincidente y correcta longitud)
                 String password, confirm;
                 do {
                     do {
@@ -129,10 +129,10 @@ public class mainSystem {
                         password = sc.nextLine().trim();
                         if (password.isEmpty()) {
                             terminal.emptyPassword(); // Mensaje específico para contraseña vacía
-                        } /**else if (password.length() < 8 || password.length() > 12) {
+                        } else if (password.length() < 8 || password.length() > 12) {
                             terminal.passwordTooShort(); // Mensaje específico para contraseña corta
-                        }**/
-                    } while (password.isEmpty()); //||password.length() < 8 || password.length() > 12);
+                        }
+                    } while (password.length() < 8 || password.length() > 12);
 
                     terminal.confirmPassword();
                     confirm = sc.nextLine().trim();
@@ -232,7 +232,11 @@ public class mainSystem {
         ArrayList<Client> bannedUsers = banFileReader.readBannedUsers();
 
         if (users.isEmpty()) {
-            terminal.noUsersError();
+            if (bannedUsers.isEmpty()) {
+                terminal.noUsersError();
+            } else {
+                terminal.allusersAreBanned();
+            }
             return null;
         }
 

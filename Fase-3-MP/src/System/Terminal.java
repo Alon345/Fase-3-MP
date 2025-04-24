@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Terminal {
-    public Terminal(){
-    }
     /**Mensajes iniciales**/
     public void wellcome() {
         String boldBlue = "\033[1;34m"; // Azul en negrita
@@ -79,14 +77,6 @@ public class Terminal {
                         crown = "👑";
                         colorCode = "\033[1;33m"; // Amarillo brillante
                         break;
-                    case 1:
-                        crown = "";
-                        colorCode = "\033[0;36m"; // Cian
-                        break;
-                    case 2:
-                        crown = "";
-                        colorCode = "\033[0;35m"; // Magenta
-                        break;
                 }
                 System.out.printf(colorCode + "%s%d %-15s (GOLD %5s)\033[0m\n",
                         crown,
@@ -116,20 +106,20 @@ public class Terminal {
     }
     public void nickExists() {System.out.println("El nick introducido ya existe");}
 
-    public void askWeaknessValue() {System.out.println("Introduce el valor de la debilidad ");}
-    public void askNumWeakness() {System.out.println("Introduce el numero de debilidades a añadir ");}
+    public void askWeaknessValue() {System.out.println("Introduce el valor de la debilidad");}
+    public void askNumWeakness() {System.out.println("Introduce el numero de debilidades a añadir. (>=0) ");}
     public void askWeaknessName() {System.out.println("Introduce el nombre de la debilidad ");}
 
-    public void askStrengthValue() {System.out.println("Introduce el valor de la fortaleza ");}
-    public void askNumStrengths() {System.out.println("Introduce el numero de fortalezas a añadir ");}
+    public void askStrengthValue() {System.out.println("Introduce el valor de la fortaleza. (>=0)");}
+    public void askNumStrengths() {System.out.println("Introduce el numero de fortalezas a añadir. (>=0) ");}
     public void askStrengthName() {System.out.println("Introduce el nombre de la fortaleza ");}
 
-    public void askNumArmors() {System.out.println("Introduce el número de armaduras a equipar ");}
+    public void askNumArmors() {System.out.println("Introduce el número de armaduras a equipar (mínimo 1) ");}
     public void askNameArmors() {System.out.println("Introduce el nombre de la armadura ");}
     public void askForDefenceArmor() {System.out.println("Introduce la defensa máxima de la armadura, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos), si no tiene defensa escribe 0 ");}
     public void askForAttackeArmor() {System.out.println("Introduce el ataque máximo de la armadura, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos), si no tiene ataque escribe 0 ");}
 
-    public void askNumWeapons() {System.out.println("Introduce el número de armas a equipar ");}
+    public void askNumWeapons() {System.out.println("Introduce el número de armas a equipar (mínimo 1) ");}
     public void askWeapName() {System.out.println("Introduce el nombre del arma ");}
     public void askWeapAttack() {System.out.println("Introduce el ataque máximo del arma, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos)");}
     public void askWeapDefence() {System.out.println("Introduce la defensa máxima del arma, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos), si no tiene defensa escribe 0 ");}
@@ -452,19 +442,7 @@ public class Terminal {
     public void noUsersToBanError(){
         System.out.println("No hay usuarios en el sistema.");
     }
-    public void allBannedUsers(ArrayList<String> bannedClients) {
-        if (bannedClients.isEmpty()) {
-            System.out.println("No hay usuarios baneados.");
-        } else {
-            System.out.println("Usuarios baneados");
-            for (int i = 0; i < bannedClients.size(); i++) {
-                String[] parts = bannedClients.get(i).split("\\|");
-                String nick = parts[0];
-                String motivo = parts.length > 1 ? parts[1] : "Sin motivo";
-                System.out.println((i + 1) + ". " + nick + " - Motivo: " + motivo);
-            }
-        }
-    }
+
     public void whatUserToUnBan(){
             System.out.println("===========================================");
             System.out.println("Introduce el número del usuario a desbanear");
