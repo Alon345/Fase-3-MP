@@ -26,6 +26,10 @@ public class Terminal {
             System.out.println("=======================================");
         }
 
+    public void invalidInput() {
+        System.out.println("Error: Entrada no válida. Por favor, ingrese un número.");
+    }
+
     public void showMenu() {
         String colorCodeGreen = "\033[0;32m"; // Verde
         String resetCode = "\033[0m";         // Reset de color
