@@ -132,12 +132,6 @@ public class Administrator extends User{
                     newClient.setPassword(userToUnban.getPassword());
                     newClient.setRegister(userToUnban.getRegister());
 
-                    // 4. Añadir a la lista de usuarios
-                    userList.add(newClient);
-
-                    // 5. Reescribir archivo de usuarios
-                    userFileWriter.rewriteUserFile(userList);
-
                     terminal.unbbanedUser(bannedNick);
                 } else {
                     terminal.error();
@@ -223,9 +217,6 @@ public class Administrator extends User{
                 BanFileWriter banWriter = new BanFileWriter();
                 banWriter.banUser(userToBan, bannedBecause, numHours);
 
-                userList.remove(selection - 1); // Eliminar de la lista
-                userFileWriter.rewriteUserFile(userList); // Reescribir el archivo sin el baneado
-
                 terminal.banned(username);
             } else {
                 terminal.cancelOperation();
@@ -239,6 +230,4 @@ public class Administrator extends User{
             e.printStackTrace();
         }
     }
-
-
 }

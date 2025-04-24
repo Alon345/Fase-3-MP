@@ -78,6 +78,7 @@ public class BanFileWriter {
         }
         return false; // No está baneado o ya se le pasó el castigo
     }
+
     private File ensureFileExists() throws IOException {
         File file = new File(BAN_FILE_PATH);
         if (!file.exists()) {
@@ -89,6 +90,7 @@ public class BanFileWriter {
         }
         return file;
     }
+
     // Método para reescribir el archivo de baneos
     public void rewriteBanFile(List<Client> bannedClients, String motivo, int duracionHoras) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(BAN_FILE_PATH))) {
