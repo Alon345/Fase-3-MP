@@ -1,0 +1,10 @@
+========== ADMIN ==========
+NOMBRE Admin
+NICK admin
+PASSWORD 1
+========== FIN ADMIN ==========
+========== ADMIN ==========
+NOMBRE administrator
+NICK adminPROMAX
+PASSWORD 1
+========== FIN ADMIN ==========
