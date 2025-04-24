@@ -1,5 +1,5 @@
 package Entities;
-import Factories.VampireFactory;
+import Factories.*;
 import System.mainSystem;
 import System.Terminal;
 
@@ -16,9 +16,11 @@ public class Client extends User {
     private Character character;
 
     /**A continuación se definen Getters y Setters**/
+
     public Character getCharacter() {
         return character;
     }
+
     public void setCharacter(Character character) {
         this.character = character;
     }
@@ -26,6 +28,7 @@ public class Client extends User {
     public String getRegister() {
         return register;
     }
+
     public void setRegister(String register) {
         this.register = register;
     }
@@ -33,11 +36,13 @@ public class Client extends User {
     public char getLetter() {
         return (char) (Math.random() * 26 + 'a');
     }
+
     public char getNumber() {
         return (char) (Math.random() * 10 + '0');
     }
 
     /**A continuación se definen operaciones**/
+
     public String generateRegisterNumber() {
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> list = userFileReader.userFileReader();
@@ -96,6 +101,7 @@ public class Client extends User {
      * Creación de los Vampiros
      * @return vampire
      */
+
     public Vampire createVampire() {
         boolean[] aux1 = new boolean[]{true, true};
         boolean[] aux2 = new boolean[]{true, false};
@@ -130,6 +136,7 @@ public class Client extends User {
         vampire.setType("VAMPIRO");
         return vampire;
     }
+
     private void setVampireMinions(VampireFactory vampireFactory, Terminal terminal, Vampire vampire, ArrayList<MinionsComposit> minionsComposits) {
         terminal.askForMinionsNum();
         int minionsNum = vampireFactory.askNumber();
@@ -272,19 +279,296 @@ public class Client extends User {
         vampireFactory.setAbility(vampire, discipline);
     }
 
+    /** A continuación se definen los métodos de creación de Cazador */
+
     public Hunter createHunter() {
         return new Hunter();
     }
+
+    private void setHunterMinions(HunterFactory hunterFactory, Hunter hunter, ArrayList<MinionsComposit> minions) {
+        int numMinions = hunterFactory.askNumber();
+        for (int iterator = 1; iterator <= numMinions; iterator++) {
+            MinionsComposit minion = new MinionsComposit();
+            minion = minion.createMinion(false);
+            minions.add(minion);
+        }
+        hunter.setMinions(minions);
+    }
+
+    private void setHunterModifiers(HunterFactory hunterFactory, Terminal terminal, Hunter hunter, Weakness weakness, Strength strength, ArrayList<Weakness> weaknesses, ArrayList<Strength> strengths) {
+        terminal.askNumWeakness();
+        int numWeaknesss = hunterFactory.askNumber();
+        for (int iterator = 1; iterator <= numWeaknesss; iterator++) {
+            terminal.askWeaknessName();
+            hunterFactory.initializeWeaknessName(weakness);
+            terminal.askWeaknessValue();
+            hunterFactory.initializeWeaknessValue(weakness);
+            hunterFactory.addWeakness(weaknesses, weakness);
+        }
+        hunterFactory.setWeaknesses(hunter, weaknesses);
+        terminal.askNumStrengths();
+        int numFortalezas = hunterFactory.askNumber();
+        for (int iterator = 1; iterator <= numFortalezas; iterator++) {
+            terminal.askStrengthName();
+            hunterFactory.initializeStrengthName(strength);
+            terminal.askStrengthValue();
+            hunterFactory.initializeStrengthValue(strength);
+            hunterFactory.addStrength(strengths, strength);
+        }
+        hunterFactory.setStrengths(hunter, strengths);
+        terminal.askForMinionsNum();
+    }
+
+    private void setGoldPowerHPHunter(HunterFactory hunterFactory, Terminal terminal, Hunter hunter) {
+        boolean rightValue;
+        do {
+            terminal.askGold();
+            rightValue = hunterFactory.initializeGold(hunter);
+        } while (!rightValue);
+        do {
+            terminal.askForHp();
+            rightValue = hunterFactory.initializeHP(hunter);
+        } while (!rightValue);
+        do {
+            terminal.askPower();
+            rightValue = hunterFactory.initializePower(hunter);
+        } while (!rightValue);
+    }
+
+    private void setAllArmorsHunter(HunterFactory hunterFactory, Terminal terminal, Hunter hunter, ArrayList<Armor> armors, Armor armor) {
+        boolean rightValue;
+        int numArmors;
+        do {
+            terminal.askNumArmors();
+            numArmors = hunterFactory.askNumber();
+        } while (numArmors < 1);
+        for (int iterator = 1; iterator <= numArmors; iterator++) {
+            armor = new Armor();
+            terminal.askNameArmors();
+            hunterFactory.initializeArmorName(armor);
+            do {
+                terminal.askForDefenceArmor();
+                rightValue = hunterFactory.initializeArmorDefense(armor);
+            } while (!rightValue);
+            do {
+                terminal.askForAttackeArmor();
+                rightValue = hunterFactory.initializeArmorAttack(armor);
+            } while (!rightValue);
+            hunterFactory.addArmor(armor, armors);
+        }
+        hunterFactory.setArmors(hunter, armors);
+        do {
+            terminal.showArmors(armors);
+            rightValue = hunterFactory.addActiveArmor(hunter, armor, armors);
+        } while (!rightValue);
+    }
+
+    private void setAllWeaponsHunter(boolean[] aux1, boolean[] aux2, HunterFactory hunterFactory, Terminal terminal, Hunter hunter, ArrayList<Weapon> weapons, ArrayList<Weapon> activeWeapons) {
+        boolean rightValue;
+        boolean[] rightWeapon;
+        Weapon weapon;
+        int numWeapons;
+        do {
+            terminal.askNumWeapons();
+            numWeapons = hunterFactory.askNumber();
+        } while (numWeapons < 1);
+        for (int iterator = 1; iterator <= numWeapons; iterator++) {
+            weapon = new Weapon();
+            terminal.askWeapName();
+            hunterFactory.initializeWeaponName(weapon);
+            do {
+                terminal.askWeapAttack();
+                rightValue = hunterFactory.initializeWeaponAttack(weapon);
+            } while (!rightValue);
+            do {
+                terminal.askWeapDefence();
+                rightValue = hunterFactory.initializeWeaponDefense(weapon);
+            } while (!rightValue);
+            do {
+                terminal.isWeaponSingleHanded();
+                rightValue = hunterFactory.initializeWeaponSingleHand(weapon);
+            } while (!rightValue);
+            hunterFactory.addWeapon(weapons, weapon);
+        }
+        hunterFactory.setWeapons(hunter, weapons);
+        do {
+            terminal.showWeapons(weapons);
+            rightWeapon = hunterFactory.addActiveWeapon(weapons, activeWeapons);
+        } while (!Arrays.equals(rightWeapon, aux1) && !Arrays.equals(rightWeapon, aux2));
+        if (Arrays.equals(rightWeapon, aux1)) {
+            do {
+                terminal.anotherWeapon(weapons, activeWeapons.get(0));
+                rightValue = hunterFactory.addActiveWeapon2(weapons, activeWeapons);
+                if (!rightValue) {
+                    terminal.noCorrectNumSelecction();
+                }
+            } while (!rightValue);
+        }
+        hunterFactory.setActiveWeapons(hunter, activeWeapons);
+    }
+
+    private void setNameAndAbilityHunter(HunterFactory hunterFactory, Terminal terminal, Hunter hunter, Talent talent) {
+        boolean rightValue;
+        terminal.askHunterName();
+        hunterFactory.initializeName(hunter);
+        terminal.askAbilityName();
+        hunterFactory.initializeAbilityName(talent);
+        do {
+            terminal.askAbilityAttack();
+            rightValue = hunterFactory.initializeAbilityAttack(talent);
+        } while (!rightValue);
+        do {
+            terminal.askAbilityDefence();
+            rightValue = hunterFactory.initializeAbilityDefense(talent);
+        } while (!rightValue);
+        terminal.askAbilityAge();
+        hunterFactory.initializeAbilityAge(talent);
+        hunterFactory.setAbility(hunter, talent);
+    }
+
+    /** A continuación se definen los métodos de creación de Licántropo */
 
     public Werewolf createWerewolf() {
         return new Werewolf();
     }
 
-        /**
+    private void setWerewolfMinions(WerewolfFactory werewolfFactory, Werewolf werewolf, ArrayList<MinionsComposit> minions) {
+        Terminal terminal = new Terminal();
+        terminal.askForMinionsNum();
+        int numEsbirros = werewolfFactory.askNumber();
+        for (int iterator = 1; iterator <= numEsbirros; iterator++) {
+            MinionsComposit minion = new MinionsComposit();
+            minion = minion.createMinion(false);
+            minions.add(minion);
+        }
+        werewolf.setMinions(minions);
+    }
+
+    private void setWerewolfModifiers(WerewolfFactory werewolfFactory, Terminal terminal, Werewolf werewolf, Weakness weakness, Strength strength, ArrayList<Weakness> weaknesses, ArrayList<Strength> strengths, ArrayList<MinionsComposit> minions) {
+        terminal.askNumWeakness();
+        int numDebilidades = werewolfFactory.askNumber();
+        for (int iterator = 1; iterator <= numDebilidades; iterator++) {
+            terminal.askWeaknessName();
+            werewolfFactory.initializeWeaknessName(weakness);
+            terminal.askWeaknessValue();
+            werewolfFactory.initializeWeaknessValue(weakness);
+            werewolfFactory.addWeakness(weaknesses, weakness);
+        }
+        werewolfFactory.setWeaknesses(werewolf, weaknesses);
+        terminal.askStrengthName();
+        int numFortalezas = werewolfFactory.askNumber();
+        for (int iterator = 1; iterator <= numFortalezas; iterator++) {
+            terminal.askStrengthName();
+            werewolfFactory.initializeStrengthName(strength);
+            terminal.askStrengthValue();
+            werewolfFactory.initializeStrengthValue(strength);
+            werewolfFactory.addStrength(strengths, strength);
+        }
+        werewolfFactory.setStrengths(werewolf, strengths);
+    }
+
+    private void setGoldPowerHPWerewolf(WerewolfFactory werewolfFactory, Terminal terminal, Werewolf werewolf) {
+        boolean rightValue;
+        do {
+            terminal.askGold();
+            rightValue = werewolfFactory.initializeGold(werewolf);
+        } while (!rightValue);
+        do {
+            terminal.askForHp();
+            rightValue = werewolfFactory.initializeHP(werewolf);
+        } while (!rightValue);
+        do {
+            terminal.askPower();
+            rightValue = werewolfFactory.initializePower(werewolf);
+        } while (!rightValue);
+    }
+
+    private void setAllArmorsWerewolf(WerewolfFactory werewolfFactory, Terminal terminal, Werewolf werewolf, Armor armor, ArrayList<Armor> armors) {
+        boolean rightValue;
+        terminal.askNumArmors();
+        int numArmaduras = werewolfFactory.askNumber();
+        for (int iterator = 1; iterator <= numArmaduras; iterator++) {
+            armor = new Armor();
+            terminal.askNumArmors();
+            werewolfFactory.initializeArmorName(armor);
+            do {
+                terminal.askForDefenceArmor();
+                rightValue = werewolfFactory.initializeArmorDefense(armor);
+            } while (!rightValue);
+            do {
+                terminal.askForAttackeArmor();
+                rightValue = werewolfFactory.initializeArmorAttack(armor);
+            } while (!rightValue);
+            werewolfFactory.addArmor(armor, armors);
+        }
+        werewolfFactory.setArmors(werewolf, armors);
+        do {
+            terminal.showArmors(armors);
+            rightValue = werewolfFactory.addActiveArmor(werewolf, armor, armors);
+        } while (!rightValue);
+    }
+
+    private void setAllWeaponsWerewolf(boolean[] aux1, boolean[] aux2, WerewolfFactory werewolfFactory, Terminal terminal, Werewolf werewolf, ArrayList<Weapon> weapons, ArrayList<Weapon> activeWeapons) {
+        boolean[] rightWeapon;
+        boolean rightValue;
+        int numArmas = werewolfFactory.askNumber();
+        for (int iterator = 1; iterator <= numArmas; iterator++) {
+            Weapon weapon = new Weapon();
+            terminal.askWeapName();
+            werewolfFactory.initializeWeaponName(weapon);
+            do {
+                terminal.askWeapAttack();
+                rightValue = werewolfFactory.initializeWeaponAttack(weapon);
+            } while (!rightValue);
+            do {
+                terminal.askWeapDefence();
+                rightValue = werewolfFactory.initializeWeaponDefense(weapon);
+            } while (!rightValue);
+            do {
+                terminal.isWeaponSingleHanded();
+                rightValue = werewolfFactory.initializeWeaponSingleHand(weapon);
+            } while (!rightValue);
+            werewolfFactory.addWeapon(weapons, weapon);
+        }
+        werewolfFactory.setWeapons(werewolf, weapons);
+        do {
+            terminal.showWeapons(weapons);
+            rightWeapon = werewolfFactory.addActiveWeapon(weapons, activeWeapons);
+        } while (!Arrays.equals(rightWeapon, aux1) && !Arrays.equals(rightWeapon, aux2));
+        if (Arrays.equals(rightWeapon, aux1)) {
+            do {
+                terminal.anotherWeapon(weapons, activeWeapons.get(0));
+                rightValue = werewolfFactory.addActiveWeapon2(weapons, activeWeapons);
+                if (!rightValue) {
+                    terminal.noCorrectNumSelecction();
+                }
+            } while (!rightValue);
+        }
+        werewolfFactory.setActiveWeapons(werewolf, activeWeapons);
+    }
+
+    private void setNameAndAbilityWerewolf(WerewolfFactory werewolfFactory, Terminal terminal, Werewolf werewolf, Don don) {
+        boolean rightValue;
+        terminal.askWerewolfName();
+        werewolfFactory.initializeName(werewolf);
+        terminal.askAbilityName();
+        werewolfFactory.initializeAbilityName(don);
+        werewolf.setRage(0);
+        do {
+            terminal.askAbilityRage();
+            rightValue = werewolfFactory.initializeRageAbility(don);
+        } while (!rightValue);
+        werewolfFactory.setAbility(werewolf, don);
+        terminal.askNumArmors();
+    }
+
+
+    /**
          * Elimina permanentemente una cuenta del sistema
          * @param client Usuario logueado (puede ser Client o Administrator)
          * @param system Referencia al sistema principal
          */
+
     public void deleteAccount(Client client, mainSystem system) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);

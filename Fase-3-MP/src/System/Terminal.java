@@ -499,4 +499,12 @@ public class Terminal {
                     user.getRegister());
         }
     }
+
+    public void askHunterName() {System.out.println("Introduce el nombre del cazador ");}
+
+    public void askAbilityAge() {System.out.println("Introduce la edad a la que el cazador adquirio el talento:");}
+
+    public void askWerewolfName() {System.out.println("Introduce el nombre del licántropo ");}
+
+    public void askAbilityRage() {System.out.println("Introduce el valor minimo para activar la rabia:");}
 }//FIN
