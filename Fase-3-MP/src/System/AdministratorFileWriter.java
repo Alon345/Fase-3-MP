@@ -7,6 +7,22 @@ import java.util.ArrayList;
 
 public class AdministratorFileWriter {
 
+    public int contarAdminsRegistrados() {
+        int contador = 0;
+        String ruta = "Fase-3-MP/src/Files/AdminRegister.txt";
+        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                if (linea.startsWith("========== ADMIN ==========")) {
+                    contador++;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return contador;
+    }
+
     // Registra un administrador en el fichero AdminRegister.txt
     public void adminRegister(Administrator admin) {
         try {
