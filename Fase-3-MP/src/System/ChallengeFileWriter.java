@@ -28,7 +28,7 @@ public class ChallengeFileWriter {
 
                 ///////////DESAFIANTE ///////////
                 bw.write("DESAFIANTE ");
-                bw.write(Challenge.getChallenger().getNick());
+                bw.write(Challenge.getChallenger().getName());
                 bw.newLine();
                 bw.write("NICK ");
                 bw.write(Challenge.getChallenger().getNick());
@@ -71,13 +71,13 @@ public class ChallengeFileWriter {
 
                 String tipoCharacterContrincante = Challenge.getRival().getCharacter().getType();
                 if (tipoCharacterContrincante == null) {
-                    bw.write("TIPO-Character null");
+                    bw.write("TIPO-PERSONAJE null");
                     bw.newLine();
-                } else if (tipoCharacterContrincante.equals("Vampire")) {
+                } else if (tipoCharacterContrincante.equals("VAMPIRO")) {
                     escrituraVampireContrincante(Challenge, bw);
-                } else if (tipoCharacterContrincante.equals("Werewolf")) {
+                } else if (tipoCharacterContrincante.equals("LICANTROPO")) {
                     escrituraWerewolfContrincante(Challenge, bw);
-                } else if (tipoCharacterContrincante.equals("Hunter")) {
+                } else if (tipoCharacterContrincante.equals("CAZADOR")) {
                     escrituraHunterContrincante(Challenge, bw);
                 }
 
@@ -86,16 +86,16 @@ public class ChallengeFileWriter {
                 bw.write(String.valueOf(Challenge.getGold()));
                 bw.newLine();
 
-                bw.write("CANTIDAD-ModifiersES ");
+                bw.write("CANTIDAD-MODIFICADORES ");
                 bw.write(String.valueOf(Challenge.getModifiers().size()));
                 bw.newLine();
                 for (int j = 0; j < (Challenge.getModifiers().size()); j++) {
                     Modifier Modifiers = Challenge.getModifiers().get(j);
-                    bw.write("NOMBRE-Modifiers ");
+                    bw.write("NOMBRE-MODIFICADORES ");
                     bw.write(Modifiers.getName());
                     bw.newLine();
 
-                    bw.write("VALOR-Modifiers ");
+                    bw.write("VALOR-MODIFICADORES ");
                     bw.write(String.valueOf(Modifiers.getValue()));
                     bw.newLine();
                 }

@@ -1,6 +1,7 @@
 package System;
 
 import Entities.*;
+import Entities.Character;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -183,6 +184,38 @@ public class Terminal {
     }
     public void writeConfirm(){System.out.println("Escriba 'ELIMINAR' para confirmar esta acción, \nsi deseas cancelar pulsa cualquier tecla.");}
 
+    public void exit() {
+        System.out.println("Guardando cambios... Saliendo...");
+    }
+
+    public void showCharacName(Character character) {
+        System.out.println("Este es el nombre actual del personaje " + character.getName());
+    }
+    public void newAtributeValue() {
+        System.out.println("¿Cual es el nuevo valor del atributo?");
+    }
+
+    public void showHp(Client client) {
+        System.out.println("Estos son los puntos de vida (HP) actuales "+ client.getCharacter().getHp());
+    }
+
+    public void showPower(Client client) {
+        System.out.println("Este es el poder actual "+ client.getCharacter().getPower());
+    }
+
+    public void showCharacType(Client client) {
+        System.out.println("Este es el tipo de personaje actual "+ client.getCharacter().getType());
+    }
+    public void showDon(Don don) {
+        System.out.println("=========================================");
+        System.out.println("Nombre de habilidad " + don.getName());
+        System.out.println("Ataque de habilidad " + don.getAttack());
+        System.out.println("Defensa de habilidad " + don.getDefense());
+        System.out.println("Edad de habilidad " + don.getMinimumValue());
+        System.out.println("=========================================");
+    }
+
+
     public void confirmNewUser(String username){
         System.out.println("=======================================");
         System.out.println("Bienvenido al sistema, "+ username + ".\nInicia sesión con tus credenciales para acceder");}
@@ -211,7 +244,48 @@ public class Terminal {
     public void deletedCharacter() {
         System.out.println("Personaje eliminado correctamente");
     }
-
+    public void selectType() {
+        System.out.println("============================================");
+        System.out.println("   MODIFICACION DEL TIPO DE PERSONAJE");
+        System.out.println("============================================");
+        System.out.println("¿De qué tipo quiere que sea el personaje?");
+        System.out.println(" 1  Vampiro");
+        System.out.println(" 2  Cazador");
+        System.out.println(" 3  Licantropo");
+        System.out.println("============================================");
+    }
+    public void characStrengths(ArrayList<Strength> strengths) {
+        System.out.println("Estas son las fortalezas del personaje");
+        for (int iterator = 0; iterator < strengths.size(); iterator++) {
+            System.out.println(iterator + 1 + " " + strengths.get(iterator).getName());
+        }
+    }
+    public void characWeakness(ArrayList<Weakness> weaknesses) {
+        System.out.println("Estas son las debilidades del personaje");
+        for (int iterator = 0; iterator < weaknesses.size(); iterator++) {
+            System.out.println(iterator + 1 + " " + weaknesses.get(iterator).getName());
+        }
+    }
+    public void modifyWeaknesses() {
+        System.out.println("============================================");
+        System.out.println("           MODIFICAR DEBILIDADES");
+        System.out.println("============================================");
+        System.out.println("¿Que desea realizar?");
+        System.out.println(" 1  Añadir debilidad");
+        System.out.println(" 2  Eliminar debilidad");
+        System.out.println(" 3  Volver");
+        System.out.println("============================================");
+    }
+    public void modifyStrengths() {
+        System.out.println("============================================");
+        System.out.println("           MODIFICAR FORTALEZAS");
+        System.out.println("============================================");
+        System.out.println("¿Que desea realizar?");
+        System.out.println(" 1  Añadir debilidad");
+        System.out.println(" 2  Eliminar debilidad");
+        System.out.println(" 3  Volver");
+        System.out.println("============================================");
+    }
     public void showTipesOfCharacters() {
         System.out.println("=========================================");
         System.out.println("         CREACIÓN DE PERSONAJE");
@@ -233,6 +307,16 @@ public class Terminal {
         System.out.println("===========================================");
 
     }
+    public void invalidValue() {
+        System.out.println("El valor introducido no es válido");
+    }
+    public void lessThanZero() {
+        System.out.println("El valor introducido no puede ser menor que 0");
+    }
+    public void moreThanMyGold(Integer gold) {
+        System.out.println("El valor introducido no puede ser mayor \nque tu cantidad de oro," +
+                           " actualmente tienes " +gold+ " Monedas de oro!");
+    }
     public void notAvaliableRival() {System.out.println("No hay rivales disponibles en este momento!");}
     public void showAvaliableRivals(ArrayList<Client> users) {
         for (int i = 0; i < users.size(); i++) {
@@ -243,13 +327,43 @@ public class Terminal {
         }
         System.out.println("===========================================");
     }
+    public void alreadyInAChallenge() {
+        System.out.println("!Ya estás participando en un desafío. No puedes iniciar otro.!");
+    }
+
     public void validNumber() {
         System.out.println("Elige un numero valido");
     }
-    public void askForGoldBet(Client client) {
-        System.out.println("Introduce la cantidad de oro que deseas apostar (>100) \nNOTA: Tu oro actual es de " + client.getCharacter().getGold() + " Monedas de Oro");
+    public void characterArmors(List<Armor> armors) {
+        System.out.println("Estas son las armas del personaje");
+        for (int iterator = 0; iterator < armors.size(); iterator++) {
+            System.out.println(iterator + 1 + " " + armors.get(iterator).getName());
+        }
     }
-    public void challengeCreated(){System.out.println("Desafío creado y enviado al rival!");}
+    public void askForGoldBet(Client client) {
+        System.out.println("Introduce la cantidad de oro que deseas apostar (>0) \nNOTA: Tu oro actual es de " + client.getCharacter().getGold() + " Monedas de Oro");
+    }
+    public void modifyArmor() {
+        System.out.println("=======================================");
+        System.out.println("       MODIFICACION DE ARMADURA");
+        System.out.println("=======================================");
+        System.out.println("       ¿Que deseas hacer?");
+        System.out.println(" 1  Añadir armadura");
+        System.out.println(" 2  Eliminar armadura");
+        System.out.println(" 3  Volver");
+        System.out.println("=======================================");
+    }
+    public void askArmorToDelete() {
+        System.out.println("Introduce la armadura que quiere eliminar");
+    }
+    public void errorActiveArmor() {
+        System.out.println("La armadura esta activa, no se puede eliminar");
+    }
+    public void showType() {
+        System.out.println("Este es el tipo de personaje actual");
+    }
+
+    public void challengeCreated(){System.out.println(" \uD83D\uDDE1\uFE0F!Desafío creado y enviado al rival!\uD83D\uDDE1\uFE0F");}
     public void askChallenge(Challenge challenge) {
         System.out.println("=======================================");
         System.out.println("           DESAFÍO ENTRANTE");
@@ -265,7 +379,11 @@ public class Terminal {
         System.out.println("=======================================");
 
     }
-   public void invalidQuantity(Client client) {
+    public void noDesafiosParaValidar() {
+        System.out.println("No hay desafios a validar en este momento");
+    }
+
+    public void invalidQuantity(Client client) {
        System.out.println("Cantidad inválida. Introduce un valor entre 1 y " + client.getCharacter().getGold());
     }
     public void noCharacter(){
@@ -274,7 +392,78 @@ public class Terminal {
     public void autoRival(){
         System.out.println("Se ha seleccionado automáticamente al único rival disponible.");
     }
+    public void preguntarBan(String desafiante, String contrincante) {
+        System.out.println("El desafiante " + desafiante + " ha incumplido las normas de desafio, desafiando a " + contrincante + ", ¿Desea banearle?");
+        System.out.println(" 1  Si");
+        System.out.println(" 2  No");
+    }
+    public void showNicks(ArrayList<Client> clients) {
+        System.out.println("=====================================");
+        System.out.println("LISTA DE NICKS CON PERSONAJES CREADOS");
+        System.out.println("=====================================");
+        for (Client client : clients) {
+            System.out.println(client.getNick());
+        }
+        System.out.println("=====================================");
+    }
+    public void characMinions(ArrayList<MinionsComposit> minionsComposits) {
+        System.out.println("Estas son las fortalezas del personaje");
+        for (int iterator = 0; iterator < minionsComposits.size(); iterator++) {
+            System.out.println(iterator + 1 + ": " + minionsComposits.get(iterator).getName());
+        }
+    }
+    public void modifyMinions() {
+        System.out.println("=======================================");
+        System.out.println("       MODIFICACION DE ESBIRROS");
+        System.out.println("=======================================");
+        System.out.println("¿Que desea realizar?");
+        System.out.println(" 1  Añadir esbirro");
+        System.out.println(" 2  Eliminar esbirro");
+        System.out.println(" 3  Volver");
+        System.out.println("=======================================");
+    }
+    public void askMinionToDelete() {
+        System.out.println("Introduce el esbirro que quiere eliminar");
+    }
+    public void showGold(Client client) {
+        System.out.println("Este es el oro actual "+ client.getCharacter().getGold());
+    }
 
+    public void askNickToAdmin() {
+        System.out.println("Introduce el nick del usuario que desea modificar su personaje");
+    }
+    public void errorNick() {
+        System.out.println("El nick introducido no corresponde con ningun cliente, \ncompueba los campos e introduce de nuevo el nick");
+    }
+    public void modifyUser() {
+        System.out.println("Introduce el nick del usuario que desea modificar su personaje");
+    }
+    public void menuModifyCharacterAtributes() {
+        System.out.println("===========================================");
+        System.out.println("    MENU DE MODIFICACIÓN DE PERSONAJE");
+        System.out.println("===========================================");
+        System.out.println("Seleccione el atributo que desea modificar");
+        System.out.println(" 1  Nombre");
+        System.out.println(" 2  Habilidad");
+        System.out.println(" 3  Armas");
+        System.out.println(" 4  Armas activas");
+        System.out.println(" 5  Armaduras");
+        System.out.println(" 6  Armafuras activas");
+        System.out.println(" 7  Esbirros");
+        System.out.println(" 8  Oro");
+        System.out.println(" 9  Hp");
+        System.out.println(" 10 Poder");
+        System.out.println(" 11 Debilidades");
+        System.out.println(" 12 Fortalezas");
+        System.out.println(" 13 Tipo");
+        System.out.println(" 14 Salir ara guardar cambios");
+        System.out.println("===========================================");
+    }
+    public void changesSaved() {
+        final String GREEN_BRIGHT = "\033[1;92m";//verde brillante
+        final String RESET = "\033[0m";
+        System.out.println(GREEN_BRIGHT + "!Cambios guardados con éxito!" + RESET);
+    }
     /**Mensajes de los esbirros**/
     public void askMinionType() {
         System.out.println("=======================================");
@@ -288,7 +477,7 @@ public class Terminal {
     public void askMinionName() {
         System.out.println("Introduce el nombre del esbirro ");
     }
-    public void askForHp() {System.out.println("Introduce la cantidad de vida, \nNOTA: Debe ser un valor entre 0 y 3 (incluídos)");}
+    public void askForHp() {System.out.println("Introduce la cantidad de vida, \nNOTA: Debe ser un valor entre 0 y 5 (incluídos)");}
     public void askForMinionsNum() {System.out.println("Introduce el numero de esbirros que deseas, \nNOTA: Debe ser un valor entre 0 y 3 (incluídos)");}
     public void askPower(){System.out.println("Introduce su poder, \nNOTA: Debe ser un valor entre 1 y 5 (incluídos)");}
     public void passwordTooShort(){
@@ -322,12 +511,15 @@ public class Terminal {
         System.out.println("     ¿Qué edad tiene tu vampiro?");
         System.out.println("=======================================");
     }
-    public void askVampireBlood() {System.out.println("Introduce la cantidad de sangre del vampiro ");}
+    public void askVampireBlood() {System.out.println("Introduce la cantidad de sangre del vampiro, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos) ");}
     public void askVampireName() {System.out.println("Introduce el nombre del vampiro ");}
     public void askAbilityName() {System.out.println("Introduce el nombre de la habilidad ");}
     public void askAbilityAttack() {System.out.println("Introduce el valor máximo de ataque de la habilidad, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos) ");}
     public void askAbilityDefence() {System.out.println("Introduce el valor máximo de defensa de la habilidad, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos) ");}
     public void askCostAbility() {System.out.println("Introduce el coste máximo de la habilidad, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos) ");}
+    public void youHaveToCreateACharacter(){System.out.println("!Para poder desafiar a un usuario \ndebes antes crear un personaje!");}
+    public void youDontHaveCharacter(){System.out.println("  No tienes ningún personaje creado" +
+                                                          "\n      !Create un personaje!");}
 
     /**Mensajes de los GHOULS**/
     public void askForDependency() {
@@ -402,6 +594,43 @@ public class Terminal {
                     user.getName());
         }
     }
+    public ArrayList<Modifier> showChallengeModifiers(Client desafiante, Client contrincante, int i) {
+        //fortalezas del desafiante y del contrincante
+        ArrayList<Modifier> lista = new ArrayList<>();
+        for (int j = 0; j < desafiante.getCharacter().getStrengths().size(); j++) {
+            System.out.println(desafiante.getCharacter().getStrengths().get(j).getName());
+            lista.add(desafiante.getCharacter().getStrengths().get(j));
+        }
+        for (int j = 0; j < contrincante.getCharacter().getStrengths().size(); j++) {
+            System.out.println(contrincante.getCharacter().getStrengths().get(j).getName());
+            lista.add(contrincante.getCharacter().getStrengths().get(j));
+        }
+        //debilidades del contrincante y del contrincante
+        for (int j = 0; j < desafiante.getCharacter().getWeaknesses().size(); j++) {
+            System.out.println(desafiante.getCharacter().getWeaknesses().get(j).getName());
+            lista.add(desafiante.getCharacter().getWeaknesses().get(j));
+        }
+        for (int j = 0; j < contrincante.getCharacter().getWeaknesses().size(); j++) {
+            System.out.println(contrincante.getCharacter().getWeaknesses().get(j).getName());
+            lista.add(contrincante.getCharacter().getWeaknesses().get(j));
+        }
+        return  lista;
+    }
+
+    public void validateChallenge() {
+        System.out.println("========================================");
+        System.out.println("     ¿Quieres validar este desafio?");
+        System.out.println("========================================");
+        System.out.println(" 1 SI");
+        System.out.println(" 2 NO");
+    }
+    public void electModifiers() {
+        System.out.println("Introduce las modificaciones para el combate," +
+                           "\n      cuando acabes escribe 'salir'");
+    }
+    public void errorMod() {
+        System.out.println(" El modificador introducido es erroneo,\n por favor indique los modificadores mostrados anteriormente");
+    }
     public void whatUserToBan(){
         System.out.println("========================================");
         System.out.println("Introduce el número del usuario a banear");
@@ -425,10 +654,11 @@ public class Terminal {
         System.out.println("Todos los usuarios del sistema han sido" +colorCodeRed+" baneados"+resetCode+ "\nNOTA: para acceder puedes registrarte como nuevo usuario\no, por otro lado, esperar a cumplir la condena.");}
     public void noNumberIn(){System.out.println("Debes introducir un número de usuario");}
     public void whyDoYouBannedThisUser(String username){System.out.println("¿Por qué se ha baneado a "+username+"? (opcional)");}
-   public void userIsBanned(String nick){
+    public void userIsBanned(String nick){
         String colorCodeRed = "\033[0;31m"; // Rojo
         String resetCode = "\033[0m";
         System.out.println("El jugador '"+ nick + "' ha sido"+colorCodeRed+" baneado "+resetCode+"por el Administrador del sistema.");}
+
     public void showArmors(List<Armor> armors) {
         System.out.println("========================================");
         System.out.println("    ¿Que armadura quieres equipar?");
@@ -484,5 +714,45 @@ public class Terminal {
 
     public void askWerewolfName() {System.out.println("Introduce el nombre del licántropo ");}
 
-    public void askAbilityRage() {System.out.println("Introduce el valor minimo para activar la rabia:");}
+    public void askAbilityRage() {System.out.println("Introduce el valor minimo para activar la rabia. \nNOTA: Debe ser un valor entre 0 y 3 (incluídos)");}
+
+    public void showTalent(Talent talent) {
+        System.out.println("========================================");
+        System.out.println("Nombre de habilidad " + talent.getName());
+        System.out.println("Ataque de habilidad " + talent.getAttack());
+        System.out.println("Defensa de habilidad " + talent.getDefense());
+        System.out.println("Edad de habilidad " + talent.getAge());
+        System.out.println("========================================");
+    }
+    public void showDiscipline(Discipline discipline) {
+        System.out.println("========================================");
+        System.out.println("Nombre de habilidad " + discipline.getName());
+        System.out.println("Ataque de habilidad " + discipline.getAttack());
+        System.out.println("Defensa de habilidad " + discipline.getDefense());
+        System.out.println("Coste de habilidad " + discipline.getCost());
+        System.out.println("========================================");
+    }
+    public void characWeapons(List<Weapon> weapons) {
+        System.out.println("Estas son las armas del personaje");
+        for (int iterator = 0; iterator < weapons.size(); iterator++) {
+            System.out.println(iterator + 1 + " " + weapons.get(iterator).getName());
+        }
+    }
+    public void askWeapToDelete() {
+        System.out.println("Introduce el arma que quiere eliminar");
+    }
+    public void errorWeaponIsActive() {
+        System.out.println("El arma esta activa, no se puede eliminar");
+    }
+
+    public void modifyWeapon() {
+        System.out.println("========================================");
+        System.out.println("         MODIFICACION DE ARMA");
+        System.out.println("========================================");
+        System.out.println("         ¿Que deseas modificar?");
+        System.out.println(" 1  Añadir arma");
+        System.out.println(" 2  Eliminar arma");
+        System.out.println(" 3  Volver");
+        System.out.println("========================================");
+    }
 }//FIN

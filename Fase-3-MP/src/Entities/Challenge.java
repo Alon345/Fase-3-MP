@@ -73,16 +73,24 @@ public class Challenge {
             } while (rivalNum < 0 || rivalNum > clientsList.size() || clientsList.get(rivalNum - 1).getCharacter() == null);
 
             setRival(clientsList.get(rivalNum - 1));
+            boolean validInput = false;
+
             terminal.askForGoldBet(client);
+
             do {
-
                 try {
-                    goldAmount = askForNumber();
+                    goldAmount = askForNumber(); // Este método debería lanzar NumberFormatException si hay fallo
+                    if (goldAmount <= 0) {
+                        terminal.lessThanZero();
+                    } else if (goldAmount > client.getCharacter().getGold()) {
+                        terminal.moreThanMyGold(client.getCharacter().getGold());
+                    } else {
+                        validInput = true; // cantidad válida
+                    }
                 } catch (NumberFormatException e) {
-                    terminal.invalidInput();
+                    terminal.invalidInput(); // Mensaje personalizado que ya tienes
                 }
-
-            } while (goldAmount <= 0 || goldAmount > client.getCharacter().getGold());
+            } while (!validInput);
 
             setGold(goldAmount);
             client.getCharacter().setGold(client.getCharacter().getGold() - goldAmount);
@@ -103,8 +111,8 @@ public class Challenge {
             setDate(new Date());
             terminal.challengeCreated();
 
-            UserFileWriter userFileWriter = new UserFileWriter();
-            userFileWriter.rewriteUserFile(clientsList);
+            //UserFileWriter userFileWriter = new UserFileWriter();
+            //userFileWriter.rewriteUserFile(clientsList);
 
             NotificationManager notificationManager = new NotificationManager();
             notificationManager.notifyChallenge(this);

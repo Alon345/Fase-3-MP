@@ -1,8 +1,0 @@
-========== USUARIO BANEADO ==========
-FECHA-Y-HORA-DEL-BANEO 2025-04-24 22:02:51
-NOMBRE r
-NICK test
-PASSWORD 1
-REGISTRO h93zb
-MOTIVO-DEL-BANEO Mala conducta
-========== FIN USUARIO BANEADO ==========

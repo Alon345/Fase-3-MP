@@ -88,7 +88,7 @@ public class Client extends User {
             userFileWriter.rewriteUserFile(clientList);
             terminal.deletedCharacter();
         } else {
-            terminal.error();
+            terminal.cancelOperation();
         }
     }
 

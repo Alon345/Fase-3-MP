@@ -1,6 +1,7 @@
 package System;
 
 import Entities.Administrator;
+import Entities.Challenge;
 import Entities.Character;
 import Entities.Client;
 
@@ -29,14 +30,14 @@ public class Menu {
                     if (client.getCharacter() != null) {
                         client.deleteCharacter(client);
                     } else {
-                        terminal.error();
+                        terminal.youDontHaveCharacter();
                     }
                     break;
                 case 3:// armaduras etc
                     client.selectTeam(client);
                     break;
                 case 4: //desafiar
-                    client.toChallenge(client);
+                    checkChallengeFile(client, terminal);
                     break;
                 case 5: //consulta de batallas
                     checkFights(client);
@@ -62,8 +63,29 @@ public class Menu {
         // Lógica para ver las peleas del cliente, si es necesario.
     }
 
-    public void checkRanking(Client client) {
-        // Lógica para ver el ranking del cliente, si es necesario.
+    private void checkChallengeFile(Client client, Terminal terminal) {
+        ChallengeFileReader challengeFileReader = new ChallengeFileReader();
+        ArrayList<Challenge> challengeList = challengeFileReader.readChallengeFile();
+
+        boolean isAlreadyInChallenge = false;
+
+        // Verificamos si el cliente está como challenger en algún desafío
+        for (Challenge ch : challengeList) {
+            if (ch.getChallenger().getNick().equals(client.getNick())) {
+                isAlreadyInChallenge = true;
+                break;
+            }
+        }
+        if (isAlreadyInChallenge) {
+            // Ya está en un desafío → no puede desafiar a nadie más
+            terminal.alreadyInAChallenge();
+        } else if (client.getCharacter() != null) {
+            // No está en desafío y tiene personaje → puede desafiar
+            client.toChallenge(client);
+        } else {
+            // No tiene personaje → debe crear uno antes de desafiar
+            terminal.youHaveToCreateACharacter();
+        }
     }
 
     /**
