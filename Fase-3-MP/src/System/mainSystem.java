@@ -57,7 +57,7 @@ public class mainSystem {
                             i--;
                         }
                     }
-                    menu.selector(client, this);
+                    menu.selectorClient(client, this);
                 }
             }
             case 3 -> {

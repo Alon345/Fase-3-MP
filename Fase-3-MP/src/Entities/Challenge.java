@@ -43,7 +43,6 @@ public class Challenge {
         Terminal terminal = new Terminal();
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> clientsList = userFileReader.userFileReader();
-        terminal.welcomeChallenge();
         int goldAmount = -1;
         int rivalNum = -1; //será una especie de indice que busque al rival en la lista.
 
@@ -55,12 +54,15 @@ public class Challenge {
             if (current.getNick().equals(myNick)) {
                 iterator.remove();
                 break; // Si solo quieres eliminarte a ti mismo, puedes salir del bucle
+            }else if (current.getCharacter() == null){
+                iterator.remove(); // Si no tiene personaje cualquiera, lo eliminamos de la lista
             }
         }
 
         if (clientsList.isEmpty()) {
             terminal.notAvaliableRival();
         } else {
+            terminal.welcomeChallenge();
             terminal.showAvaliableRivals(clientsList);
             do {
                 try {

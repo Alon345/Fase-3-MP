@@ -128,7 +128,7 @@ public class Terminal {
     public void askGold(){System.out.println("Introduce la cantidad de Monedas de Oro del personaje, \nNOTA: debe ser mayor o igual a 0");}
     public void askPassword() {System.out.println("Introduce la contraseña de tu cuenta");}
     public void confirmPassword() {System.out.println("Por favor, confirme la contraseña introducida");}
-    public void noUsersError(){System.out.println("No hay usuarios registrados en este videojuego \n        !Regístrate para jugar!");}
+    public void noUsersError(){System.out.println("!No hay usuarios registrados en este videojuego \n        !Regístrate para jugar!");}
     public void nickNotFoundError(){System.out.println(" El nick no existe en este videojuego, \n" +
                                                        "         comprueba los campos");}
     public void hiAgainUser(String username){System.out.println("    !Un placer verte de nuevo, "+ username+"!");}
@@ -242,7 +242,9 @@ public class Terminal {
         System.out.println("============================================");
     }
     public void deletedCharacter() {
-        System.out.println("Personaje eliminado correctamente");
+        final String RED_BRIGHT = "\033[1;91m"; // rojo brillante
+        final String RESET = "\033[0m";
+        System.out.println(RED_BRIGHT + "!Tu criatura ha sido eliminada y devuelta al inframundo!" + RESET);
     }
     public void selectType() {
         System.out.println("============================================");
@@ -317,7 +319,7 @@ public class Terminal {
         System.out.println("El valor introducido no puede ser mayor \nque tu cantidad de oro," +
                            " actualmente tienes " +gold+ " Monedas de oro!");
     }
-    public void notAvaliableRival() {System.out.println("No hay rivales disponibles en este momento!");}
+    public void notAvaliableRival() {System.out.println("!No hay rivales disponibles en este momento!");}
     public void showAvaliableRivals(ArrayList<Client> users) {
         for (int i = 0; i < users.size(); i++) {
             Client user = users.get(i);
@@ -464,6 +466,12 @@ public class Terminal {
         final String RESET = "\033[0m";
         System.out.println(GREEN_BRIGHT + "!Cambios guardados con éxito!" + RESET);
     }
+    public void createdCharacterMsg() {
+        final String MAGENTA_BRIGHT = "\033[1;95m"; // magenta brillante
+        final String RESET = "\033[0m";
+        System.out.println(MAGENTA_BRIGHT + "!Has dado vida a una criatura con éxito!" + RESET);
+    }
+
     /**Mensajes de los esbirros**/
     public void askMinionType() {
         System.out.println("=======================================");
@@ -715,6 +723,8 @@ public class Terminal {
     public void askWerewolfName() {System.out.println("Introduce el nombre del licántropo ");}
 
     public void askAbilityRage() {System.out.println("Introduce el valor minimo para activar la rabia. \nNOTA: Debe ser un valor entre 0 y 3 (incluídos)");}
+
+    public void errorInNumberInserted() {System.out.println("!Has introducido una opción inválida!");}
 
     public void showTalent(Talent talent) {
         System.out.println("========================================");
