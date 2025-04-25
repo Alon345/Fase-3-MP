@@ -10,11 +10,22 @@ import java.util.Map;
 public class Terminal {
     /**Mensajes iniciales**/
     public void wellcome() {
-        String boldBlue = "\033[1;34m"; // Azul en negrita
+        String[] colors = {
+                "\033[1;31m", // Rojo brillante
+                "\033[1;33m", // Amarillo brillante
+                "\033[1;32m", // Verde brillante
+                "\033[1;36m", // Cian brillante
+                "\033[1;34m", // Azul brillante
+                "\033[1;35m"  // Magenta brillante
+        };
         String reset = "\033[0m";
+
         System.out.println("=======================================");
-        System.out.println("     Bienvenido a " + boldBlue + "Shadow Clash" + reset + "!");
-    }
+        System.out.print("      Bienvenido a ");
+        for (int i = 0; i < 12; i++) { // Se repite el ciclo de colores
+            System.out.print(colors[i % colors.length] + "Shadow Clash".charAt(i) + reset);
+        }
+        System.out.println("!");}
     public void showStart() {
             System.out.println("=======================================");
             System.out.println("  Por favor, selecciona una opción");
@@ -59,11 +70,12 @@ public class Terminal {
         System.out.println("=======================================");
     }
     public void rankingMessage() {
-        System.out.println("=======================================");
-        System.out.println("          🏆 RANKING GLOBAL 🏆");
-        System.out.println("=======================================");
+        final String YELLOW_BRIGHT = "\033[1;93m"; // Amarillo brillante
+        final String RESET = "\033[0m"; // Reset de color
+        System.out.println("=======================================" );
+        System.out.println(YELLOW_BRIGHT + "          🏆 RANKING GLOBAL 🏆" + RESET);
+        System.out.println( "=======================================" );
     }
-
     public void showGoldRankingSimple(List<Map.Entry<String, Integer>> usuarios) {
         for (int i = 0; i < usuarios.size(); i++) {
             Map.Entry<String, Integer> user = usuarios.get(i);
@@ -131,7 +143,13 @@ public class Terminal {
     public void noUsersError(){System.out.println("!No hay usuarios registrados en este videojuego \n        !Regístrate para jugar!");}
     public void nickNotFoundError(){System.out.println(" El nick no existe en este videojuego, \n" +
                                                        "         comprueba los campos");}
-    public void hiAgainUser(String username){System.out.println("    !Un placer verte de nuevo, "+ username+"!");}
+    public void hiAgainUser(String username) {
+        final String BLUE_BRIGHT   = "\033[1;94m"; // Azul brillante
+        final String RESET         = "\033[0m";    // reset de color
+
+        System.out.println("   !Un placer verte de nuevo, "
+                + BLUE_BRIGHT + username + RESET +  "!");
+    }
     public void emptyPassword(){System.out.println("!El campo 'Contraseña' no debe estar vacio!");}
     public void emptyNick(){System.out.println("!El campo 'Nick' no debe estar vacio!");}
     public void emptyName(){System.out.println("!El campo 'Nombre' no debe estar vacio!");}
@@ -226,7 +244,19 @@ public class Terminal {
         System.out.println("Contraseña incorrecta, pruebe de nuevo");
     }
     public void logout() {
-        System.out.println("Cerrando sesion... Bye");
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Cerrando sesión... Bye ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rCerrando sesión... Bye " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(100); // Pausa de 100ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
     }
 
     /**Mensajes de los personajes y lo relacionado a ellos**/
@@ -247,13 +277,18 @@ public class Terminal {
         System.out.println(RED_BRIGHT + "!Tu criatura ha sido eliminada y devuelta al inframundo!" + RESET);
     }
     public void selectType() {
+        final String RED_BRIGHT = "\033[1;91m"; // Rojo brillante para Vampiro
+        final String GREEN_BRIGHT = "\033[1;92m"; // Verde brillante para Cazador
+        final String BLUE_BRIGHT = "\033[1;94m"; // Azul brillante para Licantropo
+        final String RESET = "\033[0m"; // Reset de color
+
         System.out.println("============================================");
         System.out.println("   MODIFICACION DEL TIPO DE PERSONAJE");
         System.out.println("============================================");
         System.out.println("¿De qué tipo quiere que sea el personaje?");
-        System.out.println(" 1  Vampiro");
-        System.out.println(" 2  Cazador");
-        System.out.println(" 3  Licantropo");
+        System.out.println(RED_BRIGHT + " 1  Vampiro" + RESET);
+        System.out.println(GREEN_BRIGHT + " 2  Cazador" + RESET);
+        System.out.println(BLUE_BRIGHT + " 3  Licantropo" + RESET);
         System.out.println("============================================");
     }
     public void characStrengths(ArrayList<Strength> strengths) {
@@ -458,9 +493,40 @@ public class Terminal {
         System.out.println(" 11 Debilidades");
         System.out.println(" 12 Fortalezas");
         System.out.println(" 13 Tipo");
-        System.out.println(" 14 Salir ara guardar cambios");
+        System.out.println(" 14 Salir para guardar cambios");
         System.out.println("===========================================");
     }
+    public void savingChanges() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Guardando cambios... ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rGuardando cambios... " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(150); // Pausa de 150ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+    public void savingNewUser() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Guardando nuevo usuario en el sistema... ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rGuardando nuevo usuario en el sistema... " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(100); // Pausa de 100ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+
     public void changesSaved() {
         final String GREEN_BRIGHT = "\033[1;92m";//verde brillante
         final String RESET = "\033[0m";

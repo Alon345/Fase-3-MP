@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class Menu {
 
-    public void selector(Client client, mainSystem system) {
+    public void selectorClient(Client client, mainSystem system) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
         int option;
@@ -101,9 +101,13 @@ public class Menu {
             case 1 -> charac = client.createVampire(); // 1 Vampiro
             case 2 -> charac = client.createWerewolf();// 2 Licantropo
             case 3 -> charac = client.createHunter(); //  3 Cazador
-            default -> terminal.error();
+            default -> terminal.errorInNumberInserted();
         }
         client.setCharacter(charac);
+        if (client.getCharacter() != null) {
+            terminal.savingChanges();
+            terminal.createdCharacterMsg(); //mensaje de personaje creado con éxito
+        }
         UserFileReader userFileReader = new UserFileReader();
         UserFileWriter userFileWriter = new UserFileWriter();
         ArrayList<Client> clientList = userFileReader.userFileReader();

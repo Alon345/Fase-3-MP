@@ -28,157 +28,149 @@ public class ChallengeFileReader {
             br = new BufferedReader(fr);
 
             // Lectura del fichero
-            String linea;
-            linea = br.readLine();
-
+            String linea = br.readLine();
             while (linea != null) {
-                Challenge Challenge = new Challenge();
-                Client Client = new Client();
+                Challenge challenge = new Challenge();
+                Client client = new Client();
 
-                //NOMBRE
+                // NOMBRE
+                if (linea == null) break;
                 String[] textoSeparado = linea.split(" ");
-                Client.setName(textoSeparado[1]);
+                client.setName(textoSeparado[1]);
 
-                //NICK
+                // NICK
                 linea = br.readLine();
+                if (linea == null) break;
                 textoSeparado = linea.split(" ");
-                Client.setNick(textoSeparado[1]);
+                client.setNick(textoSeparado[1]);
 
-                //PASSWORD
+                // PASSWORD
                 linea = br.readLine();
+                if (linea == null) break;
                 textoSeparado = linea.split(" ");
-                Client.setPassword(textoSeparado[1]);
+                client.setPassword(textoSeparado[1]);
 
-                //NUMERO-REGISTRO
+                // NUMERO-REGISTRO
                 linea = br.readLine();
+                if (linea == null) break;
                 textoSeparado = linea.split(" ");
-                Client.setRegister(textoSeparado[1]);
+                client.setRegister(textoSeparado[1]);
 
-                //PERSONAJE
+                // PERSONAJE
                 linea = br.readLine();
+                if (linea == null) break;
                 textoSeparado = linea.split(" ");
-
                 if (!textoSeparado[1].equals("null")) {
-                    //LECTURA SI ES DE TIPO Vampire
                     switch (textoSeparado[1]) {
-                        case "VAMPIRO" -> {
-                            Vampire Vampire = vampireChaReader(br);
-                            Client.setCharacter(Vampire);
-                        }
-                        //LECTURA SI ES DE TIPO Werewolf
-                        case "LICANTROPO" -> {
-                            Werewolf Werewolf = werewolfChaReader(br);
-                            Client.setCharacter(Werewolf);
-                        }
-                        //LECTURA SI ES DE TIPO Hunter
-                        case "CAZADOR" -> {
-                            Hunter Hunter = hunterChaReader(br);
-                            Client.setCharacter(Hunter);
-                        }
+                        case "VAMPIRO"   -> client.setCharacter(vampireChaReader(br));
+                        case "LICANTROPO"-> client.setCharacter(werewolfChaReader(br));
+                        case "CAZADOR"   -> client.setCharacter(hunterChaReader(br));
                     }
                 }
 
-                Challenge.setChallenger(Client);
+                challenge.setChallenger(client);
 
-                Client = new Client();
-                do{
-                    linea = br.readLine();
-                    textoSeparado = linea.split(" ");
-                } while (!textoSeparado[0].equals("RIVAL"));
-                //NOMBRE
-                Client.setName((textoSeparado[1]));
-
-                //NICK
-                linea = br.readLine();
-                textoSeparado = linea.split(" ");
-                Client.setNick(textoSeparado[1]);
-
-                //PASSWORD
-                linea = br.readLine();
-                textoSeparado = linea.split(" ");
-                Client.setPassword((textoSeparado[1]));
-
-                //NUMERO-REGISTRO
-                linea = br.readLine();
-                textoSeparado = linea.split(" ");
-                Client.setRegister(textoSeparado[1]);
-
-                //PERSONAJE
-                linea = br.readLine();
-                textoSeparado = linea.split(" ");
-
-                if (!textoSeparado[1].equals("null")) {
-                    //LECTURA SI ES DE TIPO Vampire
-                    switch (textoSeparado[1]) {
-                        case "VAMPIRO" -> {
-                            Vampire Vampire = vampireChaReader(br);
-                            Client.setCharacter(Vampire);
-                        }
-                        //LECTURA SI ES DE TIPO Werewolf
-                        case "LICANTROPO" -> {
-                            Werewolf Werewolf = werewolfChaReader(br);
-                            Client.setCharacter(Werewolf);
-                        }
-                        //LECTURA SI ES DE TIPO Hunter
-                        case "CAZADOR" -> {
-                            Hunter Hunter = hunterChaReader(br);
-                            Client.setCharacter(Hunter);
-                        }
-                    }
-                }
-
-                Challenge.setRival(Client);
-
-                //ORO
+                // RIVAL
+                client = new Client();
                 do {
                     linea = br.readLine();
+                    if (linea == null) break;
                     textoSeparado = linea.split(" ");
-                } while(!textoSeparado[0].equals("ORO"));
-                Challenge.setGold(Integer.parseInt(textoSeparado[1]));
+                } while (!textoSeparado[0].equals("RIVAL"));
+                if (linea == null) break;
+                client.setName(textoSeparado[1]);
 
-                //Modifier
+                // NICK
                 linea = br.readLine();
+                if (linea == null) break;
                 textoSeparado = linea.split(" ");
+                client.setNick(textoSeparado[1]);
 
-                ArrayList<Modifier> Modifieres = new ArrayList<>();
-                int tope = Integer.parseInt(textoSeparado[1]);
+                // PASSWORD
+                linea = br.readLine();
+                if (linea == null) break;
+                textoSeparado = linea.split(" ");
+                client.setPassword(textoSeparado[1]);
 
-                for (int i = 0; i < tope; i++) {
+                // NUMERO-REGISTRO
+                linea = br.readLine();
+                if (linea == null) break;
+                textoSeparado = linea.split(" ");
+                client.setRegister(textoSeparado[1]);
 
-                    Modifier Modifier = new Modifier();
-
-                    //NOMBRE 
-                    linea = br.readLine();
-                    textoSeparado = linea.split(" ");
-                    Modifier.setName(textoSeparado[1]);
-
-                    //VALOR
-                    linea = br.readLine();
-                    textoSeparado = linea.split(" ");
-                    Modifier.setValue((Integer.parseInt(textoSeparado[1])));
-
-                    Modifieres.add(Modifier);
+                // PERSONAJE
+                linea = br.readLine();
+                if (linea == null) break;
+                textoSeparado = linea.split(" ");
+                if (!textoSeparado[1].equals("null")) {
+                    switch (textoSeparado[1]) {
+                        case "VAMPIRO"   -> client.setCharacter(vampireChaReader(br));
+                        case "LICANTROPO"-> client.setCharacter(werewolfChaReader(br));
+                        case "CAZADOR"   -> client.setCharacter(hunterChaReader(br));
+                    }
                 }
-                Challenge.setModifiers(Modifieres);
 
+                challenge.setRival(client);
+
+                // ORO
+                do {
+                    linea = br.readLine();
+                    if (linea == null) break;
+                    textoSeparado = linea.split(" ");
+                } while (!textoSeparado[0].equals("ORO"));
+                if (linea == null) break;
+                challenge.setGold(Integer.parseInt(textoSeparado[1]));
+
+                // Modifier
+                linea = br.readLine();
+                if (linea == null) break;
+                textoSeparado = linea.split(" ");
+                ArrayList<Modifier> modifiers = new ArrayList<>();
+                int tope = Integer.parseInt(textoSeparado[1]);
+                for (int i = 0; i < tope; i++) {
+                    Modifier mod = new Modifier();
+
+                    // NOMBRE
+                    linea = br.readLine();
+                    if (linea == null) break;
+                    textoSeparado = linea.split(" ");
+                    mod.setName(textoSeparado[1]);
+
+                    // VALOR
+                    linea = br.readLine();
+                    if (linea == null) break;
+                    textoSeparado = linea.split(" ");
+                    mod.setValue(Integer.parseInt(textoSeparado[1]));
+
+                    modifiers.add(mod);
+                }
+                challenge.setModifiers(modifiers);
+
+                // Saltamos línea en blanco si hay
                 br.readLine();
-                //FECHA
-                linea = br.readLine();
-                textoSeparado = linea.split(" ");
-                Date fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(textoSeparado[1]);//FORMATO FECHA
-                Challenge.setDate(fecha);
 
-                //VALIDADO
+                // FECHA
                 linea = br.readLine();
+                if (linea == null) break;
                 textoSeparado = linea.split(" ");
-                Challenge.setValidated(textoSeparado[1].equals("true"));
+                Date fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(textoSeparado[1]);
+                challenge.setDate(fecha);
 
-                //REGISTRO
+                // VALIDADO
                 linea = br.readLine();
+                if (linea == null) break;
                 textoSeparado = linea.split(" ");
-                Challenge.setRegister((textoSeparado[1]));
+                challenge.setValidated(textoSeparado[1].equals("true"));
 
-                listaChallenge.add(Challenge);
+                // REGISTRO
+                linea = br.readLine();
+                if (linea == null) break;
+                textoSeparado = linea.split(" ");
+                challenge.setRegister(textoSeparado[1]);
+
+                listaChallenge.add(challenge);
+
+                // Saltamos separadores finales
                 br.readLine();
                 br.readLine();
                 linea = br.readLine();
@@ -187,18 +179,15 @@ public class ChallengeFileReader {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // En el finally cerramos el fichero
             try {
-                if (null != fr) {
-                    fr.close();
-                }
+                if (fr != null) fr.close();
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
         }
-        return listaChallenge; //devolver la lista de Client
-
+        return listaChallenge;
     }
+
 
     private Vampire vampireChaReader(BufferedReader br) {
         Vampire Vampire = new Vampire();

@@ -149,6 +149,7 @@ public class mainSystem {
 
                 // Registro del usuario
                 new UserFileWriter().userRegister(client);
+                terminal.savingNewUser();
                 terminal.confirmNewUser(name);
             }
 
@@ -213,6 +214,7 @@ public class mainSystem {
                 client.setPassword(password);
                 // Registro del administrador
                 new AdministratorFileWriter().adminRegister(client);
+                terminal.savingNewUser();
                 terminal.confirmNewAdmin(name);
             }
             case 3 -> {

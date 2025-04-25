@@ -12,3 +12,38 @@ PASSWORD selectorC
 REGISTRO a72ap
 TIPO-PERSONAJE null
 ========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Lucas
+NICK Vaz
+PASSWORD 12345678
+REGISTRO f65ib
+TIPO PERSONAJE null
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE 1
+NICK 123
+PASSWORD 12345678
+REGISTRO d70xc
+TIPO PERSONAJE null
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE loo
+NICK 12
+PASSWORD 22222222
+REGISTRO w61al
+TIPO PERSONAJE null
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE loo
+NICK 5
+PASSWORD 12345678
+REGISTRO x79xr
+TIPO PERSONAJE null
+========== FIN USUARIO ==========
+========== USUARIO ==========
+NOMBRE Alonsin
+NICK fons
+PASSWORD 12345678
+REGISTRO p81qn
+TIPO PERSONAJE null
+========== FIN USUARIO ==========

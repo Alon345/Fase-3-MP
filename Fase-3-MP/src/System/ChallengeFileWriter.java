@@ -16,17 +16,14 @@ public class ChallengeFileWriter {
     public void challengeRegister(Challenge Challenge){
             try {
                 File file = new File(CHALLENGE_REGISTER_PATH);
-                // Si el archivo no existe es creado
                 if (!file.exists()) {
                     file.createNewFile();
                 }
-                FileWriter fw = new FileWriter(file.getAbsoluteFile(), true); //opción append habilitada!
+                FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
                 BufferedWriter bw = new BufferedWriter(fw);
 
                 bw.write("========== CHALLENGE ==========");
                 bw.newLine();
-
-                ///////////DESAFIANTE ///////////
                 bw.write("DESAFIANTE ");
                 bw.write(Challenge.getChallenger().getName());
                 bw.newLine();
@@ -50,9 +47,7 @@ public class ChallengeFileWriter {
                 } else if (tipoCharacterDesafiante.equals("CAZADOR")) {
                     escrituraHunterDesafiante(Challenge, bw);
                 }
-                /////////// FIN DESAFIANTE ///////////
 
-                //escribirCliente(listaCliente);
                 bw.write("CONTRINCANTE ");
                 bw.write(Challenge.getRival().getName());
                 bw.newLine();
@@ -81,7 +76,6 @@ public class ChallengeFileWriter {
                     escrituraHunterContrincante(Challenge, bw);
                 }
 
-                /////////// FIN CONTRINCANTE ///////////
                 bw.write("ORO ");
                 bw.write(String.valueOf(Challenge.getGold()));
                 bw.newLine();
@@ -116,7 +110,6 @@ public class ChallengeFileWriter {
                 }
                 bw.newLine();
 
-                //REGISTRO
                 bw.write("REGISTRO ");
                 bw.write(Challenge.getRegister());
                 bw.newLine();
@@ -145,7 +138,6 @@ public class ChallengeFileWriter {
                     bw.write("========== CHALLENGE ==========");
                     bw.newLine();
 
-                    ///////////DESAFIANTE ///////////
                     bw.write("DESAFIANTE ");
                     bw.write(Challenge.getChallenger().getName());
                     bw.newLine();
@@ -166,16 +158,14 @@ public class ChallengeFileWriter {
                     if (tipoCharacterDesafiante == null) {
                         bw.write("TIPO-Character null");
                         bw.newLine();
-                    } else if (tipoCharacterDesafiante.equals("Vampire")) {
+                    } else if (tipoCharacterDesafiante.equals("VAMPIRO")) {
                         escrituraVampireDesafiante(Challenge, bw);
-                    } else if (tipoCharacterDesafiante.equals("Werewolf")) {
+                    } else if (tipoCharacterDesafiante.equals("LICANTROPO")) {
                         escrituraWerewolfDesafiante(Challenge, bw);
-                    } else if (tipoCharacterDesafiante.equals("Hunter")) {
+                    } else if (tipoCharacterDesafiante.equals("CAZADOR")) {
                         escrituraHunterDesafiante(Challenge, bw);
                     }
-                    /////////// FIN DESAFIANTE ///////////
 
-                    //escribirCliente(listaCliente);
                     bw.write("CONTRINCANTE ");
                     bw.write(Challenge.getRival().getName());
                     bw.newLine();
@@ -194,16 +184,16 @@ public class ChallengeFileWriter {
 
                     String tipoCharacterContrincante = Challenge.getRival().getCharacter().getType();
                     if (tipoCharacterContrincante == null) {
-                        bw.write("TIPO-Character null");
+                        bw.write("TIPO-PERSONAJE null");
                         bw.newLine();
-                    } else if (tipoCharacterContrincante.equals("Vampire")) {
+                    } else if (tipoCharacterContrincante.equals("VAMPIRO")) {
                         escrituraVampireContrincante(Challenge, bw);
-                    } else if (tipoCharacterContrincante.equals("Werewolf")) {
+                    } else if (tipoCharacterContrincante.equals("LICANTROPO")) {
                         escrituraWerewolfContrincante(Challenge, bw);
-                    } else if (tipoCharacterContrincante.equals("Hunter")) {
+                    } else if (tipoCharacterContrincante.equals("CAZADOR")) {
                         escrituraHunterContrincante(Challenge, bw);
                     }
-                    /////////// FIN CONTRINCANTE ///////////
+
                     bw.write("ORO ");
                     bw.write(String.valueOf(Challenge.getGold()));
                     bw.newLine();
@@ -214,11 +204,11 @@ public class ChallengeFileWriter {
                     bw.newLine();
                     for (int j = 0; j < (Challenge.getModifiers().size()); j++) {
                         Modifier Modifiers = Challenge.getModifiers().get(j);
-                        bw.write("NOMBRE-Modifiers ");
+                        bw.write("NOMBRE-MODIFICADORES ");
                         bw.write(Modifiers.getName());
                         bw.newLine();
 
-                        bw.write("VALOR-Modifiers ");
+                        bw.write("VALOR-MODIFICADORES ");
                         bw.write(String.valueOf(Modifiers.getValue()));
                         bw.newLine();
                     }
@@ -261,11 +251,11 @@ public class ChallengeFileWriter {
             Discipline Discipline = (Discipline) Vampire.getAbility();
 
             //TIPO Character
-            bw.write("TIPO-Character ");
+            bw.write("TIPO-PERSONAJE ");
             bw.write(Challenge.getChallenger().getCharacter().getType());
             bw.newLine();
             //NOMBRE Character
-            bw.write("NOMBRE-Character ");
+            bw.write("NOMBRE-PERSONAJE ");
             bw.write(Challenge.getChallenger().getCharacter().getName());
             bw.newLine();
             //PUNTOS DE SANGRE
@@ -293,21 +283,21 @@ public class ChallengeFileWriter {
             bw.newLine();
 
             //WeaponS
-            bw.write("NUMERO-WeaponS ");
+            bw.write("NUMERO-ARMAS ");
             bw.write(String.valueOf(Challenge.getChallenger().getCharacter().getWeapons().size()));
             bw.newLine();
 
             for (int variableWeapon = 0; variableWeapon < (Challenge.getChallenger().getCharacter().getWeapons().size()); variableWeapon++) {
                 Weapon Weapon = Challenge.getChallenger().getCharacter().getWeapons().get(variableWeapon);
-                bw.write("NOMBRE-Weapon ");
+                bw.write("NOMBRE-ARMA ");
                 bw.write(Weapon.getName());
                 bw.newLine();
 
-                bw.write("ATAQUE-Weapon ");
+                bw.write("ATAQUE-ARMA ");
                 bw.write(String.valueOf(Weapon.getAttackModifier()));
                 bw.newLine();
 
-                bw.write("DEFENSA-Weapon ");
+                bw.write("DEFENSA-ARMA ");
                 bw.write(String.valueOf(Weapon.getDefenseModifier()));
                 bw.newLine();
 
@@ -324,21 +314,21 @@ public class ChallengeFileWriter {
             bw.newLine();
 
             //NUMERO DE WeaponS ACTIVAS
-            bw.write("NUMERO-WeaponS-ACTIVAS ");
+            bw.write("NUMERO-ARMAS-ACTIVAS ");
             bw.write(String.valueOf(Challenge.getChallenger().getCharacter().getActiveWeapons().size()));
             bw.newLine();
             for (int variableWeaponActiva = 0; variableWeaponActiva < (Challenge.getChallenger().getCharacter().getActiveWeapons().size()); variableWeaponActiva++) {
                 Weapon WeaponActiva = Vampire.getActiveWeapons().get(variableWeaponActiva);
 
-                bw.write("NOMBRE-WeaponS-ACTIVAS ");
+                bw.write("NOMBRE-ARMAS-ACTIVAS ");
                 bw.write(WeaponActiva.getName());
                 bw.newLine();
 
-                bw.write("ATAQUE-Weapon-ACTIVAS ");
+                bw.write("ATAQUE-ARMA-ACTIVAS ");
                 bw.write(String.valueOf(WeaponActiva.getAttackModifier()));
                 bw.newLine();
 
-                bw.write("DEFENSA-Weapon-ACTIVAS ");
+                bw.write("DEFENSA-ARMA-ACTIVAS ");
                 bw.write(String.valueOf(WeaponActiva.getDefenseModifier()));
                 bw.newLine();
 
@@ -355,20 +345,20 @@ public class ChallengeFileWriter {
 
             //ArmorS
             //NUMERO DE ArmorS
-            bw.write("NUMERO-ArmorS ");
+            bw.write("NUMERO-ARMADURAS ");
             bw.write(String.valueOf(Challenge.getChallenger().getCharacter().getArmors().size()));
             bw.newLine();
             for (int j = 0; j < (Challenge.getChallenger().getCharacter().getArmors().size()); j++) {
                 Armor Armor = Vampire.getArmors().get(j);
-                bw.write("NOMBRE-Armor ");
+                bw.write("NOMBRE-ARMADURA ");
                 bw.write(Armor.getName());
                 bw.newLine();
 
-                bw.write("DEFENSA-Armor ");
+                bw.write("DEFENSA-ARMADURA ");
                 bw.write(String.valueOf(Armor.getDefenseModifier()));
                 bw.newLine();
 
-                bw.write("ATAQUE-Armor ");
+                bw.write("ATAQUE-ARMADURA ");
                 bw.write(String.valueOf(Armor.getAttackModifier()));
                 bw.newLine();
             }
@@ -376,22 +366,22 @@ public class ChallengeFileWriter {
 
             //Armor ACTIVA
             Armor Armor = Vampire.getActiveArmor();
-            bw.write("NOMBRE-Armor ");
+            bw.write("NOMBRE-ARMADURA ");
             bw.write(Armor.getName());
             bw.newLine();
 
-            bw.write("DEFENSA-Armor ");
+            bw.write("DEFENSA-ARMADURA ");
             bw.write(String.valueOf(Armor.getDefenseModifier()));
             bw.newLine();
 
-            bw.write("ATAQUE-Armor ");
+            bw.write("ATAQUE-ARMADURA ");
             bw.write(String.valueOf(Armor.getAttackModifier()));
             bw.newLine();
             Vampire.setActiveArmor(Armor);
             bw.newLine();
 
             //EDAD Vampire
-            bw.write("EDAD-Vampire ");
+            bw.write("EDAD-VAMPIRO ");
             bw.write(String.valueOf(Vampire.getAge()));
             bw.newLine();
 
@@ -420,32 +410,32 @@ public class ChallengeFileWriter {
             bw.newLine();
 
             //WeaknessES
-            bw.write("NUMERO-WeaknessES ");
+            bw.write("NUMERO-DEBILIDADES ");
             bw.write(String.valueOf(Challenge.getChallenger().getCharacter().getWeaknesses().size()));
             bw.newLine();
             for (int j = 0; j < (Challenge.getChallenger().getCharacter().getWeaknesses().size()); j++) {
                 Weakness Weakness = Vampire.getWeaknesses().get(j);
-                bw.write("NOMBRE-Weakness ");
+                bw.write("NOMBRE-DEBILIDAD ");
                 bw.write(Weakness.getName());
                 bw.newLine();
 
-                bw.write("VALOR-Weakness ");
+                bw.write("VALOR-DEBILIDAD ");
                 bw.write(String.valueOf(Weakness.getValue()));
                 bw.newLine();
             }
             bw.newLine();
 
             //StrengthS
-            bw.write("NUMERO-StrengthS ");
+            bw.write("NUMERO-FORTALEZAS ");
             bw.write(String.valueOf(Challenge.getChallenger().getCharacter().getStrengths().size()));
             bw.newLine();
             for (int j = 0; j < (Challenge.getChallenger().getCharacter().getStrengths().size()); j++) {
                 Strength Strength = Vampire.getStrengths().get(j);
-                bw.write("NOMBRE-Strength ");
+                bw.write("NOMBRE-FORTALEZA ");
                 bw.write(Strength.getName());
                 bw.newLine();
 
-                bw.write("VALOR-Strength ");
+                bw.write("VALOR-FORTALEZA ");
                 bw.write(String.valueOf(Strength.getValue()));
                 bw.newLine();
             }
