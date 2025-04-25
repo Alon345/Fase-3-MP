@@ -17,7 +17,7 @@ public class BanFileWriter {
             FileWriter fw = new FileWriter(BAN_FILE_PATH, true);
             BufferedWriter bw = new BufferedWriter(fw);
             LocalDateTime banStart = LocalDateTime.now();
-            bw.newLine();
+
             bw.write("========== USUARIO BANEADO ==========");
             bw.newLine();
             bw.write("FECHA-Y-HORA-DEL-BANEO " + banStart.format(formatter));

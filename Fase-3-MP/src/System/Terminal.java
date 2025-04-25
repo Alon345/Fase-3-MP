@@ -10,22 +10,12 @@ import java.util.Map;
 public class Terminal {
     /**Mensajes iniciales**/
     public void wellcome() {
-        String[] colors = {
-                "\033[1;31m", // Rojo brillante
-                "\033[1;33m", // Amarillo brillante
-                "\033[1;32m", // Verde brillante
-                "\033[1;36m", // Cian brillante
-                "\033[1;34m", // Azul brillante
-                "\033[1;35m"  // Magenta brillante
-        };
-        String reset = "\033[0m";
+        String red = "\033[1;31m"; // Rojo brillante
+        String reset = "\033[0m"; // Reset de color
 
         System.out.println("=======================================");
-        System.out.print("      Bienvenido a ");
-        for (int i = 0; i < 12; i++) { // Se repite el ciclo de colores
-            System.out.print(colors[i % colors.length] + "Shadow Clash".charAt(i) + reset);
-        }
-        System.out.println("!");}
+        System.out.println("      Bienvenido a " + red + "Shadow Clash" + reset + "!");
+    }
     public void showStart() {
             System.out.println("=======================================");
             System.out.println("  Por favor, selecciona una opción");
@@ -247,10 +237,10 @@ public class Terminal {
         final String RESET = "\033[0m";
         String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
 
-        System.out.print("Cerrando sesión... Bye ");
+        System.out.print("Cerrando sesión...");
         try {
             for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
-                System.out.print("\rCerrando sesión... Bye " + spinner[i % 4]); // Sobreescribir la línea
+                System.out.print("\rCerrando sesión..." + spinner[i % 4]); // Sobreescribir la línea
                 Thread.sleep(100); // Pausa de 100ms entre cada rotación
             }
         } catch (InterruptedException e) {
@@ -472,9 +462,7 @@ public class Terminal {
     public void errorNick() {
         System.out.println("El nick introducido no corresponde con ningun cliente, \ncompueba los campos e introduce de nuevo el nick");
     }
-    public void modifyUser() {
-        System.out.println("Introduce el nick del usuario que desea modificar su personaje");
-    }
+
     public void menuModifyCharacterAtributes() {
         System.out.println("===========================================");
         System.out.println("    MENU DE MODIFICACIÓN DE PERSONAJE");
@@ -511,6 +499,71 @@ public class Terminal {
         }
         System.out.println(); // Imprimir una nueva línea después del "spinner"
     }
+    public void deletingUser() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Eliminando usuario... ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rEliminando usuario... " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(150); // Pausa de 150ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+    public void deletingCharacter() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Eliminando personaje... ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rEliminando personaje... " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(150); // Pausa de 150ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+
+    public void savingCharacter() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Guardando criatura... ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rGuardando criatura... " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(150); // Pausa de 150ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+    public void equipingWeapons() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Configurando equipamiento...");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rConfigurando equipamiento..." + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(150); // Pausa de 150ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+    public void userHaveOneWeapon(){
+        System.out.println("Ya tienes un arma equipada, no puedes equipar otra");
+    }
+
     public void savingNewUser() {
         final String RESET = "\033[0m";
         String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
@@ -519,7 +572,22 @@ public class Terminal {
         try {
             for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
                 System.out.print("\rGuardando nuevo usuario en el sistema... " + spinner[i % 4]); // Sobreescribir la línea
-                Thread.sleep(100); // Pausa de 100ms entre cada rotación
+                Thread.sleep(150); // Pausa de 150ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+    public void chargingUsers() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Cargando lista de usuarios... ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rCargando lista de usuarios... " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(100); // Pausa de 150ms entre cada rotación
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -731,7 +799,7 @@ public class Terminal {
     public void userIsBanned(String nick){
         String colorCodeRed = "\033[0;31m"; // Rojo
         String resetCode = "\033[0m";
-        System.out.println("El jugador '"+ nick + "' ha sido"+colorCodeRed+" baneado "+resetCode+"por el Administrador del sistema.");}
+        System.out.println("El jugador '"+ nick + "' ha sido"+colorCodeRed+" baneado "+resetCode+"\npor el Administrador del sistema.");}
 
     public void showArmors(List<Armor> armors) {
         System.out.println("========================================");
@@ -745,6 +813,9 @@ public class Terminal {
     // Método para mostrar la lista de usuarios baneados
     public void noUsersToBanError(){
         System.out.println("No hay usuarios en el sistema.");
+    }
+    public void finishEquipar() {
+        System.out.println("Arma(s) y armadura equipadas correctamente...");
     }
 
     public void whatUserToUnBan(){

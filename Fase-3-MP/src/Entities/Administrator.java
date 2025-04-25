@@ -91,6 +91,7 @@ public class Administrator extends User{
         Client client = new Client();
         boolean encontrado = false;
         do {
+            terminal.chargingUsers();
             terminal.showNicks(listaclients);
             terminal.askNickToAdmin();
             String nick = sc.nextLine();
@@ -127,7 +128,7 @@ public class Administrator extends User{
                 case 12 -> changeStrengths(sc, terminal, client, HunterFactory);
                 case 13 -> changeType(sc, terminal, client, VampireFactory, HunterFactory, WerewolfFactory);
                 case 14 -> {
-                    terminal.exit();
+                    terminal.savingChanges();
                     terminal.changesSaved();}
                 default -> terminal.error();
             }
@@ -141,7 +142,6 @@ public class Administrator extends User{
                 break;
             }
         }
-        terminal.modifyUser();
     }
 
     public void validatingChallenge(){
