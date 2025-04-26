@@ -564,6 +564,7 @@ public class Terminal {
         System.out.println("Ya tienes un arma equipada, no puedes equipar otra");
     }
 
+
     public void savingNewUser() {
         final String RESET = "\033[0m";
         String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"

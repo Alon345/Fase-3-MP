@@ -86,15 +86,13 @@ public class Client extends User {
                 }
             }
             userFileWriter.rewriteUserFile(clientList);
+            terminal.deletingCharacter();
             terminal.deletedCharacter();
         } else {
             terminal.cancelOperation();
         }
     }
 
-    public void selectTeam(Client client) {
-        // A implementar
-    }
     public void challenge(Client client) {}
 
     /**
@@ -111,9 +109,9 @@ public class Client extends User {
         Terminal terminal = new Terminal();
         Vampire vampire = new Vampire();
         Discipline discipline = new Discipline();
-        ArrayList<Weapon> armas = new ArrayList<>();
-        ArrayList<Weapon> armasActivas = new ArrayList<>();
-        ArrayList<Armor> armaduras = new ArrayList<>();
+        ArrayList<Weapon> Weapons = new ArrayList<>();
+        ArrayList<Weapon> WeaponsActivas = new ArrayList<>();
+        ArrayList<Armor> Weaponduras = new ArrayList<>();
         Weakness weakness = new Weakness();
         Strength strength = new Strength();
         ArrayList<Weakness> debilidades = new ArrayList<>();
@@ -122,8 +120,8 @@ public class Client extends User {
         ArrayList<MinionsComposit> minionsComposits = new ArrayList<>();
 
         setNameNDAbilityVampire(vampireFactory, terminal, vampire, discipline);
-        setAllWeaponsVampire(aux1, aux2, vampireFactory, terminal, vampire, armas, armasActivas);
-        setAllArmorsVampire(vampireFactory, terminal, vampire, armaduras, armor);
+        setAllWeaponsVampire(aux1, aux2, vampireFactory, terminal, vampire, Weapons, WeaponsActivas);
+        setAllArmorsVampire(vampireFactory, terminal, vampire, Weaponduras, armor);
         setGoldPowerHPVampire(vampireFactory, terminal, vampire);
         setVampireModifiers(vampireFactory, terminal, vampire, weakness, strength, debilidades, fortalezas);
         terminal.askVampireAge();
@@ -486,8 +484,8 @@ public class Client extends User {
     private void setAllArmorsWerewolf(WerewolfFactory werewolfFactory, Terminal terminal, Werewolf werewolf, Armor armor, ArrayList<Armor> armors) {
         boolean rightValue;
         terminal.askNumArmors();
-        int numArmaduras = werewolfFactory.askNumber();
-        for (int iterator = 1; iterator <= numArmaduras; iterator++) {
+        int numWeaponduras = werewolfFactory.askNumber();
+        for (int iterator = 1; iterator <= numWeaponduras; iterator++) {
             armor = new Armor();
             terminal.askNumArmors();
             werewolfFactory.initializeArmorName(armor);
@@ -511,8 +509,8 @@ public class Client extends User {
     private void setAllWeaponsWerewolf(boolean[] aux1, boolean[] aux2, WerewolfFactory werewolfFactory, Terminal terminal, Werewolf werewolf, ArrayList<Weapon> weapons, ArrayList<Weapon> activeWeapons) {
         boolean[] rightWeapon;
         boolean rightValue;
-        int numArmas = werewolfFactory.askNumber();
-        for (int iterator = 1; iterator <= numArmas; iterator++) {
+        int numWeapons = werewolfFactory.askNumber();
+        for (int iterator = 1; iterator <= numWeapons; iterator++) {
             Weapon weapon = new Weapon();
             terminal.askWeapName();
             werewolfFactory.initializeWeaponName(weapon);
@@ -594,6 +592,7 @@ public class Client extends User {
                     userFileWriter.rewriteUserFile(clientList);
 
                     // Cerrar sesión
+                    terminal.deletingUser();
                     terminal.deletedAccountOK();
                     terminal.logout();
                     system.selector();

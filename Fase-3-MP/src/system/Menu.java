@@ -34,7 +34,7 @@ public class Menu {
                     }
                     break;
                 case 3:// armaduras etc
-                    client.selectTeam(client);
+                    //client.selectTeam(client);
                     break;
                 case 4: //desafiar
                     checkChallengeFile(client, terminal);
@@ -105,7 +105,7 @@ public class Menu {
         }
         client.setCharacter(charac);
         if (client.getCharacter() != null) {
-            terminal.savingChanges();
+            terminal.savingCharacter();
             terminal.createdCharacterMsg(); //mensaje de personaje creado con éxito
         }
         UserFileReader userFileReader = new UserFileReader();
