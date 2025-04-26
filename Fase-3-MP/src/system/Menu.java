@@ -34,10 +34,18 @@ public class Menu {
                     }
                     break;
                 case 3:// armaduras etc
-                    //client.selectTeam(client);
+                    if (client.getCharacter() != null) {
+                        //client.selectTeam(client);
+                    } else {
+                        terminal.youDontHaveTeam();
+                    }
                     break;
                 case 4: //desafiar
-                    checkChallengeFile(client, terminal);
+                    if (client.getCharacter() != null) {
+                        checkChallengeFile(client, terminal);
+                    } else {
+                        terminal.youDontHaveCharacter();
+                    }
                     break;
                 case 5: //consulta de batallas
                     checkFights(client);

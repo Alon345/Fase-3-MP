@@ -127,7 +127,11 @@ public class Terminal {
     public void askWeapAttack() {System.out.println("Introduce el ataque máximo del arma, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos)");}
     public void askWeapDefence() {System.out.println("Introduce la defensa máxima del arma, \nNOTA: Debe ser un valor entre 1 y 3 (incluídos), si no tiene defensa escribe 0 ");}
 
-    public void askGold(){System.out.println("Introduce la cantidad de Monedas de Oro del personaje, \nNOTA: debe ser mayor o igual a 0");}
+    public void askGold() {
+        final String YELLOW_BRIGHT = "\u001B[93m"; // Amarillo brillante
+        final String RESET = "\u001B[0m";           // Resetear color
+        System.out.println("Introduce la cantidad de " + YELLOW_BRIGHT + "Monedas de Oro" + RESET + " del personaje, \nNOTA: debe ser mayor o igual a 0");
+    }
     public void askPassword() {System.out.println("Introduce la contraseña de tu cuenta");}
     public void confirmPassword() {System.out.println("Por favor, confirme la contraseña introducida");}
     public void noUsersError(){System.out.println("!No hay usuarios registrados en este videojuego \n        !Regístrate para jugar!");}
@@ -341,8 +345,10 @@ public class Terminal {
         System.out.println("El valor introducido no puede ser menor que 0");
     }
     public void moreThanMyGold(Integer gold) {
-        System.out.println("El valor introducido no puede ser mayor \nque tu cantidad de oro," +
-                           " actualmente tienes " +gold+ " Monedas de oro!");
+        final String YELLOW_BRIGHT = "\u001B[93m"; // Amarillo brillante
+        final String RESET = "\u001B[0m";           // Resetear color
+        System.out.println("El valor introducido no puede ser mayor \nque tu cantidad de oro, actualmente tienes "
+                + YELLOW_BRIGHT + gold + " Monedas de Oro" + RESET + "!");
     }
     public void notAvaliableRival() {System.out.println("!No hay rivales disponibles en este momento!");}
     public void showAvaliableRivals(ArrayList<Client> users) {
@@ -368,7 +374,10 @@ public class Terminal {
         }
     }
     public void askForGoldBet(Client client) {
-        System.out.println("Introduce la cantidad de oro que deseas apostar (>0) \nNOTA: Tu oro actual es de " + client.getCharacter().getGold() + " Monedas de Oro");
+        final String YELLOW_BRIGHT = "\u001B[93m"; // Amarillo brillante
+        final String RESET = "\u001B[0m";           // Resetear color
+        System.out.println("Introduce la cantidad de oro que deseas apostar (>0) \nNOTA: Tu oro actual es de "
+                + YELLOW_BRIGHT + client.getCharacter().getGold() + " Monedas de Oro" + RESET);
     }
     public void modifyArmor() {
         System.out.println("=======================================");
@@ -392,19 +401,21 @@ public class Terminal {
 
     public void challengeCreated(){System.out.println(" \uD83D\uDDE1\uFE0F!Desafío creado y enviado al rival!\uD83D\uDDE1\uFE0F");}
     public void askChallenge(Challenge challenge) {
+        final String YELLOW_BRIGHT = "\u001B[93m"; // Amarillo brillante
+        final String RESET = "\u001B[0m";           // Resetear color
+
         System.out.println("=======================================");
         System.out.println("           DESAFÍO ENTRANTE");
         System.out.println("=======================================");
-        System.out.println("El usuario " + challenge.getChallenger().getNick()+" te ha desafiado.");
-        System.out.println("Su apuesta es de " + challenge.getGold() + " Monedas de Oro");
+        System.out.println("El usuario " + challenge.getChallenger().getNick() + " te ha desafiado.");
+        System.out.println("Su apuesta es de " + YELLOW_BRIGHT + challenge.getGold() + " Monedas de Oro" + RESET);
         System.out.println("=======================================");
-        System.out.println("     ¿Quieres aceptar el desafio?");
+        System.out.println("     ¿Quieres aceptar el desafío?");
         System.out.println("=======================================");
         System.out.println("  1 SI ACEPTAR");
         System.out.println("  2 NO ACEPTAR");
-        System.out.println("NOTA: si no aceptas perderás " + challenge.getGold() / 10 + " de tus Monedas de Oro");
+        System.out.println("NOTA: si no aceptas perderás " + YELLOW_BRIGHT + (challenge.getGold() / 10) + " Monedas de Oro" + RESET);
         System.out.println("=======================================");
-
     }
     public void noDesafiosParaValidar() {
         System.out.println("No hay desafios a validar en este momento");
@@ -516,34 +527,53 @@ public class Terminal {
     }
     public void deletingCharacter() {
         final String RESET = "\033[0m";
-        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+        final String RED = "\033[91m";
+        final String GREEN = "\033[92m";
+        final String YELLOW = "\033[93m";
+        final String BLUE = "\033[94m";
 
+        String[] spinner = {
+                RED + "|" + RESET,
+                GREEN + "/" + RESET,
+                YELLOW + "-" + RESET,
+                BLUE + "\\" + RESET
+        }; // Cada símbolo del spinner con un color diferente
         System.out.print("Eliminando personaje... ");
         try {
-            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+            for (int i = 0; i < 10; i++) { // Número de iteraciones
                 System.out.print("\rEliminando personaje... " + spinner[i % 4]); // Sobreescribir la línea
                 Thread.sleep(150); // Pausa de 150ms entre cada rotación
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(); // Imprimir una nueva línea después del "spinner"
+        System.out.println(); // Nueva línea después del spinner
     }
 
     public void savingCharacter() {
         final String RESET = "\033[0m";
-        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+        final String RED = "\033[91m";
+        final String GREEN = "\033[92m";
+        final String YELLOW = "\033[93m";
+        final String BLUE = "\033[94m";
 
-        System.out.print("Guardando criatura... ");
+        String[] spinner = {
+                RED + "|" + RESET,
+                GREEN + "/" + RESET,
+                YELLOW + "-" + RESET,
+                BLUE + "\\" + RESET
+        }; // Cada símbolo con su color
+
+        System.out.print("Dando vida a una criatura... ");
         try {
-            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
-                System.out.print("\rGuardando criatura... " + spinner[i % 4]); // Sobreescribir la línea
-                Thread.sleep(150); // Pausa de 150ms entre cada rotación
+            for (int i = 0; i < 10; i++) { // Número de iteraciones
+                System.out.print("\rDando vida a una criatura... " + spinner[i % 4]);
+                Thread.sleep(200); // Pausa de 150ms
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(); // Imprimir una nueva línea después del "spinner"
+        System.out.println(); // Nueva línea después del spinner
     }
     public void equipingWeapons() {
         final String RESET = "\033[0m";
@@ -553,7 +583,7 @@ public class Terminal {
         try {
             for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
                 System.out.print("\rConfigurando equipamiento..." + spinner[i % 4]); // Sobreescribir la línea
-                Thread.sleep(150); // Pausa de 150ms entre cada rotación
+                Thread.sleep(200); // Pausa de 150ms entre cada rotación
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -564,7 +594,6 @@ public class Terminal {
         System.out.println("Ya tienes un arma equipada, no puedes equipar otra");
     }
 
-
     public void savingNewUser() {
         final String RESET = "\033[0m";
         String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
@@ -573,7 +602,7 @@ public class Terminal {
         try {
             for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
                 System.out.print("\rGuardando nuevo usuario en el sistema... " + spinner[i % 4]); // Sobreescribir la línea
-                Thread.sleep(150); // Pausa de 150ms entre cada rotación
+                Thread.sleep(200); // Pausa de 150ms entre cada rotación
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -626,40 +655,41 @@ public class Terminal {
         System.out.println(); // Imprimir una nueva línea después del "spinner"
     }
     public void showClashAnimation() {
+        final String RESET = "\033[0m";
+        final String RED = "\033[91m";
+        final String YELLOW = "\033[93m";
+        final String ORANGE = "\033[38;5;208m"; // Color naranja (código especial)
+
         String[] frames = {
-                "        >===>                 <===<        ",
-                "         >===>               <===<         ",
-                "          >===>             <===<          ",
-                "           >===>           <===<           ",
-                "            >===>         <===<            ",
-                "             >===>       <===<             ",
-                "              >===>     <===<              ",
-                "               >===>   <===<               ",
-                "                >===> <===<                ",
-                "              ⚔ CLASH ⚔                  "
+                RED + "        >===>" + RESET + "                 " + RED + "<===<" + RESET,
+                RED + "         >===>" + RESET + "               " + RED + "<===<" + RESET,
+                ORANGE + "          >===>" + RESET + "             " + ORANGE + "<===<" + RESET,
+                ORANGE + "           >===>" + RESET + "           " + ORANGE + "<===<" + RESET,
+                YELLOW + "            >===>" + RESET + "         " + YELLOW + "<===<" + RESET,
+                YELLOW + "             >===>" + RESET + "       " + YELLOW + "<===<" + RESET,
+                YELLOW + "              >===>" + RESET + "     " + YELLOW + "<===<" + RESET,
+                YELLOW + "               >===>" + RESET + "   " + YELLOW + "<===<" + RESET,
+                YELLOW + "                >===>" + RESET + " " + YELLOW + "<===<" + RESET
         };
 
-        // Calcular cuántos espacios agregar para centrar el mensaje
-        int terminalWidth = 39; // Ancho de la terminal
-        String message = "⚔ CLASH ⚔";
-        int spacesToCenter = (terminalWidth - message.length()) / 2;
+        String clashFrame = "\033[93;1m" + "              ⚔ CLASH ⚔" + RESET; // ⚔ CLASH ⚔ super amarillo brillante + negrita
 
         try {
             // Animación de las espadas
             for (String frame : frames) {
                 System.out.print("\r" + frame);
-                Thread.sleep(200); // 200ms entre frames
+                Thread.sleep(150); // 150ms entre frames
             }
 
-            // Finalmente, centramos el mensaje
-            System.out.print("\r" + " ".repeat(spacesToCenter) + message);
+            // Explosión épica en el CLASH
+            System.out.print("\r" + clashFrame);
+            Thread.sleep(600); // Mantener el CLASH un rato
 
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println(); // Salto de línea al final
+        System.out.println(); // Salto de línea final
     }
-
 
     public void chargingUsers() {
         final String RESET = "\033[0m";
