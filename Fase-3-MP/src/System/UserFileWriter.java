@@ -38,7 +38,7 @@ public class UserFileWriter {
             bw.write("REGISTRO ");
             bw.write(client.getRegister());
             bw.newLine();
-            bw.write("TIPO PERSONAJE null");
+            bw.write("TIPO-PERSONAJE null");
             bw.newLine();
             bw.write("========== FIN USUARIO ==========");
             bw.newLine();

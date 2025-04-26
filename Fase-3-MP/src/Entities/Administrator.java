@@ -296,6 +296,8 @@ public class Administrator extends User{
                 bannedClients.remove(userToUnban);
                 userToUnban.setBanMotive("");
                 banFileWriter.rewriteBanFile(bannedClients);
+                //2. Mensajes de confirmación
+                terminal.unbanningUser();
                 terminal.unbbanedUser(bannedNick);
 
             } else {
@@ -381,6 +383,7 @@ public class Administrator extends User{
             // 4) Añadimos al fichero de baneos
             banWriter.banUser(userToBan);
 
+            terminal.bannigUser();
             terminal.banned(nick);
 
         } catch (InputMismatchException e) {

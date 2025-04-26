@@ -46,16 +46,21 @@ public class Challenge {
         int goldAmount = -1;
         int rivalNum = -1; //será una especie de indice que busque al rival en la lista.
 
-        //debemos eliminar de la lista el cliente que está creando el desafío
+        terminal.searchingRivals();
+        // Eliminar al cliente actual o aquellos que no tengan personaje
         String myNick = client.getNick();
-        Iterator<Client> iterator = clientsList.iterator();
+        Iterator<Client> iterator = clientsList.iterator(); // Usar un iterador para evitar ConcurrentModificationException
+
         while (iterator.hasNext()) {
             Client current = iterator.next();
+            // Elimina al cliente actual si está creando el desafío
             if (current.getNick().equals(myNick)) {
                 iterator.remove();
-                break; // Si solo quieres eliminarte a ti mismo, puedes salir del bucle
-            }else if (current.getCharacter() == null){
-                iterator.remove(); // Si no tiene personaje cualquiera, lo eliminamos de la lista
+                break; // Salir del bucle después de eliminarme
+            }
+            // Eliminar a clientes sin personaje
+            else if (current.getCharacter() == null) {
+                iterator.remove();
             }
         }
 
@@ -111,6 +116,7 @@ public class Challenge {
             setRegister(registro);
             setModifiers(new ArrayList<>());
             setDate(new Date());
+            terminal.showClashAnimation();
             terminal.challengeCreated();
 
             //UserFileWriter userFileWriter = new UserFileWriter();

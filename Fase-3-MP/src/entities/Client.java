@@ -609,7 +609,7 @@ public class Client extends User {
             system.selector();
         }
     }
-
+    
     public void globalRanking() {
         Terminal terminal = new Terminal();
         terminal.rankingMessage();

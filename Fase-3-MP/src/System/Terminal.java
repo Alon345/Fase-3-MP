@@ -580,6 +580,87 @@ public class Terminal {
         }
         System.out.println(); // Imprimir una nueva línea después del "spinner"
     }
+    public void bannigUser() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Desterrando del reino digital... ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rDesterrando del reino digital... " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(200); // Pausa de 150ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+    public void searchingRivals() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Explorando el reino en busca de nuevos rivales... ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rExplorando el reino en busca de nuevos rivales... " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(200); // Pausa de 150ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+    public void unbanningUser() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Rompiendo las cadenas del exilio... ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rRompiendo las cadenas del exilio... " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(200); // Pausa de 150ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+    public void showClashAnimation() {
+        String[] frames = {
+                "        >===>                 <===<        ",
+                "         >===>               <===<         ",
+                "          >===>             <===<          ",
+                "           >===>           <===<           ",
+                "            >===>         <===<            ",
+                "             >===>       <===<             ",
+                "              >===>     <===<              ",
+                "               >===>   <===<               ",
+                "                >===> <===<                ",
+                "              ⚔ CLASH ⚔                  "
+        };
+
+        // Calcular cuántos espacios agregar para centrar el mensaje
+        int terminalWidth = 39; // Ancho de la terminal
+        String message = "⚔ CLASH ⚔";
+        int spacesToCenter = (terminalWidth - message.length()) / 2;
+
+        try {
+            // Animación de las espadas
+            for (String frame : frames) {
+                System.out.print("\r" + frame);
+                Thread.sleep(200); // 200ms entre frames
+            }
+
+            // Finalmente, centramos el mensaje
+            System.out.print("\r" + " ".repeat(spacesToCenter) + message);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Salto de línea al final
+    }
+
+
     public void chargingUsers() {
         final String RESET = "\033[0m";
         String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
@@ -663,7 +744,7 @@ public class Terminal {
     public void youHaveToCreateACharacter(){System.out.println("!Para poder desafiar a un usuario \ndebes antes crear un personaje!");}
     public void youDontHaveCharacter(){System.out.println("  No tienes ningún personaje creado" +
                                                           "\n      !Create un personaje!");}
-
+    public void youDontHaveTeam() {System.out.println("No portas armas ni armaduras en tu travesía... ");}
     /**Mensajes de los GHOULS**/
     public void askForDependency() {
         System.out.println("=======================================");
