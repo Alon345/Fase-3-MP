@@ -125,26 +125,43 @@ public class Challenge {
         int challengerPower = challengerCharacter.getAttack() - rivalCharacter.getDefense();
         int rivalPower = rivalCharacter.getAttack() - challengerCharacter.getDefense();
 
+        String result;
         if (challengerPower > rivalPower) {
+            result = "Victoria del desafiante";
             terminal.combatWinner(challenger.getNick(), challengerPower, rivalPower);
             challengerCharacter.setGold(challengerCharacter.getGold() + gold);
             rivalCharacter.setGold(rivalCharacter.getGold() - gold);
         } else if (rivalPower > challengerPower) {
+            result = "Victoria del rival";
             terminal.combatWinner(rival.getNick(), rivalPower, challengerPower);
             rivalCharacter.setGold(rivalCharacter.getGold() + gold);
             challengerCharacter.setGold(challengerCharacter.getGold() - gold);
         } else {
+            result = "Empate";
             terminal.combatDraw(challengerPower, rivalPower);
         }
 
         terminal.combatDetails(challenger.getNick(), challengerCharacter.getAttack(), challengerCharacter.getDefense(),
                 rival.getNick(), rivalCharacter.getAttack(), rivalCharacter.getDefense());
 
+        // Registrar el combate en el archivo
+        registerCombat(result);
+
         UserFileWriter userFileWriter = new UserFileWriter();
         ArrayList<Client> clientsList = new UserFileReader().userFileReader();
         userFileWriter.rewriteUserFile(clientsList);
 
         terminal.combatEnd();
+    }
+
+    public void registerCombat(String result) {
+        String combatLog = "Fecha: " + new Date() + "\n" +
+                "Desafiante: " + challenger.getNick() + "\n" +
+                "Rival: " + rival.getNick() + "\n" +
+                "Resultado: " + result + "\n" +
+                "Oro apostado: " + gold + "\n" +
+                "-----------------------------------";
+        CombatLogger.logCombat(combatLog);
     }
 
     public int askForNumber() {

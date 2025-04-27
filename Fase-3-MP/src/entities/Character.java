@@ -3,7 +3,7 @@ package Entities;
 import java.util.ArrayList;
 
 public class Character {
-    /**A continuación se definen los atributos**/
+    /** Atributos **/
     private String name;
     private Ability ability;
     private ArrayList<Weapon> weapons;
@@ -19,7 +19,7 @@ public class Character {
     private String type;
     private ArrayList<MinionsComposit> minionsComposit;
 
-    /**A continuación se definen los setters y getters**/
+    /** Setters y Getters **/
 
     public String getName() {
         return this.name;
@@ -112,9 +112,39 @@ public class Character {
         this.type = type;
     }
 
-    public int getHp() {return hp;}
+    public int getHp() {
+        return hp;
+    }
     public void setHp(int hp) {
         this.hp = hp;
+    }
+
+    /** Métodos adicionales necesarios para el combate **/
+
+    public int getAttack() {
+        int totalAttack = power;
+        if (activeWeapons != null) {
+            for (Weapon weapon : activeWeapons) {
+                totalAttack += weapon.getAttack();
+            }
+        }
+        if (activeArmor != null) {
+            totalAttack += activeArmor.getAttack();
+        }
+        return totalAttack;
+    }
+
+    public int getDefense() {
+        int totalDefense = 0;
+        if (activeWeapons != null) {
+            for (Weapon weapon : activeWeapons) {
+                totalDefense += weapon.getDefense();
+            }
+        }
+        if (activeArmor != null) {
+            totalDefense += activeArmor.getDefense();
+        }
+        return totalDefense;
     }
 }
 

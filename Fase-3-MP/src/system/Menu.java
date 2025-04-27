@@ -1,11 +1,10 @@
 package System;
 
-import Entities.Administrator;
-import Entities.Challenge;
+import Entities.*;
 import Entities.Character;
-import Entities.Client;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
@@ -47,8 +46,8 @@ public class Menu {
                         terminal.youDontHaveCharacter();
                     }
                     break;
-                case 5: //consulta de batallas
-                    checkFights(client);
+                case 5: // consulta de batallas
+                    consultarCombates();
                     break;
                 case 6: //consultar ranking global
                     client.globalRanking();
@@ -67,8 +66,10 @@ public class Menu {
         } while (option != 7 && option != 8);
     }
 
-    public void checkFights(Client client) {
-        // Lógica para ver las peleas del cliente, si es necesario.
+    public void consultarCombates() {
+        Terminal terminal = new Terminal();
+        List<String> logs = CombatLogger.getCombatLogs();
+        terminal.showCombatLogs(logs);
     }
 
     private void checkChallengeFile(Client client, Terminal terminal) {

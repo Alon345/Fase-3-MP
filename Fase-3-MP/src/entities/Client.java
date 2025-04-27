@@ -43,6 +43,14 @@ public class Client extends User {
 
     /**A continuación se definen operaciones**/
 
+    public int getGold() {
+        return character != null ? character.getGold() : 0;
+    }
+
+    public int getHp() {
+        return character != null ? character.getHp() : 0;
+    }
+
     public String generateRegisterNumber() {
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> list = userFileReader.userFileReader();

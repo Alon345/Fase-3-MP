@@ -56,6 +56,19 @@ public class Terminal {
         System.out.println("=======================================");
     }
 
+    public void showCombatLogs(List<String> logs) {
+        System.out.println("=======================================");
+        System.out.println("         HISTORIAL DE COMBATES");
+        System.out.println("=======================================");
+        if (logs.isEmpty()) {
+            System.out.println("No hay combates registrados.");
+        } else {
+            for (String log : logs) {
+                System.out.println(log);
+            }
+        }
+        System.out.println("=======================================");
+    }
     public void startCombatMessage(Character challenger, Character rival) {
         System.out.println(CYAN + "⚔️ ¡El combate comienza entre " + challenger.getName() + " y " + rival.getName() + "! ⚔️" + RESET);
     }

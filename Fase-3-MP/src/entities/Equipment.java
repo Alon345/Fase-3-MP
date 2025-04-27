@@ -31,7 +31,14 @@ public class Equipment {
     public void setDefenseModifier(int defenseModifier) {
         this.defenseModifier = defenseModifier;
     }
+
+    /** Métodos adicionales **/
+    public int getAttack() {
+        return this.attackModifier;
+    }
+
+    public int getDefense() {
+        return this.defenseModifier;
+    }
 }
-
-
 
