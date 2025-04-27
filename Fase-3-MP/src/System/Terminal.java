@@ -8,6 +8,15 @@ import java.util.List;
 import java.util.Map;
 
 public class Terminal {
+
+    private static final String RESET = "\u001B[0m";
+    private static final String RED = "\u001B[31m";
+    private static final String GREEN = "\u001B[32m";
+    private static final String YELLOW = "\u001B[33m";
+    private static final String BLUE = "\u001B[34m";
+    private static final String CYAN = "\u001B[36m";
+
+
     /**Mensajes iniciales**/
     public void wellcome() {
         String red = "\033[1;31m"; // Rojo brillante
@@ -45,6 +54,31 @@ public class Terminal {
         System.out.println("  7 Salir");
         System.out.println("  8 Borrar cuenta");
         System.out.println("=======================================");
+    }
+
+    public void startCombatMessage(Character challenger, Character rival) {
+        System.out.println(CYAN + "⚔️ ¡El combate comienza entre " + challenger.getName() + " y " + rival.getName() + "! ⚔️" + RESET);
+    }
+
+    public void combatWinner(String winnerNick, int winnerPower, int loserPower) {
+        System.out.println(GREEN + "🏆 ¡" + winnerNick + " ha ganado el combate! 🏆" + RESET);
+        System.out.println(YELLOW + "Poder del ganador: " + winnerPower + " | Poder del perdedor: " + loserPower + RESET);
+    }
+
+    public void combatDraw(int challengerPower, int rivalPower) {
+        System.out.println(RED + "🤝 ¡El combate terminó en empate! 🤝" + RESET);
+        System.out.println(YELLOW + "Poder de ambos jugadores: " + challengerPower + RESET);
+    }
+
+    public void combatDetails(String challengerNick, int challengerAttack, int challengerDefense,
+                              String rivalNick, int rivalAttack, int rivalDefense) {
+        System.out.println(BLUE + "📜 Detalles del combate:" + RESET);
+        System.out.println(GREEN + challengerNick + " (Ataque: " + challengerAttack + ", Defensa: " + challengerDefense + ")" + RESET);
+        System.out.println(RED + rivalNick + " (Ataque: " + rivalAttack + ", Defensa: " + rivalDefense + ")" + RESET);
+    }
+
+    public void combatEnd() {
+        System.out.println(CYAN + "⚔️ El combate ha finalizado. ⚔️" + RESET);
     }
 
     /**Mensajes de los usuarios**/
@@ -1014,4 +1048,6 @@ public class Terminal {
         System.out.println(" 3  Volver");
         System.out.println("========================================");
     }
+
+
 }//FIN

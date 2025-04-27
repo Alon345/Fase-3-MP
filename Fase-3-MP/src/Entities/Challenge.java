@@ -1,9 +1,7 @@
 package Entities;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
+
 import System.*;
 
 public class Challenge {
@@ -44,22 +42,15 @@ public class Challenge {
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> clientsList = userFileReader.userFileReader();
         int goldAmount = -1;
-        int rivalNum = -1; //será una especie de indice que busque al rival en la lista.
+        int rivalNum = -1;
 
         terminal.searchingRivals();
-        // Eliminar al cliente actual o aquellos que no tengan personaje
         String myNick = client.getNick();
-        Iterator<Client> iterator = clientsList.iterator(); // Usar un iterador para evitar ConcurrentModificationException
+        Iterator<Client> iterator = clientsList.iterator();
 
         while (iterator.hasNext()) {
             Client current = iterator.next();
-            // Elimina al cliente actual si está creando el desafío
-            if (current.getNick().equals(myNick)) {
-                iterator.remove();
-                break; // Salir del bucle después de eliminarme
-            }
-            // Eliminar a clientes sin personaje
-            else if (current.getCharacter() == null) {
+            if (current.getNick().equals(myNick) || current.getCharacter() == null) {
                 iterator.remove();
             }
         }
@@ -72,30 +63,28 @@ public class Challenge {
             do {
                 try {
                     terminal.validNumber();
-                    rivalNum = askForNumber(); //return sc.nextInt();
+                    rivalNum = askForNumber();
                 } catch (NumberFormatException e) {
                     terminal.invalidInput();
                 }
-
             } while (rivalNum < 0 || rivalNum > clientsList.size() || clientsList.get(rivalNum - 1).getCharacter() == null);
 
             setRival(clientsList.get(rivalNum - 1));
             boolean validInput = false;
 
             terminal.askForGoldBet(client);
-
             do {
                 try {
-                    goldAmount = askForNumber(); // Este método debería lanzar NumberFormatException si hay fallo
+                    goldAmount = askForNumber();
                     if (goldAmount <= 0) {
                         terminal.lessThanZero();
                     } else if (goldAmount > client.getCharacter().getGold()) {
                         terminal.moreThanMyGold(client.getCharacter().getGold());
                     } else {
-                        validInput = true; // cantidad válida
+                        validInput = true;
                     }
                 } catch (NumberFormatException e) {
-                    terminal.invalidInput(); // Mensaje personalizado que ya tienes
+                    terminal.invalidInput();
                 }
             } while (!validInput);
 
@@ -119,21 +108,68 @@ public class Challenge {
             terminal.showClashAnimation();
             terminal.challengeCreated();
 
-            //UserFileWriter userFileWriter = new UserFileWriter();
-            //userFileWriter.rewriteUserFile(clientsList);
-
             NotificationManager notificationManager = new NotificationManager();
             notificationManager.notifyChallenge(this);
+
+            startCombat();
         }
     }
 
-    public int askForNumber() {
-        Scanner sc = new Scanner(System.in); // Crea el scanner solo cuando sea necesario
-        while (!sc.hasNextInt()) {
-            System.out.println("Por favor, ingrese un número válido.");
-            sc.next(); // Descartar entrada inválida
+    public void startCombat() {
+        Terminal terminal = new Terminal();
+        Character challengerCharacter = challenger.getCharacter();
+        Character rivalCharacter = rival.getCharacter();
+
+        terminal.startCombatMessage(challengerCharacter, rivalCharacter);
+
+        int challengerPower = challengerCharacter.getAttack() - rivalCharacter.getDefense();
+        int rivalPower = rivalCharacter.getAttack() - challengerCharacter.getDefense();
+
+        if (challengerPower > rivalPower) {
+            terminal.combatWinner(challenger.getNick(), challengerPower, rivalPower);
+            challengerCharacter.setGold(challengerCharacter.getGold() + gold);
+            rivalCharacter.setGold(rivalCharacter.getGold() - gold);
+        } else if (rivalPower > challengerPower) {
+            terminal.combatWinner(rival.getNick(), rivalPower, challengerPower);
+            rivalCharacter.setGold(rivalCharacter.getGold() + gold);
+            challengerCharacter.setGold(challengerCharacter.getGold() - gold);
+        } else {
+            terminal.combatDraw(challengerPower, rivalPower);
         }
-        return sc.nextInt();
+
+        terminal.combatDetails(challenger.getNick(), challengerCharacter.getAttack(), challengerCharacter.getDefense(),
+                rival.getNick(), rivalCharacter.getAttack(), rivalCharacter.getDefense());
+
+        UserFileWriter userFileWriter = new UserFileWriter();
+        ArrayList<Client> clientsList = new UserFileReader().userFileReader();
+        userFileWriter.rewriteUserFile(clientsList);
+
+        terminal.combatEnd();
+    }
+
+    public int askForNumber() {
+        Scanner sc = new Scanner(System.in);
+        int number = -1;
+        boolean valid = false;
+
+        while (!valid) {
+            try {
+                System.out.println("Introduce un número válido:");
+                number = sc.nextInt();
+                if (number > 0) {
+                    valid = true;
+                } else {
+                    System.out.println("Por favor, ingrese un número mayor a 0.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Entrada no válida. Por favor, ingrese un número.");
+                sc.nextLine(); // Limpiar el buffer
+            } catch (NoSuchElementException e) {
+                System.out.println("Error: No se recibió ninguna entrada.");
+                break; // Salir del bucle si no hay más entradas
+            }
+        }
+        return number;
     }
 
     public String generateRegisterNumber() {
