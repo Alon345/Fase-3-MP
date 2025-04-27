@@ -16,3 +16,9 @@ Rival: pio13
 Resultado: Empate
 Oro apostado: 70
 -----------------------------------
+Fecha: Sun Apr 27 15:43:19 CEST 2025
+Desafiante: pio12
+Rival: pio13
+Resultado: Empate
+Oro apostado: 50
+-----------------------------------

@@ -13,9 +13,6 @@ public class Challenge {
     private boolean validated;
     private String register;
     private Date date;
-    private int rondasGanadas = 0;
-    private int rondasPerdidas = 0;
-    private int rondasEmpatadas = 0;
 
     /** Setters y Getters **/
     public void setRival(Client rival) { this.rival = rival; }
@@ -148,7 +145,7 @@ public class Challenge {
                 rival.getNick(), rivalCharacter.getAttack(), rivalCharacter.getDefense());
 
         // Registrar el combate en el archivo
-        registerCombat(result);
+        registerCombat(result, new Menu());
 
         UserFileWriter userFileWriter = new UserFileWriter();
         ArrayList<Client> clientsList = new UserFileReader().userFileReader();
@@ -157,17 +154,17 @@ public class Challenge {
         terminal.combatEnd();
     }
 
-    public void registerCombat(String resultado) {
+    public void registerCombat(String resultado, Menu menu) {
         // Incrementar contadores según el resultado
         switch (resultado) {
             case "Victoria del desafiante":
-                rondasGanadas++;
+                menu.incrementarRondasGanadas();
                 break;
             case "Victoria del rival":
-                rondasPerdidas++;
+                menu.incrementarRondasPerdidas();
                 break;
             case "Empate":
-                rondasEmpatadas++;
+                menu.incrementarRondasEmpatadas();
                 break;
         }
 
@@ -178,12 +175,6 @@ public class Challenge {
                 "Resultado: " + resultado + "\n" +
                 "Oro apostado: " + gold + "\n" +
                 "-----------------------------------");
-
-        // Mostrar resumen de rondas
-        System.out.println("Resumen de rondas:");
-        System.out.println("Ganadas: " + rondasGanadas);
-        System.out.println("Perdidas: " + rondasPerdidas);
-        System.out.println("Empatadas: " + rondasEmpatadas);
     }
 
     public int askForNumber() {
