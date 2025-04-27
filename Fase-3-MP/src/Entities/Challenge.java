@@ -13,6 +13,9 @@ public class Challenge {
     private boolean validated;
     private String register;
     private Date date;
+    private int rondasGanadas = 0;
+    private int rondasPerdidas = 0;
+    private int rondasEmpatadas = 0;
 
     /** Setters y Getters **/
     public void setRival(Client rival) { this.rival = rival; }
@@ -154,14 +157,33 @@ public class Challenge {
         terminal.combatEnd();
     }
 
-    public void registerCombat(String result) {
-        String combatLog = "Fecha: " + new Date() + "\n" +
+    public void registerCombat(String resultado) {
+        // Incrementar contadores según el resultado
+        switch (resultado) {
+            case "Victoria del desafiante":
+                rondasGanadas++;
+                break;
+            case "Victoria del rival":
+                rondasPerdidas++;
+                break;
+            case "Empate":
+                rondasEmpatadas++;
+                break;
+        }
+
+        // Registrar el combate en el archivo
+        CombatLogger.logCombat("Fecha: " + new java.util.Date() + "\n" +
                 "Desafiante: " + challenger.getNick() + "\n" +
                 "Rival: " + rival.getNick() + "\n" +
-                "Resultado: " + result + "\n" +
+                "Resultado: " + resultado + "\n" +
                 "Oro apostado: " + gold + "\n" +
-                "-----------------------------------";
-        CombatLogger.logCombat(combatLog);
+                "-----------------------------------");
+
+        // Mostrar resumen de rondas
+        System.out.println("Resumen de rondas:");
+        System.out.println("Ganadas: " + rondasGanadas);
+        System.out.println("Perdidas: " + rondasPerdidas);
+        System.out.println("Empatadas: " + rondasEmpatadas);
     }
 
     public int askForNumber() {

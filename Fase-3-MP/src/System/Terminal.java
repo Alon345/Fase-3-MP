@@ -56,7 +56,7 @@ public class Terminal {
         System.out.println("=======================================");
     }
 
-    public void showCombatLogs(List<String> logs) {
+    public void showCombatLogs(List<String> logs, int rondasGanadas, int rondasPerdidas, int rondasEmpatadas) {
         System.out.println("=======================================");
         System.out.println("         HISTORIAL DE COMBATES");
         System.out.println("=======================================");
@@ -68,30 +68,41 @@ public class Terminal {
             }
         }
         System.out.println("=======================================");
+        System.out.println("Resumen de rondas:");
+        System.out.println("Ganadas: " + rondasGanadas);
+        System.out.println("Perdidas: " + rondasPerdidas);
+        System.out.println("Empatadas: " + rondasEmpatadas);
+        System.out.println("=======================================");
     }
+
+
     public void startCombatMessage(Character challenger, Character rival) {
-        System.out.println(CYAN + "⚔️ ¡El combate comienza entre " + challenger.getName() + " y " + rival.getName() + "! ⚔️" + RESET);
+        System.out.println("===========================================");
+        System.out.println(CYAN + "¡El combate comienza entre " + challenger.getName() + " y " + rival.getName() + "!" + RESET);
     }
 
     public void combatWinner(String winnerNick, int winnerPower, int loserPower) {
-        System.out.println(GREEN + "🏆 ¡" + winnerNick + " ha ganado el combate! 🏆" + RESET);
+        System.out.println(GREEN + "¡" + winnerNick + " ha ganado el combate!" + RESET);
         System.out.println(YELLOW + "Poder del ganador: " + winnerPower + " | Poder del perdedor: " + loserPower + RESET);
     }
 
     public void combatDraw(int challengerPower, int rivalPower) {
-        System.out.println(RED + "🤝 ¡El combate terminó en empate! 🤝" + RESET);
+        System.out.println("===========================================");
+        System.out.println(RED + "¡El combate terminó en empate!" + RESET);
         System.out.println(YELLOW + "Poder de ambos jugadores: " + challengerPower + RESET);
+
     }
 
     public void combatDetails(String challengerNick, int challengerAttack, int challengerDefense,
                               String rivalNick, int rivalAttack, int rivalDefense) {
-        System.out.println(BLUE + "📜 Detalles del combate:" + RESET);
+        System.out.println("===========================================");
+        System.out.println(BLUE + "Detalles del combate:" + RESET);
         System.out.println(GREEN + challengerNick + " (Ataque: " + challengerAttack + ", Defensa: " + challengerDefense + ")" + RESET);
         System.out.println(RED + rivalNick + " (Ataque: " + rivalAttack + ", Defensa: " + rivalDefense + ")" + RESET);
     }
 
     public void combatEnd() {
-        System.out.println(CYAN + "⚔️ El combate ha finalizado. ⚔️" + RESET);
+        System.out.println(CYAN + "El combate ha finalizado." + RESET);
     }
 
     /**Mensajes de los usuarios**/
