@@ -201,8 +201,13 @@ public class Administrator extends User{
                         rival.setCharacter(client.getCharacter());
                     }
                 }
+                ArrayList<Modifier> modifiers = challenge.getModifiers();
+                if (!modifiers.isEmpty()) {
+                    terminal.haveModifiersToChose();
+                    terminal.showChallengeModifiers(challenger, rival);
+                    System.out.println("=======================================");
+                }
                 // Mostrar información del desafío
-                terminal.showChallengeModifiers(challenger, rival);
                 // Obtener las debilidades y fortalezas personalizadas del usuario
                 ArrayList<Weakness> weaknesses = challenger.getCharacter().getWeaknesses();
                 ArrayList<Strength> strengths = challenger.getCharacter().getStrengths();

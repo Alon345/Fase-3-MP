@@ -34,7 +34,7 @@ public class Menu {
                     break;
                 case 3:// armaduras etc
                     if (client.getCharacter() != null) {
-                        //client.selectTeam(client);
+                        client.selectTeam(client);
                     } else {
                         terminal.youDontHaveTeam();
                     }

@@ -1003,7 +1003,6 @@ public class Terminal {
                 }
             }
         }
-
         // Añadir fortalezas y debilidades del contrincante
         if (contrincante.getCharacter() != null) {
             List<Strength> fortalezasCon = contrincante.getCharacter().getStrengths();
@@ -1033,26 +1032,30 @@ public class Terminal {
     }
     public void noDesafiosParaValidar(int total) {
         System.out.println("No hay desafíos pendientes de validar.");
-        System.out.println("Número total de desafíos leídos " + total);
+        System.out.println("Número total de desafíos validados " + total);
     }
 
     public void mostrarDesafiosPendientes(List<Challenge> desafios) {
         System.out.println("========== DESAFÍOS PENDIENTES ==========");
         for (Challenge ch : desafios) {
-            System.out.println("----------------------------");
+            System.out.println("--------------- INFO -----------------");
             System.out.println("ID " + ch.getRegister());
             System.out.println("Desafiante " + ch.getChallenger().getNick());
             System.out.println("Contrincante " + ch.getRival().getNick());
             System.out.println("Oro apostado " + ch.getGold());
             System.out.println("Fecha " + ch.getDate());
-            System.out.println("----------------------------");
+            System.out.println("---------------------------------------");
         }
     }
-
+    public void haveModifiersToChose(){
+        System.out.println("=======================================");
+        System.out.println("      Modificadores disponibles");
+        System.out.println("=======================================");
+    }
     public void pedirValidacion() {
         System.out.println("¿Deseas validar el desafío?");
-        System.out.println(" 1 Validar");
-        System.out.println(" 2 Cancelar");
+        System.out.println("1 Validar");
+        System.out.println("2 Cancelar");
         System.out.print("Opción ");
     }
 
