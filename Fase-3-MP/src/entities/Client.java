@@ -651,17 +651,15 @@ public class Client extends User {
         } while (!Arrays.equals(rightWeapon, aux1) && !Arrays.equals(rightWeapon, aux2));
 
         // Si el usuario ha seleccionado una arma, se pregunta si quiere agregar otra
-        if (Arrays.equals(rightWeapon, aux1)) {
+        if (Arrays.equals(rightWeapon, aux1)&& !activeWeapons.get(0).isSingleHand()) { //si era single hand no mostramos
             // Si tiene dos armas, mostramos la opción de añadir otra arma
             do {
                 terminal.anotherWeapon(client.getCharacter().getWeapons(), client.getCharacter().getActiveWeapons().get(0));
                 rightValue = addActiveWeapon2(client.getCharacter().getWeapons(), activeWeapons);
             } while (!rightValue);
         }
-
         // Establecemos las armas activas seleccionadas
         client.getCharacter().setActiveWeapons(activeWeapons);
-
         // Selección y equipamiento de armaduras
         do {
             terminal.showArmors(client.getCharacter().getArmors());
