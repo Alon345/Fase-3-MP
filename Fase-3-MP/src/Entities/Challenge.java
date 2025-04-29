@@ -144,37 +144,13 @@ public class Challenge {
         terminal.combatDetails(challenger.getNick(), challengerCharacter.getAttack(), challengerCharacter.getDefense(),
                 rival.getNick(), rivalCharacter.getAttack(), rivalCharacter.getDefense());
 
-        // Registrar el combate en el archivo
-        registerCombat(result, new Menu());
+
 
         UserFileWriter userFileWriter = new UserFileWriter();
         ArrayList<Client> clientsList = new UserFileReader().userFileReader();
         userFileWriter.rewriteUserFile(clientsList);
 
         terminal.combatEnd();
-    }
-
-    public void registerCombat(String resultado, Menu menu) {
-        // Incrementar contadores según el resultado
-        switch (resultado) {
-            case "Victoria del desafiante":
-                menu.incrementarRondasGanadas();
-                break;
-            case "Victoria del rival":
-                menu.incrementarRondasPerdidas();
-                break;
-            case "Empate":
-                menu.incrementarRondasEmpatadas();
-                break;
-        }
-
-        // Registrar el combate en el archivo
-        CombatLogger.logCombat("Fecha: " + new java.util.Date() + "\n" +
-                "Desafiante: " + challenger.getNick() + "\n" +
-                "Rival: " + rival.getNick() + "\n" +
-                "Resultado: " + resultado + "\n" +
-                "Oro apostado: " + gold + "\n" +
-                "-----------------------------------");
     }
 
     public int askForNumber() {

@@ -75,10 +75,50 @@ public class Terminal {
         System.out.println("=======================================");
     }
 
+    public void WIP() {
+        System.out.println("En desarrollo...");
+    }
 
     public void startCombatMessage(Character challenger, Character rival) {
         System.out.println("===========================================");
         System.out.println(CYAN + "¡El combate comienza entre " + challenger.getName() + " y " + rival.getName() + "!" + RESET);
+    }
+    public void mostrarCombate(Combat combate) {
+        System.out.println("Combate: " + combate.getRegister());
+        System.out.println("Desafiante: " + combate.getChallenger().getNick());
+        System.out.println("Contrincante: " + combate.getRival().getNick());
+        System.out.println("Fecha: " + combate.getDate());
+        if (combate.isChallengerMinion()) {
+            System.out.println("Esbirros de " + combate.getChallenger().getNick() + " : vivos");
+        } else {
+            System.out.println("Esbirros de " + combate.getChallenger().getNick() + " : muertos");
+        }
+        if (combate.isRivalMinion()) {
+            System.out.println("Esbirros de " + combate.getRival().getNick() + " : vivos");
+        } else {
+            System.out.println("Esbirros de " + combate.getRival().getNick() + " : muertos");
+        }
+        System.out.println("Oro apostado: " + combate.getGold());
+        System.out.println("Modificadores:");
+        for (int numModificador = 0; numModificador < combate.getModifiers().size(); numModificador++) {
+            System.out.println(combate.getModifiers().get(numModificador).getName());
+        }
+        System.out.println("RONDAS:");
+        mostrarRondas(combate);
+    }
+
+    public void mostrarRondas(Combat combate) {
+        for (int numRonda = 0; numRonda < combate.getRounds().size(); numRonda++) {
+            System.out.println("Ronda " + (numRonda+1) + " :");
+            System.out.println("Vida de " + combate.getChallenger().getCharacter().getName() + " al final de la ronda: " + combate.getRounds().get(numRonda).getHpChallengerEnd());
+            System.out.println("Vida de " + combate.getRival().getCharacter().getName() + " al final de la ronda: " + combate.getRounds().get(numRonda).getHpRivalEnd());
+        }
+        System.out.println("FIN DEL COMBATE");
+        if (combate.getWinner() != null) {
+            System.out.println("Vencedor: " + combate.getWinner().getNick());
+        } else {
+            System.out.println("Vencedor: empate");
+        }
     }
 
     public void combatWinner(String winnerNick, int winnerPower, int loserPower) {
