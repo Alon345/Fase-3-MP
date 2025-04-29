@@ -159,8 +159,9 @@ public class Administrator extends User{
             ChallengeFileReader lecturaFicheroDesafio = new ChallengeFileReader();
             ArrayList<Challenge> listaDesafios = (ArrayList<Challenge>) lecturaFicheroDesafio.readChallenges();
             boolean any = false;
-            
+
             for (int i = 0; i < listaDesafios.size(); i++) {
+                //System.out.println("desafio" + listaDesafios.get(i));
                 if (!listaDesafios.get(i).isValidated()) { //si no validado
                     any = true;
                     desafiante = listaDesafios.get(i).getChallenger();
@@ -171,7 +172,7 @@ public class Administrator extends User{
                         banUser(desafiante);
                         listaDesafios.remove(i);
                         ChallengeFileWriter escrituraFicheroDesafio = new ChallengeFileWriter();
-                        escrituraFicheroDesafio.reweiteChallengeFile(listaDesafios);
+                        escrituraFicheroDesafio.rewriteChallengeFile(listaDesafios);
                         break;
                     } else {
                         ArrayList<Modifier> lista = (ArrayList<Modifier>) terminal.showChallengeModifiers(desafiante, contrincante);
@@ -205,11 +206,11 @@ public class Administrator extends User{
                             } while (!modificacion.equals("salir"));
                             listaDesafios.get(i).setModifiers(listaMods);
                             ChallengeFileWriter escrituraFicheroDesafio = new ChallengeFileWriter();
-                            escrituraFicheroDesafio.reweiteChallengeFile(listaDesafios);
+                            escrituraFicheroDesafio.rewriteChallengeFile(listaDesafios);
                         } else {
                             listaDesafios.remove(i);
                             ChallengeFileWriter escrituraFicheroDesafio = new ChallengeFileWriter();
-                            escrituraFicheroDesafio.reweiteChallengeFile(listaDesafios);
+                            escrituraFicheroDesafio.rewriteChallengeFile(listaDesafios);
                             break;
                         }
                     }

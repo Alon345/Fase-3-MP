@@ -114,13 +114,10 @@ public class Challenge {
 
             ChallengeFileReader fileReader = new ChallengeFileReader();
             ArrayList<Challenge> challenges = (ArrayList<Challenge>) fileReader.readChallenges();
+            challenges.add(this); // AÑADES siempre el nuevo desafío
             ChallengeFileWriter fileWriter = new ChallengeFileWriter();
+            fileWriter.rewriteChallengeFile(challenges); // Reescribes con la lista actualizada
 
-            if(challenges.isEmpty()){ //falta ver si un nick no ha desafiado a alguien en 24h, en caso de que si se le banea
-                fileWriter.challengeRegister(this);
-            } else {
-                fileWriter.reweiteChallengeFile(challenges);
-            }
 
         }
         if (isValidated()) { //true -> si está validado, se envía la notificación a rival

@@ -35,7 +35,7 @@ public class NotificationManager {
             if (challenge.getRegister().equals(challenges.get(numDesafio).getRegister())) {
                 challenges.remove(numDesafio);
                 ChallengeFileWriter challengeFileWriter = new ChallengeFileWriter();
-                challengeFileWriter.reweiteChallengeFile(challenges);
+                challengeFileWriter.rewriteChallengeFile(challenges);
                 break;
             }
         }

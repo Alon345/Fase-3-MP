@@ -95,7 +95,6 @@ public class ChallengeFileWriter {
             bw.newLine();
 
             bw.write("========== FIN DESAFIO ==========");
-            bw.newLine();
             bw.close();
 
         } catch (Exception e) {
@@ -106,14 +105,12 @@ public class ChallengeFileWriter {
     }
 
 
-    public void reweiteChallengeFile(ArrayList<Challenge> challenges){
+    public void rewriteChallengeFile(ArrayList<Challenge> challenges){
         try {
             File file = new File(CHALLENGE_REGISTER_PATH);
-            if (!file.exists()) {
-                file.createNewFile();
-            }
-            FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
+            FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
+            //recorre la lista de desafios
             for (Challenge Challenge : challenges) {
                 bw.write("========== DESAFIO ==========");
                 bw.newLine();
@@ -183,8 +180,8 @@ public class ChallengeFileWriter {
 
                 bw.write("========== FIN DESAFIO ==========");
                 bw.newLine();
-                bw.close();
             }
+            bw.close();
         } catch (Exception e) {
             mainSystem mainSystem = new mainSystem();
             mainSystem.selector();
