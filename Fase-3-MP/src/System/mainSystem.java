@@ -46,7 +46,7 @@ public class mainSystem {
                             }
                         }
                         CombatFileWriter combatFileWriter = new CombatFileWriter();
-                        combatFileWriter.rewriteCombatFile(listCombats);
+                        //combatFileWriter.overwriteCombatFile(listCombats);
                     }
                         ChallengeFileReader challengeFileReader = new ChallengeFileReader();
                         ArrayList<Challenge> listaDesafios = (ArrayList<Challenge>) challengeFileReader.readChallenges();

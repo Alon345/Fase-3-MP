@@ -141,7 +141,7 @@ public class ChallengeFileWriter {
 
                 //INFORMACION DEL DESAFIO
                 bw.write("==== INFORMACION DEL DESAFIO ====");
-
+                bw.newLine();
                 bw.write("ORO-APOSTADO ");
                 bw.write(String.valueOf(Challenge.getGold()));
                 bw.newLine();

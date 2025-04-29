@@ -51,7 +51,7 @@ public class NotificationManager {
         }
         Combat combate = new Combat();
         combate = combate.initializeCombat(challenges.get(numDesafio).getChallenger(), client, challenges.get(numDesafio).getGold(), challenges.get(numDesafio).getModifiers(), challenges.get(numDesafio).getRegister());
-        combate = combate.startCombat(combate);
+        //combate = combate.startCombat(combate);
         if (combate.getWinner() != null) {
             if (combate.getWinner().getNick().equals(client.getNick())) {
                 client.getCharacter().setGold(client.getCharacter().getGold() + challenges.get(numDesafio).getGold());
@@ -103,7 +103,7 @@ public class NotificationManager {
             userFileWriter.rewriteUserFile(clients);
         }
         CombatFileWriter combatFileWriter = new CombatFileWriter();
-        combatFileWriter.combatFileWriter(combate);
+        combatFileWriter.combatRegister(combate);
     }
 
     private void doNotAcceptCombat(Client cliente, ArrayList<Challenge> challenges, int numDesafio) {
