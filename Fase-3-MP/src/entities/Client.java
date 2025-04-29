@@ -157,8 +157,16 @@ public class Client extends User {
     }
 
     private void setVampireModifiers(VampireFactory vampireFactory, Terminal terminal, Vampire vampire, Weakness weakness, Strength strength, ArrayList<Weakness> weaknesses, ArrayList<Strength> strengths) {
-        terminal.askNumWeakness();
-        int weaknessNum = vampireFactory.askNumber();
+        // Validación para el número de debilidades entre 1 y 5
+        int weaknessNum;
+        do {
+            terminal.askNumWeakness();
+            weaknessNum = vampireFactory.askNumber();
+            if (weaknessNum < 1 || weaknessNum > 5) {
+                terminal.invalidValue();  // Asegúrate de tener este mensaje en tu clase Terminal
+            }
+        } while (weaknessNum < 1 || weaknessNum > 5);
+
         for (int i = 1; i <= weaknessNum; i++) {
             terminal.askWeaknessName();
             vampireFactory.initializeWeaknessName(weakness);
@@ -167,8 +175,17 @@ public class Client extends User {
             vampireFactory.addWeakness(weaknesses, weakness);
         }
         vampireFactory.setWeaknesses(vampire, weaknesses);
-        terminal.askNumStrengths();
-        int numFortalezas = vampireFactory.askNumber();
+
+        // Validación para el número de fortalezas entre 1 y 5
+        int numFortalezas;
+        do {
+            terminal.askNumStrengths();
+            numFortalezas = vampireFactory.askNumber();
+            if (numFortalezas < 1 || numFortalezas > 5) {
+                terminal.invalidValue();  // Asegúrate de tener este mensaje en tu clase Terminal
+            }
+        } while (numFortalezas < 1 || numFortalezas > 5);
+
         for (int iterator = 1; iterator <= numFortalezas; iterator++) {
             terminal.askStrengthName();
             vampireFactory.initializeStrengthName(strength);

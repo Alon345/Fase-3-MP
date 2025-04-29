@@ -1024,20 +1024,48 @@ public class Terminal {
         return lista;
     }
 
-    public void validateChallenge() {
-        System.out.println("========================================");
-        System.out.println("     ¿Quieres validar este desafio?");
-        System.out.println("========================================");
-        System.out.println(" 1 SI");
-        System.out.println(" 2 NO");
-        System.out.println("========================================");
-    }
     public void electModifiers() {
         System.out.println("Introduce las modificaciones para el combate," +
-                           "\n      cuando acabes escribe 'salir'");
+                           "\ncuando acabes escribe 'salir'");
     }
     public void errorMod() {
         System.out.println(" El modificador introducido es erroneo,\n por favor indique los modificadores mostrados anteriormente");
+    }
+    public void noDesafiosParaValidar(int total) {
+        System.out.println("No hay desafíos pendientes de validar.");
+        System.out.println("Número total de desafíos leídos " + total);
+    }
+
+    public void mostrarDesafiosPendientes(List<Challenge> desafios) {
+        System.out.println("========== DESAFÍOS PENDIENTES ==========");
+        for (Challenge ch : desafios) {
+            System.out.println("----------------------------");
+            System.out.println("ID " + ch.getRegister());
+            System.out.println("Desafiante " + ch.getChallenger().getNick());
+            System.out.println("Contrincante " + ch.getRival().getNick());
+            System.out.println("Oro apostado " + ch.getGold());
+            System.out.println("Fecha " + ch.getDate());
+            System.out.println("----------------------------");
+        }
+    }
+
+    public void pedirValidacion() {
+        System.out.println("¿Deseas validar el desafío?");
+        System.out.println(" 1 Validar");
+        System.out.println(" 2 Cancelar");
+        System.out.print("Opción ");
+    }
+
+    public void usuarioBaneado(Client usuario) {
+        System.out.println("El usuario " + usuario.getNick() + " ha sido baneado por no validar el desafío en 24h.");
+    }
+
+    public void desafioValidadoCorrectamente(Challenge desafio) {
+        System.out.println("Desafío con ID " + desafio.getRegister() + " validado correctamente.");
+    }
+
+    public void desafioCancelado(Challenge desafio) {
+        System.out.println("Desafío con ID " + desafio.getRegister() + " ha sido cancelado.");
     }
     public void whatUserToBan(){
         System.out.println("========================================");

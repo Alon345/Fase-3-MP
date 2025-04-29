@@ -110,6 +110,8 @@ public class ChallengeFileWriter {
             File file = new File(CHALLENGE_REGISTER_PATH);
             FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
+            UserFileReader userFileReader = new UserFileReader();
+            ArrayList<Client> clients = userFileReader.userFileReader();
             //recorre la lista de desafios
             for (Challenge Challenge : challenges) {
                 bw.write("========== DESAFIO ==========");

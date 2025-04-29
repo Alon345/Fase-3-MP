@@ -150,79 +150,118 @@ public class Administrator extends User{
     /**
      * Valida los desafíos pendientes
      */
-    public void validatingChallenge(){
-        {
-            Scanner sc = new Scanner(System.in);
-            Terminal terminal = new Terminal();
-            Client desafiante, contrincante = new Client();
+    public void validatingChallenge() {
+        Scanner sc = new Scanner(System.in);
+        Terminal terminal = new Terminal();
 
-            ChallengeFileReader lecturaFicheroDesafio = new ChallengeFileReader();
-            ArrayList<Challenge> listaDesafios = (ArrayList<Challenge>) lecturaFicheroDesafio.readChallenges();
-            boolean any = false;
+        UserFileReader userFileReader = new UserFileReader();
+        ArrayList<Client> clientsList = userFileReader.userFileReader();
+        ChallengeFileReader challengeFileReader = new ChallengeFileReader();
+        ArrayList<Challenge> challengeList = (ArrayList<Challenge>) challengeFileReader.readChallenges();
+        boolean foundPending = false;
+        // Mostrar todos los desafíos pendientes
+        ArrayList<Challenge> pendingChallenges = new ArrayList<>();
 
-            for (int i = 0; i < listaDesafios.size(); i++) {
-                //System.out.println("desafio" + listaDesafios.get(i));
-                if (!listaDesafios.get(i).isValidated()) { //si no validado
-                    any = true;
-                    desafiante = listaDesafios.get(i).getChallenger();
-                    contrincante = listaDesafios.get(i).getRival();
-                    Date fechaDesafio = listaDesafios.get(i).getDate();
-                    boolean banear = checkBan(fechaDesafio, contrincante);
-                    if (banear) {
-                        banUser(desafiante);
-                        listaDesafios.remove(i);
-                        ChallengeFileWriter escrituraFicheroDesafio = new ChallengeFileWriter();
-                        escrituraFicheroDesafio.rewriteChallengeFile(listaDesafios);
-                        break;
-                    } else {
-                        ArrayList<Modifier> lista = (ArrayList<Modifier>) terminal.showChallengeModifiers(desafiante, contrincante);
-                        int opcion;
-                        do {
-                            terminal.validateChallenge();
-                            opcion = sc.nextInt();
-                            if (opcion != 2 && opcion != 1) {
-                                terminal.validNumber();
-                            }
-                        } while (opcion != 1 && opcion != 2);
-                        if (opcion == 1) {
-                            listaDesafios.get(i).setValidated(true); //importante
-                            ArrayList<Modifier> listaMods = new ArrayList<>();
-                            String modificacion;
-                            terminal.electModifiers();
-                            do {
-                                Scanner sc2 = new Scanner(System.in);
-                                modificacion = sc2.nextLine();
-                                boolean encontrado = false;
-                                for (Modifier modificador : lista) {
-                                    if (modificador.getName().equals(modificacion)) {
-                                        listaMods.add(modificador);
-                                        encontrado = true;
-                                        break;
-                                    }
-                                }
-                                if (!encontrado && !modificacion.equals("salir")) {
-                                    terminal.errorMod();
-                                }
-                            } while (!modificacion.equals("salir"));
-                            listaDesafios.get(i).setModifiers(listaMods);
-                            ChallengeFileWriter escrituraFicheroDesafio = new ChallengeFileWriter();
-                            escrituraFicheroDesafio.rewriteChallengeFile(listaDesafios);
-                        } else {
-                            listaDesafios.remove(i);
-                            ChallengeFileWriter escrituraFicheroDesafio = new ChallengeFileWriter();
-                            escrituraFicheroDesafio.rewriteChallengeFile(listaDesafios);
-                            break;
-                        }
+        for (Challenge ch : challengeList) {
+            if (!ch.isValidated()) {
+                pendingChallenges.add(ch);
+            }
+        }
+        if (pendingChallenges.isEmpty()) {
+            terminal.noDesafiosParaValidar(challengeList.size());
+            return;
+        }
+        terminal.mostrarDesafiosPendientes(pendingChallenges);
+
+
+        for (int i = 0; i < challengeList.size(); i++) {
+            Challenge challenge = challengeList.get(i);
+
+            if (!challenge.isValidated()) {
+                foundPending = true;
+
+                Client challenger = challenge.getChallenger();
+                Client rival = challenge.getRival();
+                Date challengeDate = challenge.getDate();
+
+                // Verificar baneo
+                if (checkBan(challengeDate, rival)) {
+                    banUser(challenger);
+                    challengeList.remove(i);
+                    new ChallengeFileWriter().rewriteChallengeFile(challengeList);
+                    terminal.usuarioBaneado(challenger);
+                    break;
+                }
+
+                for (Client client:clientsList ){
+                    if (client.getNick().equals(challenger.getNick())){ //pillamos al desafiante
+                        challenger.setCharacter(client.getCharacter());
+                    }
+                    if (client.getNick().equals(rival.getNick())){ //pillamos al rival
+                        rival.setCharacter(client.getCharacter());
                     }
                 }
+                // Mostrar información del desafío
+                terminal.showChallengeModifiers(challenger, rival);
+                // Obtener las debilidades y fortalezas personalizadas del usuario
+                ArrayList<Weakness> weaknesses = challenger.getCharacter().getWeaknesses();
+                ArrayList<Strength> strengths = challenger.getCharacter().getStrengths();
+
+                int opcion;
+                do {
+                    terminal.pedirValidacion();
+                    opcion = sc.nextInt();
+                    if (opcion != 1 && opcion != 2) {
+                        terminal.validNumber();
+                    }
+                } while (opcion != 1 && opcion != 2);
+
+                if (opcion == 1) {
+                    challenge.setValidated(true);
+                    ArrayList<Modifier> selectedMods = new ArrayList<>();
+
+                    terminal.electModifiers();
+                    sc.nextLine(); // Limpiar buffer
+                    String input;
+                    do {
+                        //terminal.mostrarDebilidadesYFortalezas(weaknesses, strengths); // Muestra las debilidades y fortalezas del usuario
+                        input = sc.nextLine();
+                        boolean found = false;
+
+                        // Seleccionar debilidad personalizada
+                        for (Weakness weakness : weaknesses) {
+                            if (weakness.getName().equals(input)) {
+                                selectedMods.add(weakness); // Agregar debilidad
+                                found = true;
+                                break;
+                            }
+                        }
+                        // Seleccionar fortaleza personalizada
+                        for (Strength strength : strengths) {
+                            if (strength.getName().equals(input)) {
+                                selectedMods.add(strength); // Agregar fortaleza
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found && !input.equals("salir")) {
+                            terminal.errorMod();
+                        }
+                    } while (!input.equals("salir"));
+
+                    challenge.setModifiers(selectedMods);
+                    new ChallengeFileWriter().rewriteChallengeFile(challengeList);
+                    terminal.desafioValidadoCorrectamente(challenge);
+                } else {
+                    challengeList.remove(i);
+                    new ChallengeFileWriter().rewriteChallengeFile(challengeList);
+                    terminal.desafioCancelado(challenge);
+                    break;
+                }
             }
-            if (!any){
-                System.out.println("Número de desafíos leídos: " + listaDesafios.size());
-                terminal.noDesafiosParaValidar();
-            }
-            for (Challenge ch : listaDesafios) {
-                System.out.println("Desafío con ID " + ch.getRegister() + " - ¿Validado?: " + ch.isValidated());
-            }
+        }
+        if (!foundPending) {
+            terminal.noDesafiosParaValidar(challengeList.size());
         }
     }
 
