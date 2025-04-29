@@ -26,10 +26,10 @@ public class CombatFileWriter {
             }
             FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write("***** COMBATE *****");
+            bw.write("========== COMBAT ==========");
             bw.newLine();
 
-///////////  INICIO DESAFIANTE ///////////
+            /**  INICIO DESAFIANTE **/
             bw.write("DESAFIANTE: ");
             bw.write(combat.getChallenger().getName());
             bw.newLine();
@@ -57,9 +57,9 @@ public class CombatFileWriter {
             } else if (tipoCharacterDesafiante.equals("CAZADOR")) {
                 writeHunterChallenger(combat, bw);
             }
-/////////// FIN DESAFIANTE ///////////
+            /** FIN DESAFIANTE **/
 
-/////////// INICIO CONTRINCANTE  ///////////
+            /** INICIO CONTRINCANTE  **/
             bw.write("CONTRINCANTE: ");
             bw.write(combat.getRival().getName());
             bw.newLine();
@@ -87,7 +87,7 @@ public class CombatFileWriter {
             } else if (tipoCharacterContrincante.equals("CAZADOR")) {
                 writeHunterRival(combat, bw);
             }
-/////////// FIN CONTRINCANTE  ///////////
+            /** FIN CONTRINCANTE  **/
 
             //RONDAS
             bw.write("RONDAS: ");
@@ -113,7 +113,7 @@ public class CombatFileWriter {
             bw.write(date);
             bw.newLine();
 
-// INICIO VENCEDOR  ///////////
+            /** INICIO VENCEDOR  **/
             bw.write("VENCEDOR: ");
             if (combat.getWinner()!= null) {
                 bw.write(combat.getWinner().getNick());
@@ -121,7 +121,7 @@ public class CombatFileWriter {
                 bw.write("null");
             }
             bw.newLine();
-// FIN  VENCEDOR  ///////////
+            /** FIN  VENCEDOR  **/
             //ESBIRRO DESAFIANTE
             bw.write("ESBIRRO_DESAFIANTE: ");
             if (combat.isChallengerMinion()) {
@@ -131,7 +131,7 @@ public class CombatFileWriter {
             }
             bw.newLine();
 
-            //ESBIRRO CONTRINCANTE
+            /** ESBIRRO CONTRINCANTE **/
             bw.write("ESBIRRO_CONTRINCANTE: ");
             if (combat.isRivalMinion()) {
                 bw.write("true");
@@ -144,7 +144,7 @@ public class CombatFileWriter {
             bw.write(String.valueOf(combat.getGold()));
             bw.newLine();
 
-//MODIFICADOR
+            /** MODIFICADOR **/
             bw.write("CANTIDAD_MODIFICADORES: ");
             bw.write(String.valueOf(combat.getModifiers().size()));
             bw.newLine();
@@ -160,7 +160,7 @@ public class CombatFileWriter {
 
             }
             bw.newLine();
-// FIN MODIFICADOR
+            /** FIN MODIFICADOR **/
             bw.write("REGISTRO: ");
             bw.write(combat.getRegister());
             bw.newLine();
@@ -222,39 +222,39 @@ public class CombatFileWriter {
         Vampire vampire = (Vampire) combat.getChallenger().getCharacter();
         Discipline discipline = (Discipline) vampire.getAbility();
 
-        //TIPO PERSONAJE
+        /** TIPO PERSONAJE **/
         bw.write("TIPO_PERSONAJE: ");
         bw.write(combat.getChallenger().getCharacter().getType());
         bw.newLine();
-        //NOMBRE PERSONAJE
+        /** NOMBRE PERSONAJE **/
         bw.write("NOMBRE_PERSONAJE: ");
         bw.write(combat.getChallenger().getCharacter().getName());
         bw.newLine();
-        //PUNTOS DE SANGRE
+        /** PUNTOS DE SANGRE **/
         bw.write("SANGRE: ");
         bw.write("0");
         bw.newLine();
-        //NOMBRE DE HABILIDAD
+        /** NOMBRE DE HABILIDAD **/
         bw.write("NOMNRE_HABILIDAD: ");
         bw.write(discipline.getName());
         bw.newLine();
 
-        //VALOR ATAQUE
+        /** VALOR ATAQUE **/
         bw.write("VALOR_ATAQUE: ");
         bw.write(String.valueOf(discipline.getAttack()));
         bw.newLine();
 
-        //VALOR DEFENSA
+        /** VALOR DEFENSA **/
         bw.write("VALOR_DEFENSA: ");
         bw.write(String.valueOf(discipline.getDefense()));
         bw.newLine();
 
-        //COSTE HABILIDAD
+        /** COSTE HABILIDAD **/
         bw.write("COSATE_HABILIDAD: ");
         bw.write(String.valueOf(discipline.getCost()));
         bw.newLine();
 
-        //ARMAS
+        /** ARMAS **/
         bw.write("NUMERO_ARMAS: ");
         bw.write(String.valueOf(combat.getChallenger().getCharacter().getWeapons().size()));
         bw.newLine();
@@ -285,7 +285,7 @@ public class CombatFileWriter {
         }
         bw.newLine();
 
-        //NUMERO DE ARMAS ACTIVAS
+        /** NUMERO DE ARMAS ACTIVAS **/
         bw.write("NUMERO_ARMAS_ACTIVAS: ");
         bw.write(String.valueOf(combat.getChallenger().getCharacter().getActiveWeapons().size()));
         bw.newLine();
@@ -315,8 +315,8 @@ public class CombatFileWriter {
         }
         bw.newLine();
 
-        //ARMADURAS
-        //NUMERO DE ARMADURAS
+        /** ARMADURAS **/
+        /** NUMERO DE ARMADURAS **/
         bw.write("NUMERO_ARMADURAS: ");
         bw.write(String.valueOf(combat.getChallenger().getCharacter().getArmors().size()));
         bw.newLine();
@@ -336,7 +336,7 @@ public class CombatFileWriter {
         }
         bw.newLine();
 
-        //ARMADURA ACTIVA
+        /** ARMADURA ACTIVA **/
         Armor armor = vampire.getActiveArmor();
         bw.write("NOMBRE_ARMADURA: ");
         bw.write(armor.getName());
@@ -352,36 +352,36 @@ public class CombatFileWriter {
         vampire.setActiveArmor(armor);
         bw.newLine();
 
-        //EDAD VAMPIRO
+        /** EDAD VAMPIRO **/
         bw.write("EDAD_VAMPIRO: ");
         bw.write(String.valueOf(vampire.getAge()));
         bw.newLine();
 
-        //ESBIRROS
-        //NUMERO DE ESBIRROS
+        /** ESBIRROS **/
+        /** NUMERO DE ESBIRROS **/
         bw.write("NUMERO_ESBIRROS: ");
         bw.write(String.valueOf(combat.getChallenger().getCharacter().getMinions().size()));
         bw.newLine();
 
-        //ESBIRROS
+        /** ESBIRROS **/
         writeMinionsChallenge(combat, vampire, bw);
 
-        //CANTIDAD ORO
+        /** CANTIDAD ORO **/
         bw.write("CANTIDAD_ORO: ");
         bw.write(String.valueOf(vampire.getGold()));
         bw.newLine();
 
-        //CANTIDAD VIDA
+        /** CANTIDAD VIDA **/
         bw.write("CANTIDAD_VIDA: ");
         bw.write(String.valueOf(vampire.getHp()));
         bw.newLine();
 
-        //PODER
+        /** PODER **/
         bw.write("CANTIDAD_PODER: ");
         bw.write(String.valueOf(vampire.getPower()));
         bw.newLine();
 
-        //DEBILIDADES
+        /** DEBILIDADES **/
         bw.write("NUMERO_DEBILIDADES: ");
         bw.write(String.valueOf(combat.getChallenger().getCharacter().getWeaknesses().size()));
         bw.newLine();
@@ -397,7 +397,7 @@ public class CombatFileWriter {
         }
         bw.newLine();
 
-        //FORTALEZAS
+        /** FORTALEZAS **/
         bw.write("NUMERO_FORTALEZAS: ");
         bw.write(String.valueOf(combat.getChallenger().getCharacter().getStrengths().size()));
         bw.newLine();
