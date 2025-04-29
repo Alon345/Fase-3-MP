@@ -159,7 +159,7 @@ public class Administrator extends User{
             ChallengeFileReader lecturaFicheroDesafio = new ChallengeFileReader();
             ArrayList<Challenge> listaDesafios = (ArrayList<Challenge>) lecturaFicheroDesafio.readChallenges();
             boolean any = false;
-
+            
             for (int i = 0; i < listaDesafios.size(); i++) {
                 if (!listaDesafios.get(i).isValidated()) { //si no validado
                     any = true;

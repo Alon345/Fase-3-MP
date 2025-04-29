@@ -1030,6 +1030,7 @@ public class Terminal {
         System.out.println("========================================");
         System.out.println(" 1 SI");
         System.out.println(" 2 NO");
+        System.out.println("========================================");
     }
     public void electModifiers() {
         System.out.println("Introduce las modificaciones para el combate," +

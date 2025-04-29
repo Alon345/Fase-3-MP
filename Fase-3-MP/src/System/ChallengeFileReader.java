@@ -37,7 +37,14 @@ public class ChallengeFileReader {
                 linea = br.readLine(); // REGISTRO <registro>
                 desafiante.setRegister(linea.split(" ", 2)[1]);
 
-                linea = br.readLine(); // TIPO-PERSONAJE <tipo> (lo ignoramos aquí)
+                //TIPO-PERSONAJE
+                br.mark(100);
+                linea = br.readLine();
+                if (linea != null && linea.startsWith("TIPO-PERSONAJE")) {
+                    // lo ignoramos
+                } else {
+                    br.reset(); // no era, retrocedemos
+                }
                 c.setChallenger(desafiante);
 
                 // CONTRINCANTE
@@ -51,7 +58,14 @@ public class ChallengeFileReader {
                 linea = br.readLine(); // REGISTRO <registro>
                 rival.setRegister(linea.split(" ", 2)[1]);
 
-                linea = br.readLine(); // TIPO-PERSONAJE <tipo> (lo ignoramos aquí)
+                //TIPO-PERSONAJE
+                br.mark(100);
+                linea = br.readLine();
+                if (linea != null && linea.startsWith("TIPO-PERSONAJE")) {
+                    // lo ignoramos
+                } else {
+                    br.reset(); // no era, retrocedemos
+                }
                 c.setRival(rival);
 
                 // INFORMACIÓN DEL DESAFÍO
@@ -123,5 +137,4 @@ public class ChallengeFileReader {
 
         return lista;
     }
-
 }//FIN
