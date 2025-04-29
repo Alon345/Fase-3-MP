@@ -75,7 +75,10 @@ public class Client extends User {
         Challenge challenge = new Challenge();
         challenge.createChallenge(cliente);
     }
-
+    /**
+     * Método para eliminar un personaje del cliente
+     * @param client Usuario logueado (puede ser Client o Administrator)
+     */
     public void deleteCharacter(Client client) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
@@ -107,7 +110,6 @@ public class Client extends User {
      * Creación de los Vampiros
      * @return vampire
      */
-
     public Vampire createVampire() {
         boolean[] aux1 = new boolean[]{true, true};
         boolean[] aux2 = new boolean[]{true, false};
@@ -570,11 +572,10 @@ public class Client extends User {
 
 
     /**
-         * Elimina permanentemente una cuenta del sistema
-         * @param client Usuario logueado (puede ser Client o Administrator)
-         * @param system Referencia al sistema principal
-         */
-
+     * Elimina permanentemente una cuenta del sistema
+     * @param client Usuario logueado (puede ser Client o Administrator)
+     * @param system Referencia al sistema principal
+     */
     public void deleteAccount(Client client, mainSystem system) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
@@ -617,11 +618,102 @@ public class Client extends User {
             system.selector();
         }
     }
-    
+    public void selectTeam(Client client) {
+        boolean rightValue;
+        boolean[] rightWeapon;
+        boolean[] aux1 = new boolean[]{true, true};  // Dos armas activas
+        boolean[] aux2 = new boolean[]{true, false}; // Una arma activa
+
+        ArrayList<Weapon> activeWeapons = new ArrayList<>();
+        Terminal terminal = new Terminal();
+
+        // Mostrar armas y pedir al cliente que seleccione las activas
+        do {
+            terminal.showWeapons(client.getCharacter().getWeapons());
+            rightWeapon = addActiveWeapon(client.getCharacter().getWeapons(), activeWeapons);
+        } while (!Arrays.equals(rightWeapon, aux1) && !Arrays.equals(rightWeapon, aux2));
+
+        // Si el usuario ha seleccionado una arma, se pregunta si quiere agregar otra
+        if (Arrays.equals(rightWeapon, aux1)) {
+            // Si tiene dos armas, mostramos la opción de añadir otra arma
+            do {
+                terminal.anotherWeapon(client.getCharacter().getWeapons(), client.getCharacter().getActiveWeapons().get(0));
+                rightValue = addActiveWeapon2(client.getCharacter().getWeapons(), activeWeapons);
+            } while (!rightValue);
+        }
+
+        // Establecemos las armas activas seleccionadas
+        client.getCharacter().setActiveWeapons(activeWeapons);
+
+        // Selección y equipamiento de armaduras
+        do {
+            terminal.showArmors(client.getCharacter().getArmors());
+            rightValue = addActiveArmor(client.getCharacter(), client.getCharacter().getArmors());
+        } while (!rightValue);
+
+        // Leer y actualizar los datos de usuario en el fichero
+        UserFileReader lecturaFicheroUsuarios = new UserFileReader();
+        UserFileWriter escrituraFicheroUsuario = new UserFileWriter();
+        ArrayList<Client> clientsList = lecturaFicheroUsuarios.userFileReader();
+
+        for (int numCliente = 0; numCliente < clientsList.size(); numCliente++) {
+            if (client.getNick().equals(clientsList.get(numCliente).getNick())) {
+                clientsList.remove(numCliente);
+                clientsList.add(client);
+                escrituraFicheroUsuario.rewriteUserFile(clientsList);
+                break;
+            }
+        }
+
+        // Confirmar que las armas han sido equipadas
+        terminal.equipingWeapons();
+        terminal.finishEquipar();
+    }
+
+    private boolean[] addActiveWeapon(ArrayList<Weapon> Weapons, ArrayList<Weapon> WeaponsActivas) {
+        Scanner sc = new Scanner(System.in);
+        int opcion = sc.nextInt();
+        if ((opcion < 1) || (opcion > Weapons.size() + 1)) {
+            return new boolean[]{false, false};
+        }
+        WeaponsActivas.add(Weapons.get(opcion - 1));
+        return new boolean[]{true, Weapons.get(opcion - 1).isSingleHand()};
+    }
+
+    private boolean addActiveWeapon2(ArrayList<Weapon> Weapons, ArrayList<Weapon> WeaponsActivas) {
+        Scanner sc = new Scanner(System.in);
+        int opcion = sc.nextInt();
+        if ((opcion < 0) || (opcion > Weapons.size() + 1)) {
+            return false;
+        }
+        if (opcion == 0) {
+            return true;
+        }
+        if (!Weapons.get(opcion + 1).getName().equals(WeaponsActivas.get(0).getName()) && Weapons.get(opcion + 1).isSingleHand()) {
+            WeaponsActivas.add(Weapons.get(opcion - 1));
+            return true;
+        }
+        return false;
+    }
+
+    private boolean addActiveArmor(Character character, ArrayList<Armor> Armors) {
+        Scanner sc = new Scanner(System.in);
+        int opcion = sc.nextInt();
+        if ((opcion < 1) || (opcion > Armors.size() + 1)) {
+            return false;
+        }
+        Armor Weapondura = Armors.get(opcion - 1);
+        character.setActiveArmor(Weapondura);
+        return true;
+    }
+
+    /**
+     * Método para mostrar el ranking de oro de los usuarios
+     */
     public void globalRanking() {
         Terminal terminal = new Terminal();
         terminal.rankingMessage();
-        // Usamos directamente el lector basado en Map.Entry<String, Integer>
+        // Usamos directamente el lector basado en Map.Entry<String, Integer> es decir ORO 45 en el fichero User..txt
         List<Map.Entry<String, Integer>> lista = UserFileReader.goldReaderForRanking(USER_FILE_PATH);
         // Ordenamos por oro descendente (los que no tienen oro, se consideran 0)
         lista.sort((a, b) -> {
@@ -632,5 +724,4 @@ public class Client extends User {
         // Mostrar ranking con formato bonito
         terminal.showGoldRankingSimple(lista);
     }
-
 }//FIN

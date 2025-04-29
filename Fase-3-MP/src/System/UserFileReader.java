@@ -139,7 +139,7 @@ public class UserFileReader {
     }
 
     //LECTURA PERSONAJES
-    private Vampire vampireReader(BufferedReader br) {
+    public Vampire vampireReader(BufferedReader br) {
         Vampire vampiro = new Vampire();
         Discipline disciplina = new Discipline();
 

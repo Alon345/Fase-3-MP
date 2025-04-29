@@ -37,26 +37,28 @@ public class mainSystem {
                     Menu menu = new Menu();
                     CombatFileReader combatFileReader = new CombatFileReader();
                     ArrayList<Combat> listCombats = combatFileReader.readCombatFile();
-                    for (Combat listCombat : listCombats) {
-                        if (!listCombat.isSeen() && listCombat.getChallenger().getNick().equals(client.getNick())) {
-                            NotificationManager notificationManager = new NotificationManager();
-                            notificationManager.notifyCombat(listCombat);
-                            listCombat.setSeen(true);
+                    if (!listCombats.isEmpty()) { //si hay combates...
+                        for (Combat listCombat : listCombats) {
+                            if (!listCombat.isSeen() && listCombat.getChallenger().getNick().equals(client.getNick())) { //tiene combate pendiente
+                                NotificationManager notificationManager = new NotificationManager();
+                                notificationManager.notifyCombat(listCombat);
+                                listCombat.setSeen(true);
+                            }
                         }
+                        CombatFileWriter combatFileWriter = new CombatFileWriter();
+                        combatFileWriter.rewriteCombatFile(listCombats);
                     }
-                    CombatFileWriter combatFileWriter = new CombatFileWriter();
-                    //combatFileWriter.sobreescribirFicheroCombate(listCombats);
+                        ChallengeFileReader challengeFileReader = new ChallengeFileReader();
+                        ArrayList<Challenge> listaDesafios = (ArrayList<Challenge>) challengeFileReader.readChallenges();
 
-                    ChallengeFileReader challengeFileReader = new ChallengeFileReader();
-                    ArrayList<Challenge> listaDesafios = challengeFileReader.readChallengeFile();
-
-                    for (int i = 0; i < listaDesafios.size(); i++) {
+                    for (int i = 0; i < listaDesafios.size(); i++) { //tiene desafio pensdiente?. Mostramos mensaje
                         if (listaDesafios.get(i).isValidated() && listaDesafios.get(i).getRival().getNick().equals(client.getNick())) {
                             NotificationManager notificationManager = new NotificationManager();
-                            //notificationManager.notifyChallenge(client, terminal, listaDesafios, i);
+                            notificationManager.notifyChallenge(client, terminal, listaDesafios, i);
                             i--;
                         }
                     }
+
                     menu.selectorClient(client, this);
                 }
             }
@@ -262,7 +264,6 @@ public class mainSystem {
 
         if (isBanned) {
             terminal.userIsBanned(nick);
-            new NotificationManager().notifyBan();
             return null;
         }
 

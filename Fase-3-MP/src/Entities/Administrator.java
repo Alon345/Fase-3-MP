@@ -76,6 +76,9 @@ public class Administrator extends User{
         }
     }
 
+    /**
+     * Modifica los atributos de un personaje
+     */
     public void modifyCharacter(){
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
@@ -144,31 +147,34 @@ public class Administrator extends User{
         }
     }
 
+    /**
+     * Valida los desafíos pendientes
+     */
     public void validatingChallenge(){
         {
             Scanner sc = new Scanner(System.in);
             Terminal terminal = new Terminal();
             Client desafiante, contrincante = new Client();
+
             ChallengeFileReader lecturaFicheroDesafio = new ChallengeFileReader();
-            ArrayList<Challenge> listaDesafios = lecturaFicheroDesafio.readChallengeFile();
+            ArrayList<Challenge> listaDesafios = (ArrayList<Challenge>) lecturaFicheroDesafio.readChallenges();
             boolean any = false;
 
             for (int i = 0; i < listaDesafios.size(); i++) {
-                if (!listaDesafios.get(i).isValidated()) {
+                if (!listaDesafios.get(i).isValidated()) { //si no validado
                     any = true;
                     desafiante = listaDesafios.get(i).getChallenger();
                     contrincante = listaDesafios.get(i).getRival();
                     Date fechaDesafio = listaDesafios.get(i).getDate();
-                    boolean banear = comprobarBan(fechaDesafio, contrincante);
+                    boolean banear = checkBan(fechaDesafio, contrincante);
                     if (banear) {
                         banUser(desafiante);
-                       // banearUser(desafiante);
                         listaDesafios.remove(i);
                         ChallengeFileWriter escrituraFicheroDesafio = new ChallengeFileWriter();
                         escrituraFicheroDesafio.reweiteChallengeFile(listaDesafios);
                         break;
                     } else {
-                        ArrayList<Modifier> lista = terminal.showChallengeModifiers(desafiante, contrincante, i);
+                        ArrayList<Modifier> lista = (ArrayList<Modifier>) terminal.showChallengeModifiers(desafiante, contrincante);
                         int opcion;
                         do {
                             terminal.validateChallenge();
@@ -178,7 +184,7 @@ public class Administrator extends User{
                             }
                         } while (opcion != 1 && opcion != 2);
                         if (opcion == 1) {
-                            listaDesafios.get(i).setValidated(true);
+                            listaDesafios.get(i).setValidated(true); //importante
                             ArrayList<Modifier> listaMods = new ArrayList<>();
                             String modificacion;
                             terminal.electModifiers();
@@ -210,29 +216,39 @@ public class Administrator extends User{
                 }
             }
             if (!any){
+                System.out.println("Número de desafíos leídos: " + listaDesafios.size());
                 terminal.noDesafiosParaValidar();
+            }
+            for (Challenge ch : listaDesafios) {
+                System.out.println("Desafío con ID " + ch.getRegister() + " - ¿Validado?: " + ch.isValidated());
             }
         }
     }
 
-    private boolean comprobarBan(Date fechaDesafio, Client client) {
+    /**
+     * Comprueba si el usuario ha sido baneado en las últimas 24 horas
+     * @param challengeDate Fecha del desafío
+     * @param client Cliente a comprobar
+     * @return true si el usuario debe ser baneado, false en caso contrario
+     */
+    private boolean checkBan(Date challengeDate, Client client) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
-        CombatFileReader lecturaFicheroCombate = new CombatFileReader();
-        ArrayList<Combat> listaCombates = lecturaFicheroCombate.readCombatFile();
+        CombatFileReader combatFileReader = new CombatFileReader();
+        ArrayList<Combat> combats = combatFileReader.readCombatFile();
         boolean sugerirBan = false;
         boolean banear = false;
         String nickDesafiante = null;
-        for (Combat listaCombate : listaCombates) {
-            if (listaCombate.getWinner() != null) {
-                if (listaCombate.getChallenger().getNick().equals(client.getNick()) ||
-                        listaCombate.getRival().getNick().equals(client.getNick())) {
-                    Date fechaDesafioAnterior = listaCombate.getDate();
-                    long diferencia = fechaDesafio.getTime() - fechaDesafioAnterior.getTime();
+        for (Combat combat : combats) {
+            if (combat.getWinner() != null) {
+                if (combat.getChallenger().getNick().equals(client.getNick()) ||
+                        combat.getRival().getNick().equals(client.getNick())) {
+                    Date fechaDesafioAnterior = combat.getDate();
+                    long diferencia = challengeDate.getTime() - fechaDesafioAnterior.getTime();
                     long horas = TimeUnit.MILLISECONDS.toHours(diferencia);
-                    if (horas <= 24 && (!listaCombate.getWinner().getNick().equals(client.getNick()))) {
+                    if (horas <= 24 && (!combat.getWinner().getNick().equals(client.getNick()))) {
                         sugerirBan = true;
-                        nickDesafiante = listaCombate.getChallenger().getNick();
+                        nickDesafiante = combat.getChallenger().getNick();
                         break;
                     }
                 }
@@ -250,7 +266,10 @@ public class Administrator extends User{
         }
         return banear;
     }
-    //DESBANEAR
+
+    /**
+     * Desbaneado de un usuario
+     */
     public void unbanUser() {
         UserFileReader userFileReader = new UserFileReader();
         BanFileReader banFileReader = new BanFileReader();
@@ -312,7 +331,10 @@ public class Administrator extends User{
         }
     }
 
-    //BANEO
+    /**
+     * Banea a un usuario
+     * @param client Usuario a banear
+     */
     public void banUser(Client client) {
         UserFileReader userFileReader = new UserFileReader();
         BanFileReader  banFileReader  = new BanFileReader();

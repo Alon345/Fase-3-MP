@@ -156,12 +156,12 @@ public class Terminal {
     }
     public void nickExists() {System.out.println("El nick introducido ya existe");}
 
-    public void askWeaknessValue() {System.out.println("Introduce el valor de la debilidad");}
+    public void askWeaknessValue() {System.out.println("Introduce el valor de la debilidad. De 1 a 5 (incluídos)");}
     public void askNumWeakness() {System.out.println("Introduce el numero de debilidades a añadir. (>=0) ");}
     public void askWeaknessName() {System.out.println("Introduce el nombre de la debilidad ");}
 
-    public void askStrengthValue() {System.out.println("Introduce el valor de la fortaleza. (>=0)");}
-    public void askNumStrengths() {System.out.println("Introduce el numero de fortalezas a añadir. (>=0) ");}
+    public void askStrengthValue() {System.out.println("Introduce el valor de la fortaleza. De 1 a 5 (incluídos)");}
+    public void askNumStrengths() {System.out.println("Introduce el numero de fortalezas a añadir. De 1 a 5 (incluídos)");}
     public void askStrengthName() {System.out.println("Introduce el nombre de la fortaleza ");}
 
     public void askNumArmors() {System.out.println("Introduce el número de armaduras a equipar (mínimo 1) ");}
@@ -447,6 +447,42 @@ public class Terminal {
     }
 
     public void challengeCreated(){System.out.println(" \uD83D\uDDE1\uFE0F!Desafío creado y enviado al rival!\uD83D\uDDE1\uFE0F");}
+    public void changeTeam() {
+        System.out.println("=====================================================");
+        System.out.println("                   CAMBIO DE EQUIPO");
+        System.out.println("=====================================================");
+        System.out.println("¿Quieres cambiar las armas y armaduras del personaje?");
+        System.out.println(" 1 SI");
+        System.out.println(" 2 NO");
+        System.out.println("=====================================================");
+    }
+    public void inCombat() {
+        System.out.println("En combate...");
+    }
+    public void mostrarCombate(Combat combate) {
+        System.out.println("Combate: " + combate.getRegister());
+        System.out.println("Desafiante: " + combate.getChallenger().getNick());
+        System.out.println("Contrincante: " + combate.getRival().getNick());
+        System.out.println("Fecha: " + combate.getDate());
+        if (combate.isChallengerMinion()) {
+            System.out.println("Esbirros de " + combate.getChallenger().getNick() + " : vivos");
+        } else {
+            System.out.println("Esbirros de " + combate.getChallenger().getNick() + " : muertos");
+        }
+        if (combate.isRivalMinion()) {
+            System.out.println("Esbirros de " + combate.getRival().getNick() + " : vivos");
+        } else {
+            System.out.println("Esbirros de " + combate.getRival().getNick() + " : muertos");
+        }
+        System.out.println("Oro apostado: " + combate.getGold());
+        System.out.println("Modificadores:");
+        for (int numModificador = 0; numModificador < combate.getModifiers().size(); numModificador++) {
+            System.out.println(combate.getModifiers().get(numModificador).getName());
+        }
+        System.out.println("RONDAS:");
+        showRounds(combate);
+    }
+
     public void askChallenge(Challenge challenge) {
         final String YELLOW_BRIGHT = "\u001B[93m"; // Amarillo brillante
         final String RESET = "\u001B[0m";           // Resetear color
@@ -895,27 +931,46 @@ public class Terminal {
                     user.getName());
         }
     }
-    public ArrayList<Modifier> showChallengeModifiers(Client desafiante, Client contrincante, int i) {
-        //fortalezas del desafiante y del contrincante
-        ArrayList<Modifier> lista = new ArrayList<>();
-        for (int j = 0; j < desafiante.getCharacter().getStrengths().size(); j++) {
-            System.out.println(desafiante.getCharacter().getStrengths().get(j).getName());
-            lista.add(desafiante.getCharacter().getStrengths().get(j));
+    public List<Modifier> showChallengeModifiers(Client desafiante, Client contrincante) {
+        List<Modifier> lista = new ArrayList<>();
+        UserFileReader userFileReader = new UserFileReader();
+
+        // Añadir fortalezas y debilidades del desafiante
+        if (desafiante.getCharacter() != null) {
+            List<Strength> fortalezasDes = desafiante.getCharacter().getStrengths();
+            if (fortalezasDes != null) {
+                for (Strength f : fortalezasDes) {
+                    System.out.println(f.getName());
+                    lista.add(f);
+                }
+            }
+            List<Weakness> debilidadesDes = desafiante.getCharacter().getWeaknesses();
+            if (debilidadesDes != null) {
+                for (Weakness d : debilidadesDes) {
+                    System.out.println(d.getName());
+                    lista.add(d);
+                }
+            }
         }
-        for (int j = 0; j < contrincante.getCharacter().getStrengths().size(); j++) {
-            System.out.println(contrincante.getCharacter().getStrengths().get(j).getName());
-            lista.add(contrincante.getCharacter().getStrengths().get(j));
+
+        // Añadir fortalezas y debilidades del contrincante
+        if (contrincante.getCharacter() != null) {
+            List<Strength> fortalezasCon = contrincante.getCharacter().getStrengths();
+            if (fortalezasCon != null) {
+                for (Strength f : fortalezasCon) {
+                    System.out.println(f.getName());
+                    lista.add(f);
+                }
+            }
+            List<Weakness> debilidadesCon = contrincante.getCharacter().getWeaknesses();
+            if (debilidadesCon != null) {
+                for (Weakness d : debilidadesCon) {
+                    System.out.println(d.getName());
+                    lista.add(d);
+                }
+            }
         }
-        //debilidades del contrincante y del contrincante
-        for (int j = 0; j < desafiante.getCharacter().getWeaknesses().size(); j++) {
-            System.out.println(desafiante.getCharacter().getWeaknesses().get(j).getName());
-            lista.add(desafiante.getCharacter().getWeaknesses().get(j));
-        }
-        for (int j = 0; j < contrincante.getCharacter().getWeaknesses().size(); j++) {
-            System.out.println(contrincante.getCharacter().getWeaknesses().get(j).getName());
-            lista.add(contrincante.getCharacter().getWeaknesses().get(j));
-        }
-        return  lista;
+        return lista;
     }
 
     public void validateChallenge() {

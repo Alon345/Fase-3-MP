@@ -251,11 +251,11 @@ public class CombatFileReader {
             String linea;
             linea = br.readLine();
 
-            while (!linea.equals("FIN_USUARIO")) {
+            while (!linea.equals("========== FIN COMBATE ==========")) {
 
                 //TIPO USUARIO
                 String[] textoSeparado = linea.split(" ");
-                Vampire.setType("Vampire");
+                Vampire.setType("VAMPIRO");
 
                 //NOMBRE Vampire
                 Vampire.setName(textoSeparado[1]);
@@ -507,7 +507,7 @@ public class CombatFileReader {
             String linea;
             linea = br.readLine();
 
-            while (!linea.equals("FIN_USUARIO")) {
+            while (!linea.equals("========== FIN COMBATE ==========")) {
 
                 //TIPO PERSONAJE
                 String[] textoSeparado = linea.split(" ");
@@ -714,9 +714,7 @@ public class CombatFileReader {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // En el finally cerramos el fichero, para asegurarnos
-            // que se cierra tanto si todo va bien como si salta
-            // una excepcion.
+            // En el finally cerramos el fichero
             try {
                 if (null != fr) {
                     fr.close();
@@ -740,7 +738,7 @@ public class CombatFileReader {
 
             linea = br.readLine();
 
-            while (!linea.equals("FIN_USUARIO")) {
+            while (!linea.equals("========== FIN COMBATE ==========")) {
 
                 //TIPO PERSONAJE
                 String[] textoSeparado = linea.split(" ");
@@ -939,9 +937,7 @@ public class CombatFileReader {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // En el finally cerramos el fichero, para asegurarnos
-            // que se cierra tanto si todo va bien como si salta
-            // una excepcion.
+            // En el finally cerramos el fichero
             try {
                 if (null != fr) {
                     fr.close();

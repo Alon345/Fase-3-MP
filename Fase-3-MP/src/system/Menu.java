@@ -34,7 +34,7 @@ public class Menu {
                     break;
                 case 3:// armaduras etc
                     if (client.getCharacter() != null) {
-                        //client.selectTeam(client);
+                        client.selectTeam(client);
                     } else {
                         terminal.youDontHaveTeam();
                     }
@@ -47,7 +47,7 @@ public class Menu {
                     }
                     break;
                 case 5: // consulta de batallas
-                    consultarCombates();
+                    consultarCombates(client);
                     break;
                 case 6: //consultar ranking global
                     client.globalRanking();
@@ -66,15 +66,23 @@ public class Menu {
         } while (option != 7 && option != 8);
     }
 
-    public void consultarCombates() {
+    private void consultarCombates(Client cliente) {
         Terminal terminal = new Terminal();
-        List<String> logs = CombatLogger.getCombatLogs();
-        terminal.showCombatLogs(logs);
+        terminal.inCombat();
+        //leer fichero combates
+        ArrayList<Combat> listaCombates = new ArrayList<>();
+        Combat combate = new Combat();
+        listaCombates.add(combate);
+        for (int i = 0; i < listaCombates.size(); i++){
+            if (listaCombates.get(i).getChallenger().getNick().equals(cliente.getNick()) || listaCombates.get(i).getRival().getNick().equals(cliente.getNick())){
+                terminal.mostrarCombate(listaCombates.get(i));
+            }
+        } // FALTA IMPLEMENTACIÓN DEL MÉTODO
     }
 
     private void checkChallengeFile(Client client, Terminal terminal) {
         ChallengeFileReader challengeFileReader = new ChallengeFileReader();
-        ArrayList<Challenge> challengeList = challengeFileReader.readChallengeFile();
+        ArrayList<Challenge> challengeList = (ArrayList<Challenge>) challengeFileReader.readChallenges();
 
         boolean isAlreadyInChallenge = false;
 

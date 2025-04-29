@@ -36,7 +36,10 @@ public class Challenge {
     public void setRegister(String register) { this.register = register; }
     public String getRegister() { return register; }
 
-    /** Operaciones **/
+    /**
+     * Método para crear un desafío.
+     * @param client El cliente que crea el desafío.
+     */
     public void createChallenge(Client client) {
         Terminal terminal = new Terminal();
         UserFileReader userFileReader = new UserFileReader();
@@ -105,92 +108,33 @@ public class Challenge {
             setRegister(registro);
             setModifiers(new ArrayList<>());
             setDate(new Date());
+
             terminal.showClashAnimation();
             terminal.challengeCreated();
 
+            ChallengeFileReader fileReader = new ChallengeFileReader();
+            ArrayList<Challenge> challenges = (ArrayList<Challenge>) fileReader.readChallenges();
+            ChallengeFileWriter fileWriter = new ChallengeFileWriter();
+
+            if(challenges.isEmpty()){ //falta ver si un nick no ha desafiado a alguien en 24h, en caso de que si se le banea
+                fileWriter.challengeRegister(this);
+            } else {
+                fileWriter.reweiteChallengeFile(challenges);
+            }
+
+        }
+        if (isValidated()) { //true -> si está validado, se envía la notificación a rival
             NotificationManager notificationManager = new NotificationManager();
             notificationManager.notifyChallenge(this);
-
-            startCombat();
         }
     }
 
-    public void startCombat() {
-        Terminal terminal = new Terminal();
-        Character challengerCharacter = challenger.getCharacter();
-        Character rivalCharacter = rival.getCharacter();
-
-        terminal.startCombatMessage(challengerCharacter, rivalCharacter);
-
-        int challengerPower = challengerCharacter.getAttack() - rivalCharacter.getDefense();
-        int rivalPower = rivalCharacter.getAttack() - challengerCharacter.getDefense();
-
-        String result;
-        if (challengerPower > rivalPower) {
-            result = "Victoria del desafiante";
-            terminal.combatWinner(challenger.getNick(), challengerPower, rivalPower);
-            challengerCharacter.setGold(challengerCharacter.getGold() + gold);
-            rivalCharacter.setGold(rivalCharacter.getGold() - gold);
-        } else if (rivalPower > challengerPower) {
-            result = "Victoria del rival";
-            terminal.combatWinner(rival.getNick(), rivalPower, challengerPower);
-            rivalCharacter.setGold(rivalCharacter.getGold() + gold);
-            challengerCharacter.setGold(challengerCharacter.getGold() - gold);
-        } else {
-            result = "Empate";
-            terminal.combatDraw(challengerPower, rivalPower);
-        }
-
-        terminal.combatDetails(challenger.getNick(), challengerCharacter.getAttack(), challengerCharacter.getDefense(),
-                rival.getNick(), rivalCharacter.getAttack(), rivalCharacter.getDefense());
-
-        // Registrar el combate en el archivo
-        registerCombat(result);
-
-        UserFileWriter userFileWriter = new UserFileWriter();
-        ArrayList<Client> clientsList = new UserFileReader().userFileReader();
-        userFileWriter.rewriteUserFile(clientsList);
-
-        terminal.combatEnd();
-    }
-
-    public void registerCombat(String result) {
-        String combatLog = "Fecha: " + new Date() + "\n" +
-                "Desafiante: " + challenger.getNick() + "\n" +
-                "Rival: " + rival.getNick() + "\n" +
-                "Resultado: " + result + "\n" +
-                "Oro apostado: " + gold + "\n" +
-                "-----------------------------------";
-        CombatLogger.logCombat(combatLog);
-    }
-
-    public int askForNumber() {
+    private int askForNumber() {
         Scanner sc = new Scanner(System.in);
-        int number = -1;
-        boolean valid = false;
-
-        while (!valid) {
-            try {
-                System.out.println("Introduce un número válido:");
-                number = sc.nextInt();
-                if (number > 0) {
-                    valid = true;
-                } else {
-                    System.out.println("Por favor, ingrese un número mayor a 0.");
-                }
-            } catch (InputMismatchException e) {
-                System.out.println("Entrada no válida. Por favor, ingrese un número.");
-                sc.nextLine(); // Limpiar el buffer
-            } catch (NoSuchElementException e) {
-                System.out.println("Error: No se recibió ninguna entrada.");
-                break; // Salir del bucle si no hay más entradas
-            }
-        }
-        return number;
+        return sc.nextInt();
     }
 
     public String generateRegisterNumber() {
-        return "CHALLENGE-" + System.currentTimeMillis();
+        return Long.valueOf(System.currentTimeMillis()).toString();
     }
-
 }//FIN
