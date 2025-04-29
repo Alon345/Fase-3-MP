@@ -3,7 +3,7 @@
 ## Descripción
 Este videojuego de luchas de criaturas fantásticas, desarrollado para la asignatura *Metodología de la Programación* (curso 2024/2025), permite a los usuarios (administradores y jugadores) gestionar sus personajes y enfrentarse en combates llenos de estrategia. La aplicación integra la creación y modificación de personajes, la gestión de desafíos y combates por rondas, y la persistencia de datos, asegurando que cada partida y cada configuración se conserven entre ejecuciones.
 
-> **WARNING:** Asegúrate de tener configurado correctamente el entorno y las dependencias para evitar problemas durante la ejecución.
+> **WARNING:** Asegúrate de tener configurado correctamente el entorno y las dependencias para evitar problemas durante la ejecución del videojuego.
 
 ## Equipo
 - **Rubén Ruiz Martín:** Analista Funcional  
