@@ -1,10 +1,5 @@
 ========== ADMIN ==========
-NOMBRE Admin
+NOMBRE admin2
 NICK admin
-PASSWORD 1
-========== FIN ADMIN ==========
-========== ADMIN ==========
-NOMBRE administrator
-NICK adminPROMAX
 PASSWORD 1
 ========== FIN ADMIN ==========

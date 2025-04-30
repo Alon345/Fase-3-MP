@@ -925,31 +925,49 @@ public class Terminal {
     public void showRounds(Combat combat) {
         for (int numOfRound = 0; numOfRound < combat.getRounds().size(); numOfRound++) {
             System.out.println("=======================================");
-            System.out.println(" Ronda " + (numOfRound+1) + " ");
+            System.out.println(" Ronda " + (numOfRound + 1) + " ");
             System.out.println(" Vida de " + combat.getChallenger().getCharacter().getName() + " al final de la ronda " + combat.getRounds().get(numOfRound).getHpChallengerEnd());
             System.out.println(" Vida de " + combat.getRival().getCharacter().getName() + " al final de la ronda " + combat.getRounds().get(numOfRound).getHpRivalEnd());
         }
-            System.out.println("Total de Rondas " + combat.getRounds().size());
-        System.out.println("            !FIN DEL COMBATE!");
-        if (combat.getWinner() != null) {
-            System.out.println("Vencedor " + combat.getWinner().getNick());
-        } else {
-            System.out.println("     !Ha habido un empate!");
+        System.out.println("          !FIN DEL COMBATE!");
+        System.out.println("============ INFORMACION ============");
+        System.out.println("Total de Rondas " + combat.getRounds().size());
+        // Animación: pequeños puntos de espera
+        try {
+            System.out.print("Calculando resultado");
+            for (int i = 0; i < 3; i++) {
+                Thread.sleep(700);
+                System.out.print(".");
+            }
+            System.out.println();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
-            System.out.println("=======================================");
+        // ANSI colors
+        final String ANSI_RESET = "\u001B[0m";
+        final String ANSI_GREEN = "\u001B[32m";
+        final String ANSI_YELLOW = "\u001B[33m";
+        if (combat.getWinner() != null) {
+            System.out.println(ANSI_GREEN + "Victoria absoluta " + combat.getWinner().getNick() + " ha dominado la batalla." + ANSI_RESET);
+        } else {
+            System.out.println(ANSI_YELLOW + "¡Empate! El honor de ambos prevalece." + ANSI_RESET);
+        }
+
+        System.out.println("=======================================");
     }
+
     public void showRound(int numOfRound) {
         System.out.println("Ronda número " + numOfRound);
     }
 
     public void startRound(int hpChallenger, int hpRival, String nick, String nick2, int challengerAttackPotential, int challengerDefencePotential, int rivalAttackPotential, int rivalDefencePotential) {
         System.out.println("=======================================");
-        System.out.println(nick + "-------");
+        System.out.println(nick + "----------------------");
         System.out.println("- Vida " + hpChallenger);
         System.out.println("- Potencial ataque " + challengerAttackPotential);
         System.out.println("- Potencial defensa " + challengerDefencePotential);
         System.out.println();
-        System.out.println(nick2 + "-------");
+        System.out.println(nick2 + "----------------------");
         System.out.println("- Vida " + hpRival);
         System.out.println("- Potencial ataque " + rivalAttackPotential);
         System.out.println("- Potencial defensa " + rivalDefencePotential);
@@ -962,6 +980,26 @@ public class Terminal {
     public void defenceAbility(String character, String ability) {
         System.out.println(character + " usa " + ability + " para potenciar su defensa");
     }
+    public void noGoldUser() {
+        final String RED = "\033[31m";
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"};
+
+        System.out.print("Revisando bolsillos");
+        try {
+            for (int i = 0; i < 12; i++) {
+                System.out.print("\rRevisando bolsillos" + spinner[i % 4]);
+                Thread.sleep(120);
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        System.out.println(); // Salto de línea tras animación
+
+        System.out.println(RED + "No se encontraron Monedas de Oro." + RESET);
+        System.out.println(RED + "No puedes avanzar sin una ofrenda..." + RESET);
+    }
+
 
     /**Mensajes de los Administradores**/
     public void adminMenu() {
@@ -1193,6 +1231,10 @@ public class Terminal {
     }
     public void errorWeaponIsActive() {
         System.out.println("El arma esta activa, no se puede eliminar");
+    }
+    public void noAdmins() {
+        System.out.println("No hay administradores en el sistem, \n" +
+                           "si eres digno de ser administrador,\nregistrate como uno.");
     }
 
     public void modifyWeapon() {
