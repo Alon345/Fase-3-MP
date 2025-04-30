@@ -21,6 +21,9 @@ public class Combat {
     private ArrayList<Modifier> modifiers;
     private String register;
     private boolean seen;
+    private String status;
+    private int goldBet;
+
 
     /**A continuación se definen los Setters y Getters**/
 
@@ -101,6 +104,16 @@ public class Combat {
 
     /**A continuación se definen las Operaciones**/
 
+    // Método para establecer el estado del combate
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    // Método para obtener el estado del combate
+    public String getStatus() {
+        return status;
+    }
+    
     public Combat initializeCombat(Client challenger, Client rival, Date date,int gold, ArrayList<Modifier> modifiers, String register) {
         setChallenger(challenger);
         setRival(rival);
@@ -220,5 +233,13 @@ public class Combat {
             }
         }
         return hp;
+    }
+
+    public int getGoldBet() {
+        return goldBet;
+    }
+
+    public void setGoldBet(int goldBet) {
+        this.goldBet = goldBet;
     }
 }

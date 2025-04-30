@@ -1,6 +1,8 @@
 package System;
 
 import Entities.*;
+import Entities.Character;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -15,140 +17,55 @@ public class CombatFileReader {
     private static final String COMBAT_FILE_PATH = "Fase-3-MP/src/Files/CombatRegister.txt";
 
     public List<Combat> readCombats() {
-        List<Combat> lista = new ArrayList<>();
-
+        List<Combat> combats = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(COMBAT_FILE_PATH))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                if (!"========== COMBATE ==========".equals(linea)) continue;
-
-                Combat c = new Combat();
-
-                // — DESAFIANTE —
-                linea = br.readLine(); // "DESAFIANTE <nombre>"
-                Client desafiante = new Client();
-                if (linea != null && linea.contains(" ")) {
-                    desafiante.setName(linea.split(" ", 2)[1]);
-                }
-                // NICK
-                linea = br.readLine(); // "NICK <nick>"
-                if (linea != null && linea.contains(" ")) {
-                    desafiante.setNick(linea.split(" ", 2)[1]);
-                }
-                // REGISTRO
-                linea = br.readLine(); // "REGISTRO <reg>"
-                if (linea != null && linea.contains(" ")) {
-                    desafiante.setRegister(linea.split(" ", 2)[1]);
-                }
-
-                // Posibles líneas TIPO-PERSONAJE y ESBIRROS-CON-VIDA
-                br.mark(200);
-                linea = br.readLine();
-                if (linea == null ||
-                        !(linea.startsWith("TIPO-PERSONAJE") || linea.startsWith("ESBIRROS-CON-VIDA"))) {
-                    br.reset();
-                }
-                c.setChallenger(desafiante);
-
-                // — CONTRINCANTE —
-                linea = br.readLine(); // "CONTRINCANTE <nombre>"
-                Client rival = new Client();
-                if (linea != null && linea.contains(" ")) {
-                    rival.setName(linea.split(" ", 2)[1]);
-                }
-                // NICK
-                linea = br.readLine();
-                if (linea != null && linea.contains(" ")) {
-                    rival.setNick(linea.split(" ", 2)[1]);
-                }
-                // REGISTRO
-                linea = br.readLine();
-                if (linea != null && linea.contains(" ")) {
-                    rival.setRegister(linea.split(" ", 2)[1]);
-                }
-
-                // Posibles líneas TIPO-PERSONAJE y ESBIRROS
-                br.mark(200);
-                linea = br.readLine();
-                if (linea == null ||
-                        !(linea.startsWith("TIPO-PERSONAJE") || linea.startsWith("ESBIRROS-CON-VIDA"))) {
-                    br.reset();
-                }
-                c.setRival(rival);
-                br.readLine();
-                // — BLOQUE INFO —
-                br.readLine(); // ==== INFORMACION DEL COMBATE ====
-
-                // ORO-APOSTADO
-                linea = br.readLine();
-                int gold = 0;
-                if (linea != null && linea.startsWith("ORO-APOSTADO")) {
-                    String[] parts = linea.split(" ", 2);
-                    if (parts.length == 2 && !parts[1].isBlank()) {
-                        gold = Integer.parseInt(parts[1].trim());
+            String line;
+            Combat combat = null;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.startsWith("========== COMBATE ==========")) {
+                    combat = new Combat();
+                } else if (line.startsWith("DESAFIANTE")) {
+                    String challengerName = line.split(" ", 2)[1];
+                    Client challenger = new Client();
+                    challenger.setNick(challengerName);
+                    combat.setChallenger(challenger);
+                } else if (line.startsWith("NICK") && combat.getChallenger() != null && combat.getRival() == null) {
+                    String nick = line.split(" ", 2)[1];
+                    combat.getChallenger().setNick(nick);
+                } else if (line.startsWith("CONTRINCANTE")) {
+                    String rivalName = line.split(" ", 2)[1];
+                    Client rival = new Client();
+                    rival.setNick(rivalName);
+                    combat.setRival(rival);
+                } else if (line.startsWith("NICK") && combat.getRival() != null) {
+                    String nick = line.split(" ", 2)[1];
+                    combat.getRival().setNick(nick);
+                } else if (line.startsWith("FECHA")) {
+                    String dateStr = line.split(" ", 2)[1];
+                    try {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                        combat.setDate(sdf.parse(dateStr));
+                    } catch (ParseException e) {
+                        combat.setDate(null);
                     }
-                }
-                c.setGold(gold);
-
-                // CANTIDAD_MODIFICADORES
-                linea = br.readLine();
-                int tope = 0;
-                if (linea != null && linea.startsWith("CANTIDAD_MODIFICADORES")) {
-                    String[] parts = linea.split(" ", 2);
-                    if (parts.length == 2 && !parts[1].isBlank()) {
-                        tope = Integer.parseInt(parts[1].trim());
+                } else if (line.startsWith("ORO-APOSTADO")) {
+                    try {
+                        int gold = Integer.parseInt(line.split(" ", 2)[1]);
+                        combat.setGoldBet(gold); // Cambiado de setGold a setGoldBet
+                    } catch (NumberFormatException e) {
+                        combat.setGoldBet(0); // Valor por defecto si hay un error
                     }
+                } else if (line.startsWith("ESTADO-COMBATE")) {
+                    combat.setStatus(line.split(" ", 2)[1]);
+                } else if (line.startsWith("========== FIN COMBATE ==========")) {
+                    combats.add(combat);
                 }
-                ArrayList<Modifier> mods = new ArrayList<>();
-                for (int i = 0; i < tope; i++) {
-                    Modifier m = new Modifier();
-                    linea = br.readLine(); // "NOMBRE <n>"
-                    if (linea != null && linea.contains(" ")) {
-                        m.setName(linea.split(" ", 2)[1]);
-                    }
-                    linea = br.readLine(); // "VALOR <n>"
-                    if (linea != null && linea.contains(" ")) {
-                        m.setValue(Integer.parseInt(linea.split(" ", 2)[1].trim()));
-                    }
-                    mods.add(m);
-                }
-                c.setModifiers(mods);
-
-                // Saltar vacíos hasta FECHA
-
-                if (linea != null && linea.startsWith("FECHA")) {
-                    String[] parts = linea.split(" ", 2);
-                    if (parts.length == 2) {
-                        try {
-                            Date fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(parts[1].trim());
-                            c.setDate(fecha);
-                        } catch (ParseException e) {
-                            System.err.println("Error al parsear la fecha: " + parts[1].trim());
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                // REGISTRO final
-                linea = br.readLine();
-                if (linea != null && linea.startsWith("REGISTRO")) {
-                    String[] parts = linea.split(" ", 2);
-                    if (parts.length == 2) {
-                        c.setRegister(parts[1].trim());
-                    }
-                }
-
-                br.readLine(); //saltamos
-                // Fin de bloque
-                br.readLine(); // ========== FIN COMBATE ==========
-
-                lista.add(c);
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        return lista;
+        return combats;
     }
-
 
 }
