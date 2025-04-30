@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -114,15 +115,17 @@ public class CombatFileReader {
                 c.setModifiers(mods);
 
                 // Saltar vacíos hasta FECHA
-                do {
-                    br.mark(200);
-                    linea = br.readLine();
-                } while (linea != null && linea.isBlank());
+
                 if (linea != null && linea.startsWith("FECHA")) {
                     String[] parts = linea.split(" ", 2);
                     if (parts.length == 2) {
-                        Date fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(parts[1].trim());
-                        c.setDate(fecha);
+                        try {
+                            Date fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(parts[1].trim());
+                            c.setDate(fecha);
+                        } catch (ParseException e) {
+                            System.err.println("Error al parsear la fecha: " + parts[1].trim());
+                            e.printStackTrace();
+                        }
                     }
                 }
 

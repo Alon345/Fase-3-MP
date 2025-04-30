@@ -81,6 +81,7 @@ public class CombatFileWriter {
             String pattern = "dd-MM-yyyy HH:mm:ss";
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
             String date = simpleDateFormat.format(Combat.getDate());
+
             bw.write("FECHA ");
             bw.write(date);
             bw.newLine();

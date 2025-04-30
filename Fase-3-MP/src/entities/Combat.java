@@ -101,11 +101,10 @@ public class Combat {
 
     /**A continuación se definen las Operaciones**/
 
-    public Combat initializeCombat(Client challenger, Client rival, int gold, ArrayList<Modifier> modifiers, String register) {
+    public Combat initializeCombat(Client challenger, Client rival, Date date,int gold, ArrayList<Modifier> modifiers, String register) {
         setChallenger(challenger);
         setRival(rival);
-        Date todaysDate = new Date();
-        setDate(todaysDate);
+        setDate(date);
         setGold(gold);
         setModifiers(modifiers);
         setRegister(register);
@@ -148,6 +147,7 @@ public class Combat {
         combat.initializeCombat(
                 fullChallenger,
                 fullRival,
+                challenge.getDate(),
                 challenge.getGold(),
                 challenge.getModifiers(),
                 challenge.getRegister()
@@ -193,7 +193,6 @@ public class Combat {
         } else {
             combat.setWinner(null); // Empate
         }
-
         terminal.showRounds(combat);
         return combat;
     }
