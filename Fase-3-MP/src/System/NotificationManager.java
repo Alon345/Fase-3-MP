@@ -8,9 +8,6 @@ import java.util.Scanner;
 
 public class NotificationManager {
 
-    public void notifyCombat(Combat combat){
-
-    }
     public void notifyChallenge(Client client, Terminal terminal, ArrayList<Challenge> challenges, int challengeNumber, Client desafiante, String regNumber) {
         int opcion;
         do {
@@ -21,6 +18,7 @@ public class NotificationManager {
             doCombat(client, terminal, challenges, challengeNumber);
         } else { // 2 = NO ACEPTAR
             doNotAcceptCombat(client, challenges, challengeNumber); //10% oro
+            terminal.restandoOro();
         }
         unsubscribeDesafio(challenges.get(challengeNumber), challenges);
     }
@@ -55,6 +53,7 @@ public class NotificationManager {
         combate = combate.initializeCombat(
                 challenges.get(numDesafio).getChallenger(),
                 client,
+                challenges.get(numDesafio).getDate(),
                 challenges.get(numDesafio).getGold(),
                 challenges.get(numDesafio).getModifiers(),
                 challenges.get(numDesafio).getRegister()
@@ -128,24 +127,33 @@ public class NotificationManager {
 
 
     private void doNotAcceptCombat(Client cliente, ArrayList<Challenge> challenges, int numDesafio) {
-        cliente.getCharacter().setGold(cliente.getCharacter().getGold() - (challenges.get(numDesafio).getGold() / 10));
+        int penalizacion = challenges.get(numDesafio).getGold() / 10;
+        int oroActual = cliente.getCharacter().getGold();
+        // Comprobamos que no se quede con oro negativo
+        if (oroActual >= penalizacion) {
+            cliente.getCharacter().setGold(oroActual - penalizacion);
+        } else {
+            cliente.getCharacter().setGold(0); // Si no tiene suficiente, se deja en 0
+        }
+        // Recompensar al desafiante con lo apostado + 10%
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> clients = userFileReader.userFileReader();
         for (Client listaCliente : clients) {
             if (listaCliente.getNick().equals(challenges.get(numDesafio).getChallenger().getNick())) {
-                listaCliente.getCharacter().setGold(listaCliente.getCharacter().getGold() + challenges.get(numDesafio).getGold() + (challenges.get(numDesafio).getGold() / 10));
+                int recompensa = challenges.get(numDesafio).getGold() + penalizacion;
+                listaCliente.getCharacter().setGold(listaCliente.getCharacter().getGold() + recompensa);
                 break;
             }
         }
-        for (int numCliente = 0; numCliente < clients.size(); numCliente++){
-            if (cliente.getNick().equals(clients.get(numCliente).getNick())){
-                clients.remove(numCliente);
-                clients.add(cliente);
+        // Actualizar al cliente rechazador en la lista
+        for (int numCliente = 0; numCliente < clients.size(); numCliente++) {
+            if (cliente.getNick().equals(clients.get(numCliente).getNick())) {
+                clients.set(numCliente, cliente); // reemplazar en lugar de remove+add
                 break;
             }
         }
+        // Guardar los cambios
         UserFileWriter userFileWriter = new UserFileWriter();
-        userFileWriter.rewriteUserFile(clients); //Actualizamos oro del que ha rechazado
+        userFileWriter.rewriteUserFile(clients);
     }
-
 }//FIN

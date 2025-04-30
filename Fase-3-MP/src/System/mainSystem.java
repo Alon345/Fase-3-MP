@@ -35,22 +35,9 @@ public class mainSystem {
                 client = loginClient(client);
                 if (client != null) {
                     Menu menu = new Menu();
-                    CombatFileReader combatFileReader = new CombatFileReader();
-                    ArrayList<Combat> listCombats = (ArrayList<Combat>) combatFileReader.readCombats();
 
-                    if (!listCombats.isEmpty()) { //si hay combates...
-                        for (Combat listCombat : listCombats) {
-                            if (!listCombat.isSeen() && listCombat.getChallenger().getNick().equals(client.getNick())) { //tiene combate pendiente
-                                NotificationManager notificationManager = new NotificationManager();
-                                notificationManager.notifyCombat(listCombat);
-                                listCombat.setSeen(true);
-                            }
-                        }
-                        CombatFileWriter combatFileWriter = new CombatFileWriter();
-                        combatFileWriter.rewriteCombatFile(listCombats);
-                    }
-                        ChallengeFileReader challengeFileReader = new ChallengeFileReader();
-                        ArrayList<Challenge> listaDesafios = (ArrayList<Challenge>) challengeFileReader.readChallenges();
+                    ChallengeFileReader challengeFileReader = new ChallengeFileReader();
+                    ArrayList<Challenge> listaDesafios = (ArrayList<Challenge>) challengeFileReader.readChallenges();
 
                     for (int i = 0; i < listaDesafios.size(); i++) { //tiene desafio pensdiente?. Mostramos mensaje
                         if (listaDesafios.get(i).isValidated() && listaDesafios.get(i).getRival().getNick().equals(client.getNick())) {
@@ -61,7 +48,6 @@ public class mainSystem {
                             i--;
                         }
                     }
-
                     menu.selectorClient(client, this);
                 }
             }

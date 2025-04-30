@@ -5,6 +5,7 @@ import Entities.Character;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -514,34 +515,8 @@ public class Terminal {
         System.out.println("¿Quieres cambiar las armas y armaduras del personaje?");
         System.out.println(" 1 SI");
         System.out.println(" 2 NO");
-        System.out.println("=====================================================");
-    }
-    public void inCombat() {
-        System.out.println("En combate...");
-    }
-    public void mostraCombate(Combat combate) {
-        System.out.println("Combate: " + combate.getRegister());
-        System.out.println("Desafiante: " + combate.getChallenger().getNick());
-        System.out.println("Contrincante: " + combate.getRival().getNick());
-        System.out.println("Fecha: " + combate.getDate());
-        if (combate.isChallengerMinion()) {
-            System.out.println("Esbirros de " + combate.getChallenger().getNick() + " : vivos");
-        } else {
-            System.out.println("Esbirros de " + combate.getChallenger().getNick() + " : muertos");
-        }
-        if (combate.isRivalMinion()) {
-            System.out.println("Esbirros de " + combate.getRival().getNick() + " : vivos");
-        } else {
-            System.out.println("Esbirros de " + combate.getRival().getNick() + " : muertos");
-        }
-        System.out.println("Oro apostado: " + combate.getGold());
-        System.out.println("Modificadores:");
-        for (int numModificador = 0; numModificador < combate.getModifiers().size(); numModificador++) {
-            System.out.println(combate.getModifiers().get(numModificador).getName());
-        }
-        System.out.println("RONDAS:");
-        showRounds(combate);
-    }
+        System.out.println("=====================================================");}
+
 
     public void askChallenge(Challenge challenge) {
         final String YELLOW_BRIGHT = "\u001B[93m"; // Amarillo brillante
@@ -555,24 +530,12 @@ public class Terminal {
         System.out.println("=======================================");
         System.out.println("     ¿Quieres aceptar el desafío?");
         System.out.println("=======================================");
-        System.out.println("  1 SI ACEPTAR");
-        System.out.println("  2 NO ACEPTAR");
+        System.out.println(" 1 SI ACEPTAR");
+        System.out.println(" 2 NO ACEPTAR");
         System.out.println("NOTA: si no aceptas perderás " + YELLOW_BRIGHT + (challenge.getGold() / 10) + " Monedas de Oro" + RESET);
         System.out.println("=======================================");
     }
-    public void noDesafiosParaValidar() {
-        System.out.println("No hay desafios a validar en este momento");
-    }
 
-    public void invalidQuantity(Client client) {
-       System.out.println("Cantidad inválida. Introduce un valor entre 1 y " + client.getCharacter().getGold());
-    }
-    public void noCharacter(){
-        System.out.println("El rival seleccionado no tiene personaje válido.");
-    }
-    public void autoRival(){
-        System.out.println("Se ha seleccionado automáticamente al único rival disponible.");
-    }
     public void preguntarBan(String desafiante, String contrincante) {
         System.out.println("El desafiante " + desafiante + " ha incumplido las normas de desafio, desafiando a " + contrincante + ", ¿Desea banearle?");
         System.out.println(" 1  Si");
@@ -598,29 +561,32 @@ public class Terminal {
             System.out.println("No tienes combates registrados.");
             return;
         }
-        System.out.println("===== Historial de Combates para " + current.getNick() + " =====");
+        System.out.println("=======================================");
+        System.out.println("        HISTORIAL DE COMBATES" );
+        System.out.println("=======================================");
         for (Combat c : combates) {
             String youAre = current.getNick().equals(c.getChallenger().getNick())
-                    ? "Desafiante" : "Contrincante";
-            Client opponent = youAre.equals("Desafiante")
+                    ? "DESAFIANTE" : "CONTRINCANTE";
+            Client opponent = youAre.equals("DESAFIANTE")
                     ? c.getRival() : c.getChallenger();
-
-            System.out.println("=======================================");
-            System.out.println("Rol " + youAre);
+            Date combatDate = c.getDate();
+            String formattedDate = (combatDate != null)
+                    ? new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(combatDate)
+                    : "Fecha desconocida";
+            System.out.println("Tu Rol " + youAre);
             System.out.println("Oponente " + opponent.getNick());
-            System.out.println("Fecha   " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
-                    .format(c.getDate()));
-            System.out.println("Apuesta " + c.getGold() + " oro");
+            System.out.println("Fecha " + formattedDate);
+            System.out.println("Apuesta " + c.getGold() + " Monedas de Oro");
             System.out.print  ("Resultado ");
             if (c.getWinner() == null) {
-                System.out.println("Empate");
+                System.out.println("EMPATE");
             } else if (c.getWinner().getNick().equals(current.getNick())) {
-                System.out.println("Victoria");
+                System.out.println("VICTORIA");
             } else {
-                System.out.println("Derrota");
+                System.out.println("DERROTA");
             }
+            System.out.println("=======================================");
         }
-        System.out.println("=======================================");
     }
 
     public void modifyMinions() {
@@ -963,13 +929,14 @@ public class Terminal {
             System.out.println(" Vida de " + combat.getChallenger().getCharacter().getName() + " al final de la ronda " + combat.getRounds().get(numOfRound).getHpChallengerEnd());
             System.out.println(" Vida de " + combat.getRival().getCharacter().getName() + " al final de la ronda " + combat.getRounds().get(numOfRound).getHpRivalEnd());
         }
-        System.out.println("        !FIN DEL COMBATE!");
+            System.out.println("Total de Rondas " + combat.getRounds().size());
+        System.out.println("            !FIN DEL COMBATE!");
         if (combat.getWinner() != null) {
-            System.out.println(" Vencedor " + combat.getWinner().getNick());
+            System.out.println("Vencedor " + combat.getWinner().getNick());
         } else {
-            System.out.println("    !Ha habido un empate!");
+            System.out.println("     !Ha habido un empate!");
         }
-        System.out.println("=======================================");
+            System.out.println("=======================================");
     }
     public void showRound(int numOfRound) {
         System.out.println("Ronda número " + numOfRound);
@@ -977,12 +944,12 @@ public class Terminal {
 
     public void startRound(int hpChallenger, int hpRival, String nick, String nick2, int challengerAttackPotential, int challengerDefencePotential, int rivalAttackPotential, int rivalDefencePotential) {
         System.out.println("=======================================");
-        System.out.println(nick + ":");
+        System.out.println(nick + "-------");
         System.out.println("- Vida " + hpChallenger);
         System.out.println("- Potencial ataque " + challengerAttackPotential);
         System.out.println("- Potencial defensa " + challengerDefencePotential);
         System.out.println();
-        System.out.println(nick2 + ":");
+        System.out.println(nick2 + "-------");
         System.out.println("- Vida " + hpRival);
         System.out.println("- Potencial ataque " + rivalAttackPotential);
         System.out.println("- Potencial defensa " + rivalDefencePotential);
@@ -1238,6 +1205,18 @@ public class Terminal {
         System.out.println(" 3  Volver");
         System.out.println("========================================");
     }
-
+    public void restandoOro() {
+        String[] spinner = {"🪙", "💸", "🔻", "⌛"};
+        System.out.print("Restando oro de la cuenta... ");
+        try {
+            for (int i = 0; i < 12; i++) {
+                System.out.print("\rRestando oro de la cuenta... " + spinner[i % spinner.length]);
+                Thread.sleep(180);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("\rOro restado con éxito.               "); // Limpia lo anterior
+    }
 
 }//FIN
