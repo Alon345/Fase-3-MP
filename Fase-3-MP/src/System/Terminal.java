@@ -50,30 +50,38 @@ public class Terminal {
         System.out.println("  3 Seleccionar equipo");
         System.out.println("  4 Desafiar a un jugador");
         System.out.println("  5 Consultar combates");
-        System.out.println("  6 Consultar ranking global");
-        System.out.println("  7 Salir");
-        System.out.println("  8 Borrar cuenta");
+        System.out.println("  6 Consultar desafios");
+        System.out.println("  7 Consultar ranking global");
+        System.out.println("  8 Salir");
+        System.out.println("  9 Borrar cuenta");
         System.out.println("=======================================");
     }
 
-    public void showCombatLogs(List<String> logs, int rondasGanadas, int rondasPerdidas, int rondasEmpatadas) {
+    public void showPendingChallenges(List<Challenge> challenges, Client currentUser) {
+        String currentNick = currentUser.getNick();
+        boolean found = false;
         System.out.println("=======================================");
-        System.out.println("         HISTORIAL DE COMBATES");
+        System.out.println("              TUS DESAFIOS ");
         System.out.println("=======================================");
-        if (logs.isEmpty()) {
-            System.out.println("No hay combates registrados.");
-        } else {
-            for (String log : logs) {
-                System.out.println(log);
+        for (Challenge c : challenges) {
+            String challengerNick = c.getChallenger().getNick();
+            String rivalNick = c.getRival().getNick();
+            // Verifica si el desafío está pendiente y el usuario está involucrado
+            if (c.isValidated() && (currentNick.equals(challengerNick) || currentNick.equals(rivalNick))) {
+                System.out.println("  Desafiante " + challengerNick);
+                System.out.println("  Rival " + rivalNick);
+                System.out.println("  Oro apostado " + c.getGold());
+                System.out.println("  Estado del desafío "+ (c.isValidated() ? "Aceptado por Admin." : "Pendiente"));
+                System.out.println("  El rival debe aceptar el desafío");
+                System.out.println("=======================================");
+                found = true;
             }
         }
-        System.out.println("=======================================");
-        System.out.println("Resumen de rondas:");
-        System.out.println("Ganadas: " + rondasGanadas);
-        System.out.println("Perdidas: " + rondasPerdidas);
-        System.out.println("Empatadas: " + rondasEmpatadas);
-        System.out.println("=======================================");
+        if (!found) {
+            System.out.println("No tienes desafíos pendientes.");
+        }
     }
+
 
     public void WIP() {
         System.out.println("En desarrollo...");
@@ -933,7 +941,7 @@ public class Terminal {
         System.out.println("=======================================");
     }
     public void showRound(int numOfRound) {
-        System.out.println("Ronda número " + numOfRound + ":");
+        System.out.println("Ronda número " + numOfRound);
     }
 
     public void startRound(int hpChallenger, int hpRival, String nick, String nick2, int challengerAttackPotential, int challengerDefencePotential, int rivalAttackPotential, int rivalDefencePotential) {

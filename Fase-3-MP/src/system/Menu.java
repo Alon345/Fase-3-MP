@@ -49,27 +49,39 @@ public class Menu {
                 case 5: // consulta de batallas
                     consultarCombates();
                     break;
-                case 6: //consultar ranking global
+                case 6: //consultar desafios pendientes
+                    consultarPendingChallenges(client);
+                    break;
+                case 7: //consultar ranking global
                     client.globalRanking();
                     break;
-                case 7: //salir
+                case 8: //salir
                     terminal.logout();
                     system.selector();
                     break;
-                case 8: //borrar cuenta
+                case 9: //borrar cuenta
                     client.deleteAccount(client, system);
                     break;
                 default:
                     terminal.error();
                     break;
             }
-        } while (option != 7 && option != 8);
+        } while (option != 8 && option != 9);
     }
 
     public void consultarCombates() {
         Terminal terminal = new Terminal();
         //List<String> logs = CombatLogger.getCombatLogs();
         //terminal.showCombatLogs(logs);
+    }
+
+    public void consultarPendingChallenges(Client client){
+        Terminal terminal = new Terminal();
+        ChallengeFileReader challengeFileReader = new ChallengeFileReader();
+
+        ArrayList<Challenge> challenges = (ArrayList<Challenge>) challengeFileReader.readChallenges();
+
+        terminal.showPendingChallenges(challenges, client);
     }
 
     private void checkChallengeFile(Client client, Terminal terminal) {

@@ -117,12 +117,11 @@ public class Challenge {
             challenges.add(this); // AÑADES siempre el nuevo desafío
             ChallengeFileWriter fileWriter = new ChallengeFileWriter();
             fileWriter.rewriteChallengeFile(challenges); // Reescribes con la lista actualizada
-
-
-        }
-        if (isValidated()) { //true -> si está validado, se envía la notificación a rival
-            NotificationManager notificationManager = new NotificationManager();
-            notificationManager.notifyChallenge(this);
+            if (isValidated()) { //true -> si está validado, se envía la notificación a rival
+                Client desafiante = getChallenger();
+                NotificationManager notificationManager = new NotificationManager();
+                notificationManager.notifyChallenge(client, terminal, challenges, 1, desafiante, registro);
+            }
         }
     }
 

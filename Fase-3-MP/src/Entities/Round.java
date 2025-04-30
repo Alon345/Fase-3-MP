@@ -31,11 +31,10 @@ public class Round {
 
     public boolean startRound(int hpChallenger, int hpRival, Client challenger, Client rival, ArrayList<Modifier> modifiers) {
         Terminal terminal = new Terminal();
-        int challengerArmorAttack = 0;
-        int rivalArmorAttack = 0;
 
-        challengerArmorAttack = getArmourAttack(challenger, challengerArmorAttack);
-        rivalArmorAttack = getArmourAttack(rival, rivalArmorAttack);
+        // Inicialización de armaduras
+        int challengerArmorAttack = getArmourAttack(challenger, 0);
+        int rivalArmorAttack = getArmourAttack(rival, 0);
 
         int challengerAttackPotential = challenger.getCharacter().getPower() + challenger.getCharacter().getAbility().getAttack() + challengerArmorAttack;
         int rivalAttackPotential = rival.getCharacter().getPower() + rival.getCharacter().getAbility().getAttack() + rivalArmorAttack;
@@ -43,11 +42,9 @@ public class Round {
         challengerAttackPotential = getAttackPotential(challenger, challengerAttackPotential);
         rivalAttackPotential = getAttackPotential(rival, rivalAttackPotential);
 
-        int challengerArmorDefence= 0;
-        int rivalArmorDefence = 0;
-
-        challengerArmorDefence = getArmourDefence(challenger, challengerArmorDefence);
-        rivalArmorDefence = getArmourDefence(rival, rivalArmorDefence);
+        // Inicialización de defensas
+        int challengerArmorDefence = getArmourDefence(challenger, 0);
+        int rivalArmorDefence = getArmourDefence(rival, 0);
 
         int challengerDefencePotential = challenger.getCharacter().getPower() + challenger.getCharacter().getAbility().getDefense() + challengerArmorDefence;
         int rivalDefencePotential = rival.getCharacter().getPower() + rival.getCharacter().getAbility().getDefense() + rivalArmorDefence;
@@ -55,46 +52,39 @@ public class Round {
         challengerDefencePotential = getDefencePotential(challenger, challengerDefencePotential);
         rivalDefencePotential = getDefencePotential(rival, rivalDefencePotential);
 
-        int challengerModifiersValue = 0;
-        int rivalModifiersValue = 0;
+        // Aplicar modificadores
+        int challengerModifiersValue = getChallengerMofifiersValues(challenger, modifiers, 0);
+        int rivalModifiersValue = getChallengerMofifiersValues(rival, modifiers, 0);
 
-        challengerModifiersValue = getChallengerMofifiersValues(challenger, modifiers, challengerModifiersValue);
-        rivalModifiersValue = getChallengerMofifiersValues(rival, modifiers, rivalModifiersValue);
-
-        if (challengerModifiersValue >= 0) {
-            challengerDefencePotential += challengerModifiersValue;
-        } else {
-            challengerDefencePotential -= challengerModifiersValue;
-        }
-        if (rivalModifiersValue >= 0) {
-            rivalDefencePotential += rivalModifiersValue;
-        } else {
-            rivalDefencePotential -= rivalModifiersValue;
-        }
+        challengerDefencePotential += challengerModifiersValue;
+        rivalDefencePotential += rivalModifiersValue;
 
         terminal.startRound(hpChallenger, hpRival, challenger.getNick(), rival.getNick(), challengerAttackPotential, challengerDefencePotential, rivalAttackPotential, rivalDefencePotential);
 
+        // Realizar disparos (ataques y defensas)
         int challengerAttack = doRoundShots(challengerAttackPotential);
         int rivalAttack = doRoundShots(rivalAttackPotential);
 
         int challengerDefence = doRoundShots(challengerDefencePotential);
         int rivalDefence = doRoundShots(rivalDefencePotential);
 
+        // Calcular nuevos HP
         hpChallenger = getHp(challengerAttack, rivalDefence, hpRival, challenger, rival);
         hpRival = getHp(rivalAttack, challengerDefence, hpChallenger, rival, challenger);
 
         setHpChallengerEnd(hpChallenger);
         setHpRivalEnd(hpRival);
+
         return (getHpChallengerEnd() == 0 || getHpRivalEnd() == 0);
     }
 
     private int getHp(int ataqueDesafiante, int defensaContrincante, int hpContrincante, Client challenger, Client rival) {
-        if (ataqueDesafiante >= defensaContrincante) {
-            hpContrincante -= 1;
-            modifyValues(challenger, rival);
-        }
+        int damage = Math.max(ataqueDesafiante - defensaContrincante, 0);
+        hpContrincante -= damage;
+        modifyValues(challenger, rival);
         return hpContrincante;
     }
+
 
     private int doRoundShots(int potential) {
         int result = 0;

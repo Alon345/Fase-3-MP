@@ -280,7 +280,8 @@ public class Administrator extends User{
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
         CombatFileReader combatFileReader = new CombatFileReader();
-        ArrayList<Combat> combats = combatFileReader.readCombatFile();
+        ArrayList<Combat> combats = (ArrayList<Combat>) combatFileReader.readCombats();
+
         boolean sugerirBan = false;
         boolean banear = false;
         String nickDesafiante = null;
