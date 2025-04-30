@@ -557,27 +557,40 @@ public class Terminal {
         }
     }
     public void showCombats(List<Combat> combates, Client current) {
-        if (combates.isEmpty()) {
+        if (combates == null || combates.isEmpty()) {
             System.out.println("No tienes combates registrados.");
             return;
         }
+
         System.out.println("=======================================");
-        System.out.println("        HISTORIAL DE COMBATES" );
+        System.out.println("        HISTORIAL DE COMBATES");
         System.out.println("=======================================");
+
         for (Combat c : combates) {
-            String youAre = current.getNick().equals(c.getChallenger().getNick())
-                    ? "DESAFIANTE" : "CONTRINCANTE";
-            Client opponent = youAre.equals("DESAFIANTE")
-                    ? c.getRival() : c.getChallenger();
-            Date combatDate = c.getDate();
-            String formattedDate = (combatDate != null)
-                    ? new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(combatDate)
-                    : "Fecha desconocida";
-            System.out.println("Tu Rol " + youAre);
-            System.out.println("Oponente " + opponent.getNick());
-            System.out.println("Fecha " + formattedDate);
-            System.out.println("Apuesta " + c.getGold() + " Monedas de Oro");
-            System.out.print  ("Resultado ");
+            // Determinar el rol del usuario actual
+            String youAre = current.getNick().equals(c.getChallenger().getNick()) ? "DESAFIANTE" : "CONTRINCANTE";
+            Client opponent = youAre.equals("DESAFIANTE") ? c.getRival() : c.getChallenger();
+
+            // Formatear la fecha del combate
+            String formattedDate;
+            if (c.getDate() != null) {
+                try {
+                    formattedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(c.getDate());
+                } catch (Exception e) {
+                    formattedDate = "Fecha inválida";
+                }
+            } else {
+                formattedDate = "Fecha desconocida";
+            }
+
+            // Mostrar los detalles del combate
+            System.out.println("Tu Rol: " + youAre);
+            System.out.println("Oponente: " + (opponent != null ? opponent.getNick() : "Desconocido"));
+            System.out.println("Fecha: " + formattedDate);
+            System.out.println("Apuesta: " + c.getGold() + " Monedas de Oro");
+
+            // Determinar el resultado del combate
+            System.out.print("Resultado: ");
             if (c.getWinner() == null) {
                 System.out.println("EMPATE");
             } else if (c.getWinner().getNick().equals(current.getNick())) {
@@ -585,6 +598,7 @@ public class Terminal {
             } else {
                 System.out.println("DERROTA");
             }
+
             System.out.println("=======================================");
         }
     }

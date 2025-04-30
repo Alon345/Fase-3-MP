@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -110,12 +111,19 @@ public class ChallengeFileReader {
                     br.reset(); // no era vacía, volver atrás
                 }
 
-                // FECHA y HORA
-                linea = br.readLine(); // FECHA dd-MM-yyyy HH:mm:ss
-                String dateStr = linea.split(" ", 2)[1];
-                // si viene en una sola línea como "FECHA 29-04-2025 22:32:53", parsea directamente:
-                Date fecha = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").parse(dateStr);
-                c.setDate(fecha);
+                // Leer fecha
+                linea = br.readLine(); // "FECHA <fecha>"
+                if (linea != null && linea.startsWith("FECHA")) {
+                    try {
+                        String fechaStr = linea.split(" ", 2)[1].trim();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+                        Date fecha = dateFormat.parse(fechaStr);
+                        c.setDate(fecha);
+                    } catch (ParseException e) {
+                        System.err.println("Error al parsear la fecha: " + linea);
+                        c.setDate(new Date(0)); // Fecha por defecto si no se puede parsear
+                    }
+                }
 
                 // VALIDADO
                 linea = br.readLine(); // VALIDADO <true|false>
