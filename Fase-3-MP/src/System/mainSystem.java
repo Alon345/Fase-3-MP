@@ -278,7 +278,7 @@ public class mainSystem {
         AdministratorFileReader operatorFileReader = new AdministratorFileReader();
         ArrayList<Administrator> list = operatorFileReader.adminFileReader();
         if (list.isEmpty()) {
-            terminal.noUsersError();
+            terminal.noAdmins();
             return null;
         }
         terminal.askNick();
