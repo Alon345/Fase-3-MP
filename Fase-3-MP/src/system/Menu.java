@@ -47,7 +47,7 @@ public class Menu {
                     }
                     break;
                 case 5: // consulta de batallas
-                    consultarCombates();
+                    consultarCombates(client, terminal);
                     break;
                 case 6: //consultar desafios pendientes
                     consultarPendingChallenges(client);
@@ -69,10 +69,21 @@ public class Menu {
         } while (option != 8 && option != 9);
     }
 
-    public void consultarCombates() {
-        Terminal terminal = new Terminal();
-        //List<String> logs = CombatLogger.getCombatLogs();
-        //terminal.showCombatLogs(logs);
+    public void consultarCombates(Client currentClient, Terminal terminal) {
+        // 1) Leer todos los combates del fichero
+        CombatFileReader combatReader = new CombatFileReader();
+        List<Combat> allCombats = combatReader.readCombats();
+        // 2) Filtrar solo los que involucran al cliente actual
+        List<Combat> myCombats = new ArrayList<>();
+        for (Combat c : allCombats) {
+            String nick = currentClient.getNick();
+            if (nick.equals(c.getChallenger().getNick()) ||
+                    nick.equals(c.getRival().getNick())) {
+                myCombats.add(c);
+            }
+        }
+        // 3) Mostrar los combates filtrados
+        terminal.showCombats(myCombats, currentClient);
     }
 
     public void consultarPendingChallenges(Client client){

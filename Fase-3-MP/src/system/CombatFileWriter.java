@@ -89,7 +89,8 @@ public class CombatFileWriter {
             bw.write("REGISTRO ");
             bw.write(Combat.getRegister());
             bw.newLine();
-
+            bw.write("ESTADO-COMBATE FINALIZADO");
+            bw.newLine();
             bw.write("========== FIN COMBATE ==========");
             bw.close();
 
@@ -173,7 +174,8 @@ public class CombatFileWriter {
                 bw.write("REGISTRO ");
                 bw.write(Combates.getRegister());
                 bw.newLine();
-
+                bw.write("ESTADO-COMBATE FINALIZADO");
+                bw.newLine();
                 bw.write("========== FIN COMBATE ==========");
                 bw.newLine();
             }

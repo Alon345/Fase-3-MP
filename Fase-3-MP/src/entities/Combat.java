@@ -2,7 +2,10 @@ package Entities;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 import System.Terminal;
+import System.*;
 
 public class Combat {
 
@@ -110,7 +113,51 @@ public class Combat {
         return this;
     }
 
-    public Combat startCombate(Combat combat) {
+    public Combat startCombatFromFile() {
+        ChallengeFileReader challengeReader = new ChallengeFileReader();
+        List<Challenge> challenges = challengeReader.readChallenges();
+
+        if (challenges.isEmpty()) {
+            throw new IllegalStateException("No hay desafíos disponibles.");
+        }
+
+        Challenge challenge = challenges.get(0); // Puedes adaptar esto para recorrer más desafíos
+
+        // Leemos los clientes desde el fichero de usuarios
+        UserFileReader userReader = new UserFileReader(); // Clase que tú ya tienes implementada
+        List<Client> clients = userReader.userFileReader();
+
+        Client fullChallenger = null;
+        Client fullRival = null;
+
+        // Buscamos los clientes con nick coincidente
+        for (Client client : clients) {
+            if (client.getNick().equals(challenge.getChallenger().getNick())) {
+                fullChallenger = client;
+            } else if (client.getNick().equals(challenge.getRival().getNick())) {
+                fullRival = client;
+            }
+        }
+
+        if (fullChallenger == null || fullRival == null) {
+            throw new IllegalStateException("No se encontró uno o ambos participantes en el fichero de usuarios.");
+        }
+
+        // Inicializamos el combate con los datos completos
+        Combat combat = new Combat();
+        combat.initializeCombat(
+                fullChallenger,
+                fullRival,
+                challenge.getGold(),
+                challenge.getModifiers(),
+                challenge.getRegister()
+        );
+        // Ejecutamos el combate como ya lo tienes definido
+        return startCombat(combat);
+    }
+
+
+    public Combat startCombat(Combat combat) {
         int hpChallenger = combat.getChallenger().getCharacter().getHp();
         int hpRival = combat.getRival().getCharacter().getHp();
 
@@ -129,24 +176,29 @@ public class Combat {
             hpRival = round.getHpRivalEnd();
             rounds.add(round);
             numOfRound++;
+
+            // Corte por vida igual o menor a 0
+            if (hpChallenger <= 0 || hpRival <= 0) {
+                endOfTheCombat = true;
+            }
         }
         combat.setRounds(rounds);
-        if (rounds.getLast().getHpChallengerEnd() > 0) {
+        // Determinar ganador
+        if (hpChallenger > 0 && hpRival <= 0) {
             combat.setWinner(combat.getChallenger());
-            combat.setChallengerMinion(rounds.getLast().getHpChallengerEnd() > combat.getChallenger().getCharacter().getHp());
-        } else if (rounds.getLast().getHpRivalEnd() > 0) {
+            combat.setChallengerMinion(rounds.get(rounds.size() - 1).getHpChallengerEnd() < combat.getChallenger().getCharacter().getHp());
+        } else if (hpRival > 0 && hpChallenger <= 0) {
             combat.setWinner(combat.getRival());
-            if (rounds.getLast().getHpRivalEnd() > combat.getRival().getCharacter().getHp()) {
-                combat.setChallengerMinion(true);
-            } else {
-                combat.setChallengerMinion(false);
-            }
-        } else { //empate
-            combat.setWinner(null);
+            combat.setChallengerMinion(false);
+        } else {
+            combat.setWinner(null); // Empate
         }
+
         terminal.showRounds(combat);
         return combat;
     }
+
+
 
     private int addMinionsHp(Demon demon, int hp) {
         for (int numEsbirro = 0; numEsbirro < demon.getMinionsComposits().size(); numEsbirro++) {

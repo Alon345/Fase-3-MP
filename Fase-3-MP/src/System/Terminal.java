@@ -3,6 +3,7 @@ package System;
 import Entities.*;
 import Entities.Character;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -592,6 +593,36 @@ public class Terminal {
             System.out.println(iterator + 1 + ": " + minionsComposits.get(iterator).getName());
         }
     }
+    public void showCombats(List<Combat> combates, Client current) {
+        if (combates.isEmpty()) {
+            System.out.println("No tienes combates registrados.");
+            return;
+        }
+        System.out.println("===== Historial de Combates para " + current.getNick() + " =====");
+        for (Combat c : combates) {
+            String youAre = current.getNick().equals(c.getChallenger().getNick())
+                    ? "Desafiante" : "Contrincante";
+            Client opponent = youAre.equals("Desafiante")
+                    ? c.getRival() : c.getChallenger();
+
+            System.out.println("=======================================");
+            System.out.println("Rol " + youAre);
+            System.out.println("Oponente " + opponent.getNick());
+            System.out.println("Fecha   " + new SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+                    .format(c.getDate()));
+            System.out.println("Apuesta " + c.getGold() + " oro");
+            System.out.print  ("Resultado ");
+            if (c.getWinner() == null) {
+                System.out.println("Empate");
+            } else if (c.getWinner().getNick().equals(current.getNick())) {
+                System.out.println("Victoria");
+            } else {
+                System.out.println("Derrota");
+            }
+        }
+        System.out.println("=======================================");
+    }
+
     public void modifyMinions() {
         System.out.println("=======================================");
         System.out.println("       MODIFICACION DE ESBIRROS");
@@ -928,7 +959,7 @@ public class Terminal {
     public void showRounds(Combat combat) {
         for (int numOfRound = 0; numOfRound < combat.getRounds().size(); numOfRound++) {
             System.out.println("=======================================");
-            System.out.println(" Ronda " + (numOfRound+1) + " :");
+            System.out.println(" Ronda " + (numOfRound+1) + " ");
             System.out.println(" Vida de " + combat.getChallenger().getCharacter().getName() + " al final de la ronda " + combat.getRounds().get(numOfRound).getHpChallengerEnd());
             System.out.println(" Vida de " + combat.getRival().getCharacter().getName() + " al final de la ronda " + combat.getRounds().get(numOfRound).getHpRivalEnd());
         }
