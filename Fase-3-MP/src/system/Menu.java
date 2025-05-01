@@ -41,6 +41,10 @@ public class Menu {
                     }
                     break;
                 case 4: //desafiar
+                    if (client.getGold() == 0) {
+                        terminal.noGoldUser();
+                        break;
+                    }
                     if (client.getCharacter() != null) {
                         checkChallengeFile(client, terminal);
                     } else {
@@ -48,7 +52,7 @@ public class Menu {
                     }
                     break;
                 case 5: // consulta de batallas
-                    consultarCombates(client, terminal);
+                    consultarCombates(client);
                     break;
                 case 6: //consultar desafios pendientes
                     consultarPendingChallenges(client);
@@ -70,7 +74,7 @@ public class Menu {
         } while (option != 8 && option != 9);
     }
 
-    public void consultarCombates(Client currentClient, Terminal terminal) {
+    public void consultarCombates(Client currentClient) {
         System.out.println("=======================================");
         System.out.println("         HISTORIAL DE COMBATES         ");
         System.out.println("=======================================");
@@ -95,11 +99,12 @@ public class Menu {
                 System.out.println("========== COMBATE ==========");
                 String role = currentClient.getNick().equals(c.getChallenger().getNick()) ? "DESAFIANTE" : "RIVAL";
                 String date = c.getDate() != null ? new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(c.getDate()) : "Fecha desconocida";
-                System.out.println("Tu Rol: " + role);
-                System.out.println("Oponente: " + (role.equals("DESAFIANTE") ? c.getRival().getNick() : c.getChallenger().getNick()));
-                System.out.println("Fecha: " + date);
-                System.out.println("Apuesta: " + c.getGoldBet() + " Monedas de Oro");
-                System.out.println("Resultado: " + c.getStatus());
+                System.out.println("Tu Rol " + role);
+                System.out.println("Rival " + (role.equals("DESAFIANTE") ? c.getRival().getNick() : c.getChallenger().getNick()));
+                System.out.println("Fecha " + date);
+                System.out.println("Apuesta " + c.getGoldBet() + " Monedas de Oro");
+                System.out.println("Resultado " + c.getStatus());
+                System.out.print("Ganador " + (c.getWinner() != null ? c.getWinner().getNick() : "EMPATE"));
                 System.out.println("========== FIN COMBATE ==========");
             }
         }

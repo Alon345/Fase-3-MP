@@ -39,6 +39,7 @@ public class NotificationManager {
         }
     }
     private void doCombat(Client client, Terminal terminal, ArrayList<Challenge> challenges, int numDesafio) {
+
         int cambioEquipo;
         do {
             terminal.changeTeam();
@@ -50,6 +51,7 @@ public class NotificationManager {
         }
 
         Combat combate = new Combat();
+        combate.setGoldBet(challenges.get(numDesafio).getGold()); // Oro apostado
         combate = combate.initializeCombat(
                 challenges.get(numDesafio).getChallenger(),
                 client,

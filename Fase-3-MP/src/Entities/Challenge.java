@@ -49,11 +49,13 @@ public class Challenge {
 
         terminal.searchingRivals();
         String myNick = client.getNick();
-        Iterator<Client> iterator = clientsList.iterator();
+        Iterator<Client> iterator = clientsList.iterator(); //Patron Iterator
 
         while (iterator.hasNext()) {
             Client current = iterator.next();
             if (current.getNick().equals(myNick) || current.getCharacter() == null) {
+                iterator.remove();
+            }else if (current.getCharacter().getGold() == 0) {
                 iterator.remove();
             }
         }
@@ -83,6 +85,8 @@ public class Challenge {
                         terminal.lessThanZero();
                     } else if (goldAmount > client.getCharacter().getGold()) {
                         terminal.moreThanMyGold(client.getCharacter().getGold());
+                    } else if (goldAmount > getRival().getCharacter().getGold()) {
+                        terminal.moreThanRivalGold(getRival().getCharacter().getGold());
                     } else {
                         validInput = true;
                     }
@@ -90,7 +94,6 @@ public class Challenge {
                     terminal.invalidInput();
                 }
             } while (!validInput);
-
             setGold(goldAmount);
             client.getCharacter().setGold(client.getCharacter().getGold() - goldAmount);
 
