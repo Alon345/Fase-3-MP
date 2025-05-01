@@ -58,6 +58,13 @@ public class CombatFileReader {
                     }
                 } else if (line.startsWith("ESTADO-COMBATE")) {
                     combat.setStatus(line.split(" ", 2)[1]);
+                }else if (line.startsWith("GANADOR")) {
+                    String winnerName = line.split(" ", 2)[1];
+                    Client winner = new Client();
+                    winner.setNick(winnerName);
+                    combat.setWinner(winner);
+                } else if (line.equals("EMPATE")) {
+                    combat.setWinner(null); // Si es empate, no hay ganador
                 } else if (line.startsWith("========== FIN COMBATE ==========")) {
                     combats.add(combat);
                 }
