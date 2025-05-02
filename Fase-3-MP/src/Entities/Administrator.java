@@ -129,8 +129,8 @@ public class Administrator extends User{
                 case 10 -> changePower(sc, terminal, client);
                 case 11 -> changeWaknesses(sc, terminal, client, HunterFactory);
                 case 12 -> changeStrengths(sc, terminal, client, HunterFactory);
-                case 13 -> changeType(sc, terminal, client, VampireFactory, HunterFactory, WerewolfFactory);
-                case 14 -> {
+                //case 13 -> changeType(sc, terminal, client, VampireFactory, HunterFactory, WerewolfFactory);
+                case 13 -> {
                     terminal.savingChanges();
                     terminal.changesSaved();}
                 default -> terminal.error();
