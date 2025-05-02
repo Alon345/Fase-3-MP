@@ -14,7 +14,6 @@ public class Character {
     private ArrayList<Strength> strengths;
     private int gold;
     private int health;
-    private int hp;
     private int power;
     private String type;
     private ArrayList<MinionsComposit> minionsComposit;
@@ -110,13 +109,6 @@ public class Character {
     }
     public void setType(String type) {
         this.type = type;
-    }
-
-    public int getHp() {
-        return hp;
-    }
-    public void setHp(int hp) {
-        this.hp = hp;
     }
 
     /** Métodos adicionales necesarios para el combate **/

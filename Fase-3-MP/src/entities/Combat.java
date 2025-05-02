@@ -171,8 +171,8 @@ public class Combat {
 
 
     public Combat startCombat(Combat combat) {
-        int hpChallenger = combat.getChallenger().getCharacter().getHp();
-        int hpRival = combat.getRival().getCharacter().getHp();
+        int hpChallenger = combat.getChallenger().getCharacter().getHealth();
+        int hpRival = combat.getRival().getCharacter().getHealth();
 
         hpChallenger = restartInitHp(combat.getChallenger().getCharacter(), hpChallenger);
         hpRival = restartInitHp(combat.getRival().getCharacter(), hpRival);
@@ -189,7 +189,7 @@ public class Combat {
             hpRival = round.getHpRivalEnd();
             rounds.add(round);
             numOfRound++;
-            if(challenger.getCharacter().getType().equals("CAZADOR")) {
+            if(combat.getChallenger().getCharacter().getType().equals("CAZADOR")) {
                 System.out.println("Entra");
             }
 
@@ -202,7 +202,7 @@ public class Combat {
         // Determinar ganador
         if (hpChallenger > 0 && hpRival <= 0) {
             combat.setWinner(combat.getChallenger());
-            combat.setChallengerMinion(rounds.get(rounds.size() - 1).getHpChallengerEnd() < combat.getChallenger().getCharacter().getHp());
+            combat.setChallengerMinion(rounds.get(rounds.size() - 1).getHpChallengerEnd() < combat.getChallenger().getCharacter().getHealth());
         } else if (hpRival > 0 && hpChallenger <= 0) {
             combat.setWinner(combat.getRival());
             combat.setChallengerMinion(false);

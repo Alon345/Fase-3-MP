@@ -12,14 +12,14 @@ public class MinionsComposit {
 
     /**A continuación se definen los Getters y Setters**/
     public String getType() {return type;}
-    public void setType(String tipo) {
+    public void setType(String type) {
         this.type = type;
     }
 
     public String getName() {
         return name;
     }
-    public void setName(String nombre) {
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -46,7 +46,6 @@ public class MinionsComposit {
                     return createHuman();
                 } else {
                     terminal.errorHuman();
-                    createMinion(true);
                 }
             }
             case 2 -> {
@@ -74,7 +73,7 @@ public class MinionsComposit {
         String name = sc.nextLine();
         human.setName(name);
         do {
-            terminal.askForHp();
+            terminal.askForHpMinion();
             hp = sc.nextInt();
         } while (hp < 1 || hp > 3);
         human.setHp(hp);
@@ -83,13 +82,12 @@ public class MinionsComposit {
             loyaltyOption = sc.nextInt();
         } while (loyaltyOption < 1 || loyaltyOption > 3);
         if (loyaltyOption == 1) {
-            loyalty = Human.Loyalty.ALTA;
+            human.setLoyalty(Human.Loyalty.ALTA);
         } else if (loyaltyOption == 2) {
-            loyalty = Human.Loyalty.MEDIA;
+            human.setLoyalty(Human.Loyalty.MEDIA);
         } else {
-            loyalty = Human.Loyalty.BAJA;
+            human.setLoyalty(Human.Loyalty.BAJA);
         }
-        human.setLoyalty(loyalty);
         human.setType("HUMANO");
         return human;
     }
@@ -103,7 +101,7 @@ public class MinionsComposit {
         String name = sc.nextLine();
         ghoul.setName(name);
         do {
-            terminal.askForHp();
+            terminal.askForHpMinion();
             hp = sc.nextInt();
         } while (hp < 1 || hp > 3);
         ghoul.setHp(hp);
@@ -124,7 +122,7 @@ public class MinionsComposit {
         String name = sc.nextLine();
         demon.setName(name);
         do {
-            terminal.askForHp();
+            terminal.askForHpMinion();
             hp = sc.nextInt();
         } while (hp < 1 || hp > 3);
         demon.setHp(hp);

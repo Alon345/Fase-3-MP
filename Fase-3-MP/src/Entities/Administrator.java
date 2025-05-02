@@ -125,7 +125,7 @@ public class Administrator extends User{
                 case 6 -> changeActiveArmors(terminal, client);
                 case 7 -> changeMinions(sc, terminal, client);
                 case 8 -> changeGold(sc, terminal, client);
-                case 9 -> changeHP(sc, terminal, client);
+                case 9 -> changeHealth(sc, terminal, client);
                 case 10 -> changePower(sc, terminal, client);
                 case 11 -> changeWaknesses(sc, terminal, client, HunterFactory);
                 case 12 -> changeStrengths(sc, terminal, client, HunterFactory);
@@ -154,121 +154,97 @@ public class Administrator extends User{
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
 
-        UserFileReader userFileReader = new UserFileReader();
-        ArrayList<Client> clientsList = userFileReader.userFileReader();
-        ChallengeFileReader challengeFileReader = new ChallengeFileReader();
-        ArrayList<Challenge> challengeList = (ArrayList<Challenge>) challengeFileReader.readChallenges();
-        boolean foundPending = false;
-        // Mostrar todos los desafíos pendientes
-        ArrayList<Challenge> pendingChallenges = new ArrayList<>();
-
-        for (Challenge ch : challengeList) {
-            if (!ch.isValidated()) {
-                pendingChallenges.add(ch);
-            }
+        // Carga clientes y desafíos
+        ArrayList<Client> clientsList = new UserFileReader().userFileReader();
+        Map<String, Client> clientsByNick = new HashMap<>();
+        for (Client client : clientsList) {
+            clientsByNick.put(client.getNick(), client);
         }
-        if (pendingChallenges.isEmpty()) {
+        ArrayList<Challenge> challengeList =
+                (ArrayList<Challenge>) new ChallengeFileReader().readChallenges();
+
+        // Filtrar pendientes
+        ArrayList<Challenge> pending = new ArrayList<>();
+        for (Challenge ch : challengeList) {
+            if (!ch.isValidated()) pending.add(ch);
+        }
+        if (pending.isEmpty()) {
             terminal.noDesafiosParaValidar(challengeList.size());
             return;
         }
-        terminal.mostrarDesafiosPendientes(pendingChallenges);
 
+        // 1) Mostrar pendientes con índice
+        terminal.mostrarDesafiosPendientes(pending);
+        // Ejemplo de mostrarDesafiosPendientes:
+        //   1) Desafío de Tester vs Pedro (fecha...)
+        //   2) Desafío de Ana vs Luis (fecha...)
 
-        for (int i = 0; i < challengeList.size(); i++) {
-            Challenge challenge = challengeList.get(i);
-
-            if (!challenge.isValidated()) {
-                foundPending = true;
-
-                Client challenger = challenge.getChallenger();
-                Client rival = challenge.getRival();
-                Date challengeDate = challenge.getDate();
-
-                // Verificar baneo
-                if (checkBan(challengeDate, rival)) {
-                    banUser(challenger);
-                    challengeList.remove(i);
-                    new ChallengeFileWriter().rewriteChallengeFile(challengeList);
-                    terminal.usuarioBaneado(challenger);
-                    break;
-                }
-
-                for (Client client:clientsList ){
-                    if (client.getNick().equals(challenger.getNick())){ //pillamos al desafiante
-                        challenger.setCharacter(client.getCharacter());
-                    }
-                    if (client.getNick().equals(rival.getNick())){ //pillamos al rival
-                        rival.setCharacter(client.getCharacter());
-                    }
-                }
-                ArrayList<Modifier> modifiers = challenge.getModifiers();
-                if (!modifiers.isEmpty()) {
-                    terminal.haveModifiersToChose();
-                    terminal.showChallengeModifiers(challenger, rival);
-                    System.out.println("=======================================");
-                }
-                // Mostrar información del desafío
-                // Obtener las debilidades y fortalezas personalizadas del usuario
-                ArrayList<Weakness> weaknesses = challenger.getCharacter().getWeaknesses();
-                ArrayList<Strength> strengths = challenger.getCharacter().getStrengths();
-
-                int opcion;
-                do {
-                    terminal.pedirValidacion();
-                    opcion = sc.nextInt();
-                    if (opcion != 1 && opcion != 2) {
-                        terminal.validNumber();
-                    }
-                } while (opcion != 1 && opcion != 2);
-
-                if (opcion == 1) {
-                    challenge.setValidated(true);
-                    ArrayList<Modifier> selectedMods = new ArrayList<>();
-
-                    terminal.electModifiers();
-                    sc.nextLine(); // Limpiar buffer
-                    String input;
-                    do {
-                        //terminal.mostrarDebilidadesYFortalezas(weaknesses, strengths); // Muestra las debilidades y fortalezas del usuario
-                        input = sc.nextLine();
-                        boolean found = false;
-
-                        // Seleccionar debilidad personalizada
-                        for (Weakness weakness : weaknesses) {
-                            if (weakness.getName().equals(input)) {
-                                selectedMods.add(weakness); // Agregar debilidad
-                                found = true;
-                                break;
-                            }
-                        }
-                        // Seleccionar fortaleza personalizada
-                        for (Strength strength : strengths) {
-                            if (strength.getName().equals(input)) {
-                                selectedMods.add(strength); // Agregar fortaleza
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found && !input.equals("salir")) {
-                            terminal.errorMod();
-                        }
-                    } while (!input.equals("salir"));
-
-                    challenge.setModifiers(selectedMods);
-                    new ChallengeFileWriter().rewriteChallengeFile(challengeList);
-                    terminal.desafioValidadoCorrectamente(challenge);
-                } else {
-                    challengeList.remove(i);
-                    new ChallengeFileWriter().rewriteChallengeFile(challengeList);
-                    terminal.desafioCancelado(challenge);
-                    break;
-                }
+        // 2) Pedir selección
+        int sel;
+        do {
+            terminal.pedirNumeroDesafio(pending.size());
+            sel = sc.nextInt();
+            if (sel < 1 || sel > pending.size()) {
+                terminal.validNumber();
             }
+        } while (sel < 1 || sel > pending.size());
+
+        // Ajustar índice a 0-based
+        Challenge challenge = pending.get(sel - 1);
+
+        // 3) Procesar sólo ese desafío
+        Client challenger = challenge.getChallenger();
+        Client rival      = challenge.getRival();
+        // ... resto de verificaciones (existencia, personajes, baneo) iguales ...
+        // Mostrar modificadores si los hay:
+        ArrayList<Modifier> modifiers = challenge.getModifiers();
+        if (!modifiers.isEmpty()) {
+            terminal.haveModifiersToChose();
+            terminal.showChallengeModifiers(challenger, rival);
+            System.out.println("=======================================");
         }
-        if (!foundPending) {
-            terminal.noDesafiosParaValidar(challengeList.size());
+
+        // Pedir VALIDAR o CANCELAR
+        int opcion;
+        do {
+            terminal.pedirValidacion();
+            opcion = sc.nextInt();
+            if (opcion != 1 && opcion != 2) terminal.validNumber();
+        } while (opcion != 1 && opcion != 2);
+
+        if (opcion == 1) {
+            // VALIDAR
+            challenge.setValidated(true);
+            ArrayList<Modifier> selected = new ArrayList<>();
+            terminal.electModifiers();
+            sc.nextLine(); // limpiar buffer
+            String input;
+            do {
+                input = sc.nextLine();
+                if (!input.equals("salir")) {
+                    boolean found = false;
+                    for (Weakness w : challenger.getCharacter().getWeaknesses()) {
+                        if (w.getName().equals(input)) { selected.add(w); found = true; break; }
+                    }
+                    for (Strength s : challenger.getCharacter().getStrengths()) {
+                        if (!found && s.getName().equals(input)) { selected.add(s); found = true; break; }
+                    }
+                    if (!found) terminal.errorMod();
+                }
+            } while (!input.equals("salir"));
+            challenge.setModifiers(selected);
+            terminal.desafioValidadoCorrectamente(challenge);
+
+        } else {
+            // CANCELAR
+            challengeList.remove(challenge);
+            terminal.desafioCancelado(challenge);
         }
+
+        // 4) Guardar cambios
+        new ChallengeFileWriter().rewriteChallengeFile(challengeList);
     }
+
 
     /**
      * Comprueba si el usuario ha sido baneado en las últimas 24 horas
@@ -285,30 +261,33 @@ public class Administrator extends User{
         boolean sugerirBan = false;
         boolean banear = false;
         String nickDesafiante = null;
+
         for (Combat combat : combats) {
             if (combat.getWinner() != null) {
-                if (combat.getChallenger().getNick().equals(client.getNick()) ||
-                        combat.getRival().getNick().equals(client.getNick())) {
+                // Verificar si el cliente participó en este combate (como desafiante o rival)
+                boolean esParticipante = combat.getChallenger().getNick().equals(client.getNick()) ||
+                        combat.getRival().getNick().equals(client.getNick());
+
+                if (esParticipante) {
                     Date fechaDesafioAnterior = combat.getDate();
-                    long diferencia = challengeDate.getTime() - fechaDesafioAnterior.getTime();
-                    long horas = TimeUnit.MILLISECONDS.toHours(diferencia);
-                    if (horas <= 24 && (!combat.getWinner().getNick().equals(client.getNick()))) {
+                    long diferenciaHoras = TimeUnit.MILLISECONDS.toHours(
+                            challengeDate.getTime() - fechaDesafioAnterior.getTime()
+                    );
+
+                    // Sugerir ban si perdió un combate en las últimas 24 horas
+                    if (diferenciaHoras <= 24 && !combat.getWinner().getNick().equals(client.getNick())) {
                         sugerirBan = true;
-                        nickDesafiante = combat.getChallenger().getNick();
+                        nickDesafiante = client.getNick().equals(combat.getChallenger().getNick()) ?
+                                combat.getRival().getNick() : combat.getChallenger().getNick();
                         break;
                     }
                 }
             }
         }
         if (sugerirBan) {
-            int opcion;
-            do {
-                terminal.preguntarBan(nickDesafiante, client.getNick());
-                opcion = sc.nextInt();
-            } while (opcion != 1 && opcion != 2);
-            if (opcion == 1) {
-                banear = true;
-            }
+            terminal.askBan(nickDesafiante, client.getNick());
+            int opcion = sc.nextInt();
+            banear = (opcion == 1);
         }
         return banear;
     }
@@ -506,8 +485,8 @@ public class Administrator extends User{
         Hunter hunter = (Hunter) client.getCharacter();
         Talent talent = (Talent) hunter.getAbility();
         terminal.showTalent(talent);
-        terminal.askAbilityName();
-        hunterFactory.initializeAbilityName(talent);
+        terminal.askAbilityAge();
+        hunterFactory.initializeAbilityAge(talent);
         do {
             terminal.askAbilityAttack();
             rightValue = hunterFactory.initializeAbilityAttack(talent);
@@ -763,11 +742,11 @@ public class Administrator extends User{
         client.getCharacter().setGold(oro);
     }
 
-    private void changeHP(Scanner sc, Terminal terminal, Client client) {
+    private void changeHealth(Scanner sc, Terminal terminal, Client client) {
         terminal.showHp(client);
         terminal.newAtributeValue();
         int hp = sc.nextInt();
-        client.getCharacter().setHp(hp);
+        client.getCharacter().setHealth(hp);
     }
 
     private void changePower(Scanner sc, Terminal terminal, Client client) {

@@ -83,7 +83,7 @@ public class UserFileWriter {
                     switch (characterType) {
                        case "VAMPIRO" -> vampireWriter(clientArrayList, clientArrayList.indexOf(client), bw); //escribimos y guardamos los atributos de los vampiros
                        case "LICANTROPO" -> werewolfWriter(clientArrayList, clientArrayList.indexOf(client), bw,clientArrayList.get(0)); //idem.
-                       case "CAZADOR" -> hunterWriter(clientArrayList, clientArrayList.indexOf(client), bw,clientArrayList.get(0)); //idem.
+                       case "CAZADOR" -> hunterWriter(clientArrayList, clientArrayList.indexOf(client), bw); //idem.
 
                     }
                 }
@@ -246,7 +246,7 @@ public class UserFileWriter {
         bw.newLine();
 
         bw.write("HP ");
-        bw.write(String.valueOf(vampiro.getHp()));
+        bw.write(String.valueOf(vampiro.getHealth()));
         bw.newLine();
 
         bw.write("PODER ");
@@ -369,7 +369,7 @@ public class UserFileWriter {
             writeArmor(bw, licantrop.getActiveArmor(), "ARMADURA ACTIVA");
 
             bw.write("ORO "); bw.write(String.valueOf(licantrop.getGold())); bw.newLine();
-            bw.write("HP "); bw.write(String.valueOf(licantrop.getHp())); bw.newLine();
+            bw.write("HP "); bw.write(String.valueOf(licantrop.getHealth())); bw.newLine();
             bw.write("PODER "); bw.write(String.valueOf(licantrop.getPower())); bw.newLine();
 
             bw.write("NUMERO DE DEBILIDADES "); bw.write(String.valueOf(licantrop.getWeaknesses().size())); bw.newLine();
@@ -383,44 +383,194 @@ public class UserFileWriter {
             minionsWriter(clientArrayList, i, licantrop, bw);
     }
 
-    public void hunterWriter(ArrayList<Client> clientArrayList, int i, BufferedWriter bw,Client client) throws IOException {
-        Hunter hunter = (Hunter) clientArrayList.get(i).getCharacter();
+    public void hunterWriter(ArrayList<Client> listaCliente, int i, BufferedWriter bw) throws IOException {
+
+        Hunter hunter = (Hunter) listaCliente.get(i).getCharacter();
         Talent talent = (Talent) hunter.getAbility();
 
-            writeLine(bw, "REGISTRO-USUARIO ", client.getRegister()); //para saber de qué usuario es
-            bw.write("TIPO DE PERSONAJE "); bw.write(hunter.getType()); bw.newLine();
-            bw.write("NOMBRE DE PERSONAJE "); bw.write(hunter.getName()); bw.newLine();
-            bw.write("NOMBRE DE LA HABILIDAD "); bw.write(hunter.getAbility().getName()); bw.newLine();
-            bw.write("VOLUNTAD "); bw.write("3"); bw.newLine();
-            bw.write("ATAQUE DE HABILIDAD "); bw.write(String.valueOf(hunter.getAbility().getAttack())); bw.newLine();
-            bw.write("DEFENSA DE LA HABILIDAD "); bw.write(String.valueOf(hunter.getAbility().getDefense())); bw.newLine();
-            bw.write("EDAD DEL CAZADOR "); bw.write(String.valueOf(talent.getAge())); bw.newLine();
+        // TIPO PERSONAJE
+        bw.write("TIPO-PERSONAJE ");
+        bw.write(listaCliente.get(i).getCharacter().getType());
+        bw.newLine();
+        // NOMBRE PERSONAJE
+        bw.write("NOMBRE-PERSONAJE ");
+        bw.write(listaCliente.get(i).getCharacter().getName());
+        bw.newLine();
+        // VOLUNTAD
+        bw.write("VOLUNTAD ");
+        bw.write(String.valueOf(hunter.getWillpower()));
+        bw.newLine();
+        // NOMBRE DE HABILIDAD
+        bw.write("NOMBRE-HABILIDAD ");
+        bw.write(talent.getName());
+        bw.newLine();
 
-            bw.write("NUMERO DE ARMAS "); bw.write(String.valueOf(hunter.getWeapons().size())); bw.newLine();
-            for (Weapon w : hunter.getWeapons()) writeWeapon(bw, w, "ARMA");
+        // VALOR ATAQUE
+        bw.write("VALOR-ATAQUE ");
+        bw.write(String.valueOf(talent.getAttack()));
+        bw.newLine();
 
-            bw.write("NUMERO DE ARMAS ACTIVAS "); bw.write(String.valueOf(hunter.getActiveWeapons().size())); bw.newLine();
-            for (Weapon w : hunter.getActiveWeapons()) writeWeapon(bw, w, "ARMA ACTIVA");
+        // VALOR DEFENSA
+        bw.write("VALOR-DEFENSA ");
+        bw.write(String.valueOf(talent.getDefense()));
+        bw.newLine();
 
-            bw.write("NUMERO DE ARMADURAS "); bw.write(String.valueOf(hunter.getArmors().size())); bw.newLine();
-            for (Armor a : hunter.getArmors()) writeArmor(bw, a, "ARMADURA");
+        // EDAD
+        bw.write("EDAD ");
+        bw.write(String.valueOf(talent.getAge()));
+        bw.newLine();
 
-            writeArmor(bw, hunter.getActiveArmor(), "ARMADURA ACTIVA");
+        // ARMAS
+        bw.write("NUMERO-ARMAS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getWeapons().size()));
+        bw.newLine();
 
-            bw.write("ORO "); bw.write(String.valueOf(hunter.getGold())); bw.newLine();
-            bw.write("HP "); bw.write(String.valueOf(hunter.getHp())); bw.newLine();
-            bw.write("PODER "); bw.write(String.valueOf(hunter.getPower())); bw.newLine();
+        for (int variableArma = 0; variableArma < (listaCliente.get(i).getCharacter().getWeapons().size()); variableArma++) {
+            Weapon arma = hunter.getWeapons().get(variableArma);
+            bw.write("NOMBRE-ARMA ");
+            bw.write(arma.getName());
+            bw.newLine();
 
-            bw.write("NUMERO DE DEBILIDADES "); bw.write(String.valueOf(hunter.getWeaknesses().size())); bw.newLine();
-            for (Weakness w : hunter.getWeaknesses()) writeWeakness(bw, w);
+            bw.write("ATAQUE-ARMA ");
+            bw.write(String.valueOf(arma.getAttackModifier()));
+            bw.newLine();
 
-            bw.write("NUMERO DE FORTALEZAS "); bw.write(String.valueOf(hunter.getStrengths().size())); bw.newLine();
-            for (Strength s : hunter.getStrengths()) writeStrength(bw, s);
+            bw.write("DEFENSA-ARMA ");
+            bw.write(String.valueOf(arma.getDefenseModifier()));
+            bw.newLine();
 
-            bw.write("NUMERO DE ESBIRROS "); bw.write(String.valueOf(hunter.getMinions().size())); bw.newLine();
+            // si es true es de 1 mano, si es false es de dos manos
+            bw.write("EMPUÑADURA ");
+            if (arma.isSingleHand()) {
+                bw.write("true");
+            } else {
+                bw.write("false");
+            }
+            bw.newLine();
+        }
+        bw.newLine();
 
-            minionsWriter(clientArrayList, i, hunter, bw);
+        // NUMERO DE ARMAS ACTIVAS
+        bw.write("NUMERO-ARMAS-ACTIVAS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getActiveWeapons().size()));
+        bw.newLine();
+        for (int variableArmaActiva = 0; variableArmaActiva < (listaCliente.get(i).getCharacter().getActiveWeapons().size()); variableArmaActiva++) {
+            Weapon armaActiva = hunter.getActiveWeapons().get(variableArmaActiva);
 
+            bw.write("NOMBRE-ARMAS-ACTIVAS ");
+            bw.write(armaActiva.getName());
+            bw.newLine();
+
+            bw.write("ATAQUE-ARMA-ACTIVAS ");
+            bw.write(String.valueOf(armaActiva.getAttackModifier()));
+            bw.newLine();
+
+            bw.write("DEFENSA-ARMA-ACTIVAS ");
+            bw.write(String.valueOf(armaActiva.getDefenseModifier()));
+            bw.newLine();
+
+            // si es true es de 1 mano, si es false es de dos manos
+            bw.write("EMPUÑADURA ");
+            if (armaActiva.isSingleHand()) {
+                bw.write("true");
+            } else {
+                bw.write("false");
+            }
+            bw.newLine();
+        }
+        bw.newLine();
+
+        // ARMADURAS
+        // NUMERO DE ARMADURAS
+        bw.write("NUMERO-ARMADURAS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getArmors().size()));
+        bw.newLine();
+        for (int j = 0; j < (listaCliente.get(i).getCharacter().getArmors().size()); j++) {
+            Armor armadura = (Armor) hunter.getArmors().get(j);
+            bw.write("NOMBRE-ARMADURA ");
+            bw.write(armadura.getName());
+            bw.newLine();
+
+            bw.write("DEFENSA-ARMADURA ");
+            bw.write(String.valueOf(armadura.getDefenseModifier()));
+            bw.newLine();
+
+            bw.write("ATAQUE-ARMADURA ");
+            bw.write(String.valueOf(armadura.getAttackModifier()));
+            bw.newLine();
+        }
+        bw.newLine();
+
+        bw.write("NOMBRE-ARMADURA-ACTIVA ");
+        bw.write(hunter.getActiveArmor().getName());
+        bw.newLine();
+
+        bw.write("DEFENSA-ARMADURA-ACTIVA ");
+        bw.write(String.valueOf(hunter.getActiveArmor().getDefenseModifier()));
+        bw.newLine();
+
+        bw.write("ATAQUE-ARMADURA-ACTIVA ");
+        bw.write(String.valueOf(hunter.getActiveArmor().getAttackModifier()));
+        bw.newLine();
+
+        bw.newLine();
+
+        // ORO
+        bw.write("ORO ");
+        bw.write(String.valueOf(hunter.getGold()));
+        bw.newLine();
+
+        // HP
+        bw.write("HP ");
+        bw.write(String.valueOf(hunter.getHealth()));
+        bw.newLine();
+
+        // PODER
+        bw.write("PODER ");
+        bw.write(String.valueOf(hunter.getPower()));
+        bw.newLine();
+
+        bw.write("NUMERO-FORTALEZAS ");
+        bw.write(String.valueOf(hunter.getStrengths().size()));
+        bw.newLine();
+
+        for (int j = 0; j < (listaCliente.get(i).getCharacter().getStrengths().size()); j++) {
+            Strength fortaleza = listaCliente.get(i).getCharacter().getStrengths().get(j);
+            bw.write("NOMBRE-FORTALEZA ");
+            bw.write(fortaleza.getName());
+            bw.newLine();
+
+            bw.write("VALOR-FORTALEZA ");
+            bw.write(String.valueOf(fortaleza.getValue()));
+            bw.newLine();
+        }
+
+        bw.write("NUMERO-DEBILIDADES ");
+        bw.write(String.valueOf(hunter.getWeaknesses().size()));
+        bw.newLine();
+
+        for (int j = 0; j < (listaCliente.get(i).getCharacter().getWeaknesses().size()); j++) {
+            Weakness debilidad = listaCliente.get(i).getCharacter().getWeaknesses().get(j);
+            bw.write("NOMBRE-DEBILIDAD ");
+            bw.write(debilidad.getName());
+            bw.newLine();
+
+            bw.write("VALOR-DEBILIDAD ");
+            bw.write(String.valueOf(debilidad.getValue()));
+            bw.newLine();
+        }
+
+        // ESBIRROS
+        // NUMERO DE ESBIRROS
+        bw.write("NUMERO-ESBIRROS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getMinions().size()));
+        bw.newLine();
+
+        // ESBIRROS
+        minionsWriter(listaCliente, i, hunter, bw);
+
+        bw.write("========== FIN USUARIO ==========");
+        bw.newLine();
     }
 
     private void minionsWriter(ArrayList<Client> clientArrayList, int i, Character normalPerson, BufferedWriter bw) throws IOException {
@@ -428,11 +578,11 @@ public class UserFileWriter {
 
         for (MinionsComposit minion : minions) {
             String tipo = minion.getType();
-            bw.write("TIPO DE ESBIRRO " + tipo);
+            bw.write("TIPO-DE-ESBIRRO " + tipo);
             bw.newLine();
-            bw.write("NOMBRE DEL ESBIRRO " + minion.getName());
+            bw.write("NOMBRE-DEL-ESBIRRO " + minion.getName());
             bw.newLine();
-            bw.write("VIDA DEL ESBIRRO " + minion.getHp());
+            bw.write("VIDA-DEL-ESBIRRO " + minion.getHp());
             bw.newLine();
 
             switch (tipo) {
@@ -450,7 +600,7 @@ public class UserFileWriter {
                     Demon demon = (Demon) minion;
                     bw.write("DESCRIPCION " + demon.getDescription());
                     bw.newLine();
-                    bw.write("NUMERO DE ESBIRROS EXTRA " + clientArrayList.get(i).getCharacter().getMinions().size());
+                    bw.write("NUMERO-DE-ESBIRROS-EXTRA " + clientArrayList.get(i).getCharacter().getMinions().size());
                     bw.newLine();
                     minionsWriter(clientArrayList, i, normalPerson, bw); // llamada recursiva
                 }

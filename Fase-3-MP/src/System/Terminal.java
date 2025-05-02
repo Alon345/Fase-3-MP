@@ -316,7 +316,7 @@ public class Terminal {
     }
 
     public void showHp(Client client) {
-        System.out.println("Estos son los puntos de vida (HP) actuales "+ client.getCharacter().getHp());
+        System.out.println("Estos son los puntos de vida (HP) actuales "+ client.getCharacter().getHealth());
     }
 
     public void showPower(Client client) {
@@ -469,7 +469,7 @@ public class Terminal {
         System.out.println("===========================================");
     }
     public void alreadyInAChallenge() {
-        System.out.println("!Ya estás participando en un desafío. No puedes iniciar otro.!");
+        System.out.println("!Ya estás participando en un desafío, acábalo!");
     }
 
     public void validNumber() {
@@ -536,8 +536,8 @@ public class Terminal {
         System.out.println("=======================================");
     }
 
-    public void preguntarBan(String desafiante, String contrincante) {
-        System.out.println("El desafiante " + desafiante + " ha incumplido las normas de desafio, desafiando a " + contrincante + ", ¿Desea banearle?");
+    public void askBan(String desafiante, String contrincante) {
+        System.out.println("El desafiante " + desafiante + " ha incumplido las normas de desafio,\ndesafiando a " + contrincante + ", ¿Desea banearle?");
         System.out.println(" 1  Si");
         System.out.println(" 2  No");
     }
@@ -885,6 +885,7 @@ public class Terminal {
         System.out.println("Introduce el nombre del esbirro ");
     }
     public void askForHp() {System.out.println("Introduce la cantidad de vida, \nNOTA: Debe ser un valor entre 0 y 5 (incluídos)");}
+    public void askForHpMinion(){System.out.println("Introduce la cantidad de vida de el minion, \nNOTA: Debe ser un valor entre 0 y 3 (incluídos)");}
     public void askForMinionsNum() {System.out.println("Introduce el numero de esbirros que deseas, \nNOTA: Debe ser un valor entre 0 y 3 (incluídos)");}
     public void askPower(){System.out.println("Introduce su poder, \nNOTA: Debe ser un valor entre 1 y 5 (incluídos)");}
     public void passwordTooShort(){
@@ -930,9 +931,9 @@ public class Terminal {
     public void youDontHaveTeam() {System.out.println("No portas armas ni armaduras en tu travesía... ");}
     /**Mensajes de los GHOULS**/
     public void askForDependency() {
-        System.out.println("=======================================");
-        System.out.println("      ¿Que dependencia deseas? ");
-        System.out.println("=======================================");
+        System.out.println("================================================================");
+        System.out.println("      ¿Que dependencia deseas? (Se trata de un numero)");
+        System.out.println("================================================================");
     }
 
     /**Mensajes de las RONDAS**/
@@ -1014,6 +1015,10 @@ public class Terminal {
         System.out.println(RED + "No puedes avanzar sin una ofrenda..." + RESET);
     }
 
+    public void moreThanRivalGold(int rivalGold) {
+        System.out.println("No puedes apostar más de lo que el rival puede pagar." +
+                           "\nOro del rival " + rivalGold);
+    }
 
     /**Mensajes de los Administradores**/
     public void adminMenu() {
@@ -1111,10 +1116,13 @@ public class Terminal {
         System.out.println("=======================================");
     }
     public void pedirValidacion() {
-        System.out.println("¿Deseas validar el desafío?");
+        System.out.println("¿Deseas validar el/los desafío/s?");
         System.out.println("1 Validar");
         System.out.println("2 Cancelar");
         System.out.print("Opción ");
+    }
+    public void pedirNumeroDesafio(int totalPendientes) {
+        System.out.println("Introduce el número del desafío a validar (1–" + totalPendientes + "):");
     }
 
     public void usuarioBaneado(Client usuario) {
@@ -1209,6 +1217,9 @@ public class Terminal {
     }
 
     public void askHunterName() {System.out.println("Introduce el nombre del cazador ");}
+    public void errorClient() {System.out.println("Desafiante o rival no encontrado en los registros.");}
+    public void errorChar() {System.out.println("El personaje del desafiante o rival no está configurado.");}
+
 
     public void askAbilityAge() {System.out.println("Introduce la edad a la que el cazador adquirio el talento:");}
 

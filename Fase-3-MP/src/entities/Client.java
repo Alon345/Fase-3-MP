@@ -48,7 +48,7 @@ public class Client extends User {
     }
 
     public int getHp() {
-        return character != null ? character.getHp() : 0;
+        return character != null ? character.getHealth() : 0;
     }
 
     public String generateRegisterNumber() {
@@ -307,9 +307,36 @@ public class Client extends User {
     /** A continuación se definen los métodos de creación de Cazador */
 
     public Hunter createHunter() {
-        return new Hunter();
-    }
+        boolean[] aux1 = new boolean[]{true, true};
+        boolean[] aux2 = new boolean[]{true, false};
+        boolean rightValue;
 
+        HunterFactory hunterFactory = new HunterFactory();
+        Terminal terminal = new Terminal();
+        Hunter hunter = new Hunter();
+        Discipline discipline = new Discipline();
+        ArrayList<Weapon> Weapons = new ArrayList<>();
+        ArrayList<Weapon> WeaponsActivas = new ArrayList<>();
+        ArrayList<Armor> Weaponduras = new ArrayList<>();
+        Weakness weakness = new Weakness();
+        Strength strength = new Strength();
+        ArrayList<Weakness> debilities = new ArrayList<>();
+        ArrayList<Strength> fortress = new ArrayList<>();
+        Armor armor = new Armor();
+        ArrayList<MinionsComposit> minionsComposits = new ArrayList<>();
+        Talent talent = new Talent();
+
+        setNameAndAbilityHunter(hunterFactory, terminal, hunter, talent);
+        setAllWeaponsHunter(aux1, aux2, hunterFactory, terminal, hunter, Weapons, WeaponsActivas);
+        setAllArmorsHunter(hunterFactory, terminal, hunter, Weaponduras, armor);
+        setGoldPowerHPHunter(hunterFactory, terminal, hunter);
+        setHunterModifiers(hunterFactory, terminal, hunter, weakness, strength, debilities, fortress);
+        setHunterMinions(hunterFactory, hunter, minionsComposits);
+        hunterFactory.initializeHunterWillpower(hunter);
+        hunter.setType("CAZADOR");
+        hunter.setAbility(talent);
+        return hunter;
+    }
     private void setHunterMinions(HunterFactory hunterFactory, Hunter hunter, ArrayList<MinionsComposit> minions) {
         int numMinions = hunterFactory.askNumber();
         for (int iterator = 1; iterator <= numMinions; iterator++) {
@@ -446,9 +473,6 @@ public class Client extends User {
             terminal.askAbilityDefence();
             rightValue = hunterFactory.initializeAbilityDefense(talent);
         } while (!rightValue);
-        terminal.askAbilityAge();
-        hunterFactory.initializeAbilityAge(talent);
-        hunterFactory.setAbility(hunter, talent);
     }
 
     /** A continuación se definen los métodos de creación de Licántropo */

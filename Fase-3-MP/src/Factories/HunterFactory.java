@@ -264,4 +264,8 @@ public class HunterFactory {
     public void setStrengths(Hunter hunter, ArrayList<Strength> strengths) {
         hunter.setStrengths(strengths);
     }
+
+    public void initializeHunterWillpower(Hunter hunter){
+        hunter.setWillpower(3);
+    }
 }

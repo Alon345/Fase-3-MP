@@ -184,16 +184,18 @@ public class mainSystem {
                 } while (nickExists);
                 client.setNick(nick);
 
-                // Validación contraseña (no vacía y coincidente)
+                // Validación contraseña (no vacía, coincidente y correcta longitud)
                 String password, confirm;
                 do {
                     do {
                         terminal.askPassword();
                         password = sc.nextLine().trim();
                         if (password.isEmpty()) {
-                            terminal.emptyPassword();
+                            terminal.emptyPassword(); // Mensaje específico para contraseña vacía
+                        } else if (password.length() < 8 || password.length() > 12) {
+                            terminal.passwordTooShort(); // Mensaje específico para contraseña corta
                         }
-                    } while (password.isEmpty());
+                    } while (password.length() < 8 || password.length() > 12);
 
                     terminal.confirmPassword();
                     confirm = sc.nextLine().trim();
