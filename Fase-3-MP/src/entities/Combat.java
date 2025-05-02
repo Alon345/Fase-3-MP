@@ -189,6 +189,9 @@ public class Combat {
             hpRival = round.getHpRivalEnd();
             rounds.add(round);
             numOfRound++;
+            if(challenger.getCharacter().getType().equals("CAZADOR")) {
+                System.out.println("Entra");
+            }
 
             // Corte por vida igual o menor a 0
             if (hpChallenger <= 0 || hpRival <= 0) {
