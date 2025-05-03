@@ -622,7 +622,6 @@ public class UserFileReader {
         Don don = new Don();
 
         FileReader fr = null;
-        ArrayList<Client> listaVampire = new ArrayList<>();
         try {
             String linea;
 
@@ -630,12 +629,9 @@ public class UserFileReader {
 
             while (!linea.equals("========== FIN USUARIO ==========")) {
 
-                linea = br.readLine();
-                System.out.println(linea);
+                Werewolf.setType("LICANTROPO");
+
                 String[] spaceBtwText = linea.split(" "  );
-                Werewolf.setType(spaceBtwText[1]);
-                linea = br.readLine();
-                spaceBtwText = linea.split(" "  );
                 Werewolf.setName(spaceBtwText[1]);
                 linea = br.readLine();
                 spaceBtwText = linea.split(" "  );
@@ -643,6 +639,12 @@ public class UserFileReader {
                 linea = br.readLine();
                 spaceBtwText = linea.split(" "  );
                 Werewolf.setRage(Integer.parseInt(spaceBtwText[1]));
+                linea = br.readLine();
+                spaceBtwText = linea.split(" ");
+                don.setAttack(Integer.parseInt(spaceBtwText[1]));
+                linea = br.readLine();
+                spaceBtwText = linea.split(" ");
+                don.setDefense(Integer.parseInt(spaceBtwText[1]));
                 linea = br.readLine();
                 spaceBtwText = linea.split(" "  );
                 ArrayList<Weapon> listaWeapons = new ArrayList<>();
@@ -667,9 +669,9 @@ public class UserFileReader {
                     listaWeapons.add(Weapon);
                 }
                 Werewolf.setWeapons(listaWeapons);
+                br.readLine();
 
                 ArrayList<Weapon> WeaponsActivas = new ArrayList<>();
-                br.readLine();
                 linea = br.readLine();
                 spaceBtwText = linea.split(" "  );
                 tope = Integer.parseInt(spaceBtwText[1]);
@@ -695,8 +697,8 @@ public class UserFileReader {
                     WeaponsActivas.add(Weapon);
                 }
                 Werewolf.setActiveWeapons(WeaponsActivas);
-
                 br.readLine();
+
                 linea = br.readLine();
                 spaceBtwText = linea.split(" "  );
                 ArrayList<Armor> Armors = new ArrayList<>();
@@ -718,8 +720,8 @@ public class UserFileReader {
                     Armors.add(Armor);
                 }
                 Werewolf.setArmors(Armors);
-
                 br.readLine();
+
                 Armor Armor = new Armor();
                 linea = br.readLine();
                 spaceBtwText = linea.split(" "  );
@@ -788,6 +790,7 @@ public class UserFileReader {
                     listaEsbirros.add(esbirro);
                 }
                 Werewolf.setMinions(listaEsbirros);
+                Werewolf.setAbility(don);
                 linea = "========== FIN USUARIO ==========";
             }
         } catch (Exception e) {

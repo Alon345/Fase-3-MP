@@ -82,7 +82,7 @@ public class UserFileWriter {
                     String characterType = client.getCharacter().getType();
                     switch (characterType) {
                        case "VAMPIRO" -> vampireWriter(clientArrayList, clientArrayList.indexOf(client), bw); //escribimos y guardamos los atributos de los vampiros
-                       case "LICANTROPO" -> werewolfWriter(clientArrayList, clientArrayList.indexOf(client), bw,clientArrayList.get(0)); //idem.
+                       case "LICANTROPO" -> werewolfWriter(clientArrayList, clientArrayList.indexOf(client), bw); //idem.
                        case "CAZADOR" -> hunterWriter(clientArrayList, clientArrayList.indexOf(client), bw); //idem.
 
                     }
@@ -290,7 +290,9 @@ public class UserFileWriter {
         bw.newLine();
 
         //ESBIRROS
-        minionsWriter(listaCliente, i, vampiro, bw);
+        for(MinionsComposit minion: vampiro.getMinions()){
+            minionsWriter(listaCliente, i, minion, bw);
+        }
 
         bw.write("========== FIN USUARIO ==========");
         bw.newLine();
@@ -346,41 +348,193 @@ public class UserFileWriter {
         bw.newLine();
     }
 
-    public void werewolfWriter(ArrayList<Client> clientArrayList, int i, BufferedWriter bw,Client client) throws IOException {
-        Werewolf licantrop = (Werewolf) clientArrayList.get(i).getCharacter();
+    public void werewolfWriter(ArrayList<Client> listaCliente, int i, BufferedWriter bw) throws IOException {
 
-            writeLine(bw, "REGISTRO-USUARIO ", client.getRegister()); //para saber de qué usuario es
-            bw.write("------ TIPO DE PERSONAJE ------");
-            bw.write(licantrop.getType());
+        Werewolf werewolf = (Werewolf) listaCliente.get(i).getCharacter();
+        Don don = (Don) werewolf.getAbility();
+
+        // TIPO PERSONAJE
+        bw.write("TIPO-PERSONAJE ");
+        bw.write(listaCliente.get(i).getCharacter().getType());
+        bw.newLine();
+        // NOMBRE PERSONAJE
+        bw.write("NOMBRE-PERSONAJE ");
+        bw.write(listaCliente.get(i).getCharacter().getName());
+        bw.newLine();
+
+        // NOMBRE DE HABILIDAD
+        bw.write("NOMBRE-HABILIDAD ");
+        bw.write(don.getName());
+        bw.newLine();
+
+        // RABIA
+        bw.write("RABIA ");
+        bw.write(String.valueOf(werewolf.getRage()));
+        bw.newLine();
+
+        // ATAQUE DON
+        bw.write("ATAQUE-DON ");
+        bw.write(String.valueOf(don.getAttack()));
+        bw.newLine();
+
+        // DEFENSA DON
+        bw.write("DEFENSA-DON ");
+        bw.write(String.valueOf(don.getDefense()));
+        bw.newLine();
+
+        // ARMAS
+        bw.write("NUMERO-ARMAS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getWeapons().size()));
+        bw.newLine();
+
+        for (int variableArma = 0; variableArma < (listaCliente.get(i).getCharacter().getWeapons().size()); variableArma++) {
+            Weapon arma = werewolf.getWeapons().get(variableArma);
+            bw.write("NOMBRE-ARMA ");
+            bw.write(arma.getName());
             bw.newLine();
-            bw.write("NOMBRE DEL PERSONAJE "); bw.write(licantrop.getName()); bw.newLine();
-            bw.write("NOMBRE DE LA HABILIDAD "); bw.write(licantrop.getAbility().getName()); bw.newLine();
-            bw.write("RABIA "); bw.newLine();
 
-            bw.write("NUMERO DE ARMAS "); bw.write(String.valueOf(licantrop.getWeapons().size())); bw.newLine();
-            for (Weapon w : licantrop.getWeapons()) writeWeapon(bw, w, "ARMA");
+            bw.write("ATAQUE-ARMA ");
+            bw.write(String.valueOf(arma.getAttackModifier()));
+            bw.newLine();
 
-            bw.write("NUMERO DE ARMAS ACTIVAS "); bw.write(String.valueOf(licantrop.getActiveWeapons().size())); bw.newLine();
-            for (Weapon w : licantrop.getActiveWeapons()) writeWeapon(bw, w, "ARMA ACTIVA");
+            bw.write("DEFENSA-ARMA ");
+            bw.write(String.valueOf(arma.getDefenseModifier()));
+            bw.newLine();
 
-            bw.write("NUMERO DE ARMADURAS "); bw.write(String.valueOf(licantrop.getArmors().size())); bw.newLine();
-            for (Armor a : licantrop.getArmors()) writeArmor(bw, a, "ARMADURA");
+            // si es true es de 1 mano, si es false es de dos manos
+            bw.write("EMPUÑADURA ");
+            if (arma.isSingleHand()) {
+                bw.write("true");
+            } else {
+                bw.write("false");
+            }
+            bw.newLine();
+        }
+        bw.newLine();
 
-            writeArmor(bw, licantrop.getActiveArmor(), "ARMADURA ACTIVA");
+        // NUMERO DE ARMAS ACTIVAS
+        bw.write("NUMERO-ARMAS-ACTIVAS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getActiveWeapons().size()));
+        bw.newLine();
+        for (int variableArmaActiva = 0; variableArmaActiva < (listaCliente.get(i).getCharacter().getActiveWeapons().size()); variableArmaActiva++) {
+            Weapon armaActiva = werewolf.getActiveWeapons().get(variableArmaActiva);
 
-            bw.write("ORO "); bw.write(String.valueOf(licantrop.getGold())); bw.newLine();
-            bw.write("HP "); bw.write(String.valueOf(licantrop.getHealth())); bw.newLine();
-            bw.write("PODER "); bw.write(String.valueOf(licantrop.getPower())); bw.newLine();
+            bw.write("NOMBRE-ARMAS-ACTIVAS ");
+            bw.write(armaActiva.getName());
+            bw.newLine();
 
-            bw.write("NUMERO DE DEBILIDADES "); bw.write(String.valueOf(licantrop.getWeaknesses().size())); bw.newLine();
-            for (Weakness w : licantrop.getWeaknesses()) writeWeakness(bw, w);
+            bw.write("ATAQUE-ARMA-ACTIVAS ");
+            bw.write(String.valueOf(armaActiva.getAttackModifier()));
+            bw.newLine();
 
-            bw.write("NUMERO DE FORTALEZAS "); bw.write(String.valueOf(licantrop.getStrengths().size())); bw.newLine();
-            for (Strength s : licantrop.getStrengths()) writeStrength(bw, s);
+            bw.write("DEFENSA-ARMA-ACTIVAS ");
+            bw.write(String.valueOf(armaActiva.getDefenseModifier()));
+            bw.newLine();
 
-            bw.write("NUMERO DE ESBIRROS "); bw.write(String.valueOf(licantrop.getMinions().size())); bw.newLine();
+            // si es true es de 1 mano, si es false es de dos manos
+            bw.write("EMPUÑADURA ");
+            if (armaActiva.isSingleHand()) {
+                bw.write("true");
+            } else {
+                bw.write("false");
+            }
+            bw.newLine();
+        }
+        bw.newLine();
 
-            minionsWriter(clientArrayList, i, licantrop, bw);
+        // ARMADURAS
+        // NUMERO DE ARMADURAS
+        bw.write("NUMERO-ARMADURAS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getArmors().size()));
+        bw.newLine();
+        for (int j = 0; j < (listaCliente.get(i).getCharacter().getArmors().size()); j++) {
+            Armor armadura = (Armor) werewolf.getArmors().get(j);
+            bw.write("NOMBRE-ARMADURA ");
+            bw.write(armadura.getName());
+            bw.newLine();
+
+            bw.write("DEFENSA-ARMADURA ");
+            bw.write(String.valueOf(armadura.getDefenseModifier()));
+            bw.newLine();
+
+            bw.write("ATAQUE-ARMADURA ");
+            bw.write(String.valueOf(armadura.getAttackModifier()));
+            bw.newLine();
+        }
+        bw.newLine();
+
+        bw.write("NOMBRE-ARMADURA-ACTIVA ");
+        bw.write(werewolf.getActiveArmor().getName());
+        bw.newLine();
+
+        bw.write("DEFENSA-ARMADURA-ACTIVA ");
+        bw.write(String.valueOf(werewolf.getActiveArmor().getDefenseModifier()));
+        bw.newLine();
+
+        bw.write("ATAQUE-ARMADURA-ACTIVA ");
+        bw.write(String.valueOf(werewolf.getActiveArmor().getAttackModifier()));
+        bw.newLine();
+
+        bw.newLine();
+
+        // ORO
+        bw.write("ORO ");
+        bw.write(String.valueOf(werewolf.getGold()));
+        bw.newLine();
+
+        // HP
+        bw.write("HP ");
+        bw.write(String.valueOf(werewolf.getHealth()));
+        bw.newLine();
+
+        // PODER
+        bw.write("PODER ");
+        bw.write(String.valueOf(werewolf.getPower()));
+        bw.newLine();
+
+        bw.write("NUMERO-DEBILIDADES ");
+        bw.write(String.valueOf(werewolf.getWeaknesses().size()));
+        bw.newLine();
+
+        for (int j = 0; j < (listaCliente.get(i).getCharacter().getWeaknesses().size()); j++) {
+            Weakness debilidad = listaCliente.get(i).getCharacter().getWeaknesses().get(j);
+            bw.write("NOMBRE-DEBILIDAD ");
+            bw.write(debilidad.getName());
+            bw.newLine();
+
+            bw.write("VALOR-DEBILIDAD ");
+            bw.write(String.valueOf(debilidad.getValue()));
+            bw.newLine();
+        }
+
+        bw.write("NUMERO-FORTALEZAS ");
+        bw.write(String.valueOf(werewolf.getStrengths().size()));
+        bw.newLine();
+
+        for (int j = 0; j < (listaCliente.get(i).getCharacter().getStrengths().size()); j++) {
+            Strength fortaleza = listaCliente.get(i).getCharacter().getStrengths().get(j);
+            bw.write("NOMBRE-FORTALEZA ");
+            bw.write(fortaleza.getName());
+            bw.newLine();
+
+            bw.write("VALOR-FORTALEZA ");
+            bw.write(String.valueOf(fortaleza.getValue()));
+            bw.newLine();
+        }
+
+        // ESBIRROS
+        // NUMERO DE ESBIRROS
+        bw.write("NUMERO-ESBIRROS ");
+        bw.write(String.valueOf(listaCliente.get(i).getCharacter().getMinions().size()));
+        bw.newLine();
+
+        // ESBIRROS
+        for(MinionsComposit minion: werewolf.getMinions()) {
+            minionsWriter(listaCliente, i, minion, bw);
+        }
+
+        bw.write("========== FIN USUARIO ==========");
+        bw.newLine();
     }
 
     public void hunterWriter(ArrayList<Client> listaCliente, int i, BufferedWriter bw) throws IOException {
@@ -567,42 +721,43 @@ public class UserFileWriter {
         bw.newLine();
 
         // ESBIRROS
-        minionsWriter(listaCliente, i, hunter, bw);
+        for(MinionsComposit minion: hunter.getMinions()){
+            minionsWriter(listaCliente, i, minion, bw);
+        }
 
         bw.write("========== FIN USUARIO ==========");
         bw.newLine();
     }
 
-    private void minionsWriter(ArrayList<Client> clientArrayList, int i, Character normalPerson, BufferedWriter bw) throws IOException {
-        List<MinionsComposit> minions = normalPerson.getMinions();
+    private void minionsWriter(ArrayList<Client> clientArrayList, int i, MinionsComposit minion, BufferedWriter bw) throws IOException {
 
-        for (MinionsComposit minion : minions) {
-            String tipo = minion.getType();
-            bw.write("TIPO-DE-ESBIRRO " + tipo);
-            bw.newLine();
-            bw.write("NOMBRE-DEL-ESBIRRO " + minion.getName());
-            bw.newLine();
-            bw.write("VIDA-DEL-ESBIRRO " + minion.getHp());
-            bw.newLine();
+        String tipo = minion.getType();
+        bw.write("TIPO-DE-ESBIRRO " + tipo);
+        bw.newLine();
+        bw.write("NOMBRE-DEL-ESBIRRO " + minion.getName());
+        bw.newLine();
+        bw.write("VIDA-DEL-ESBIRRO " + minion.getHp());
+        bw.newLine();
 
-            switch (tipo) {
-                case "HUMANO" -> {
-                    Human human = (Human) minion;
-                    bw.write("LEALTAD " + human.getLoyalty());
-                    bw.newLine();
-                }
-                case "GHOUL" -> {
-                    Ghoul ghoul = (Ghoul) minion;
-                    bw.write("DEPENDENCIA " + ghoul.getDependency());
-                    bw.newLine();
-                }
-                case "DEMONIO" -> {
-                    Demon demon = (Demon) minion;
-                    bw.write("DESCRIPCION " + demon.getDescription());
-                    bw.newLine();
-                    bw.write("NUMERO-DE-ESBIRROS-EXTRA " + clientArrayList.get(i).getCharacter().getMinions().size());
-                    bw.newLine();
-                    minionsWriter(clientArrayList, i, normalPerson, bw); // llamada recursiva
+        switch (tipo) {
+            case "HUMANO" -> {
+                Human human = (Human) minion;
+                bw.write("LEALTAD " + human.getLoyalty());
+                bw.newLine();
+            }
+            case "GHOUL" -> {
+                Ghoul ghoul = (Ghoul) minion;
+                bw.write("DEPENDENCIA " + ghoul.getDependency());
+                bw.newLine();
+            }
+            case "DEMONIO" -> {
+                Demon demon = (Demon) minion;
+                bw.write("DESCRIPCION " + demon.getDescription());
+                bw.newLine();
+                bw.write("NUMERO-DE-ESBIRROS-EXTRA " + ((Demon) minion).getMinionsComposits().size());
+                bw.newLine();
+                for (MinionsComposit minionList: demon.getMinionsComposits()) {
+                    minionsWriter(clientArrayList, i, minionList, bw); // llamada recursiva
                 }
             }
         }

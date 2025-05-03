@@ -110,7 +110,6 @@ public class Round {
         for (int numWeapon = 0; numWeapon < client.getCharacter().getActiveWeapons().size(); numWeapon++) {
             armourAttack += client.getCharacter().getActiveWeapons().get(numWeapon).getAttackModifier();
         }
-        armourAttack += client.getCharacter().getActiveWeapons().getFirst().getAttackModifier();
         return armourAttack;
     }
 

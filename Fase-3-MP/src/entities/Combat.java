@@ -23,6 +23,8 @@ public class Combat {
     private boolean seen;
     private String status;
     private int goldBet;
+    private int hpChallenger;
+    private int hpRival;
 
 
     /**A continuación se definen los Setters y Getters**/
@@ -171,8 +173,6 @@ public class Combat {
 
 
     public Combat startCombat(Combat combat) {
-        int hpChallenger = combat.getChallenger().getCharacter().getHealth();
-        int hpRival = combat.getRival().getCharacter().getHealth();
 
         hpChallenger = restartInitHp(combat.getChallenger().getCharacter(), hpChallenger);
         hpRival = restartInitHp(combat.getRival().getCharacter(), hpRival);
@@ -215,25 +215,21 @@ public class Combat {
 
 
 
-    private int addMinionsHp(Demon demon, int hp) {
-        for (int numEsbirro = 0; numEsbirro < demon.getMinionsComposits().size(); numEsbirro++) {
-            if (demon.getMinionsComposits().get(numEsbirro).getType().equals("DEMONIO")) {
-                hp += demon.getMinionsComposits().get(numEsbirro).getHp();
-                hp += addMinionsHp((Demon) demon.getMinionsComposits().get(numEsbirro), hp);
-            } else {
-                hp += demon.getMinionsComposits().get(numEsbirro).getHp();
+    private int addMinionsHp(MinionsComposit minion, int hp) {
+            hp += minion.getHp();
+            if (minion.getType().equals("DEMONIO")) {
+                Demon demon = (Demon) minion;
+                for (MinionsComposit subMinion: demon.getMinionsComposits()){
+
+                    hp = addMinionsHp(subMinion, hp);
             }
         }
         return hp;
     }
     private int restartInitHp(Character character, int hp) {
+        hp += character.getHealth();
         for (int numEsbirro = 0; numEsbirro < character.getMinions().size(); numEsbirro++) {
-            if (character.getMinions().get(numEsbirro).getType().equals("DEMONIO")) {
-                hp += character.getMinions().get(numEsbirro).getHp();
-                hp += addMinionsHp((Demon) character.getMinions().get(numEsbirro), hp);
-            } else {
-                hp += character.getMinions().get(numEsbirro).getHp();
-            }
+            hp = addMinionsHp(character.getMinions().get(numEsbirro), hp);
         }
         return hp;
     }

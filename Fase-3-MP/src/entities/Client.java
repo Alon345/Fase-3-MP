@@ -309,12 +309,10 @@ public class Client extends User {
     public Hunter createHunter() {
         boolean[] aux1 = new boolean[]{true, true};
         boolean[] aux2 = new boolean[]{true, false};
-        boolean rightValue;
 
         HunterFactory hunterFactory = new HunterFactory();
         Terminal terminal = new Terminal();
         Hunter hunter = new Hunter();
-        Discipline discipline = new Discipline();
         ArrayList<Weapon> Weapons = new ArrayList<>();
         ArrayList<Weapon> WeaponsActivas = new ArrayList<>();
         ArrayList<Armor> Weaponduras = new ArrayList<>();
@@ -475,10 +473,37 @@ public class Client extends User {
         } while (!rightValue);
     }
 
-    /** A continuación se definen los métodos de creación de Licántropo */
+    /**
+     * A continuación se definen los métodos de creación de Licántropo
+     */
 
     public Werewolf createWerewolf() {
-        return new Werewolf();
+        boolean[] aux1 = new boolean[]{true, true};
+        boolean[] aux2 = new boolean[]{true, false};
+
+        WerewolfFactory werewolfFactory = new WerewolfFactory();
+        Terminal terminal = new Terminal();
+        Werewolf werewolf = new Werewolf();
+        Don don = new Don();
+        ArrayList<Weapon> Weapons = new ArrayList<>();
+        ArrayList<Weapon> WeaponsActivas = new ArrayList<>();
+        ArrayList<Armor> Weaponduras = new ArrayList<>();
+        Weakness weakness = new Weakness();
+        Strength strength = new Strength();
+        ArrayList<Weakness> debilities = new ArrayList<>();
+        ArrayList<Strength> fortress = new ArrayList<>();
+        Armor armor = new Armor();
+        ArrayList<MinionsComposit> minionsComposits = new ArrayList<>();
+
+        setNameAndAbilityWerewolf(werewolfFactory, terminal, werewolf, don);
+        setAllWeaponsWerewolf(aux1, aux2, werewolfFactory, terminal, werewolf, Weapons, WeaponsActivas);
+        setAllArmorsWerewolf(werewolfFactory, terminal, werewolf, armor, Weaponduras);
+        setGoldPowerHPWerewolf(werewolfFactory, terminal, werewolf);
+        setWerewolfModifiers(werewolfFactory, terminal, werewolf, weakness, strength, debilities, fortress);
+        setWerewolfMinions(werewolfFactory, werewolf, minionsComposits);
+        werewolf.setType("LICANTROPO");
+        werewolf.setAbility(don);
+        return werewolf;
     }
 
     private void setWerewolfMinions(WerewolfFactory werewolfFactory, Werewolf werewolf, ArrayList<MinionsComposit> minions) {
@@ -493,7 +518,7 @@ public class Client extends User {
         werewolf.setMinions(minions);
     }
 
-    private void setWerewolfModifiers(WerewolfFactory werewolfFactory, Terminal terminal, Werewolf werewolf, Weakness weakness, Strength strength, ArrayList<Weakness> weaknesses, ArrayList<Strength> strengths, ArrayList<MinionsComposit> minions) {
+    private void setWerewolfModifiers(WerewolfFactory werewolfFactory, Terminal terminal, Werewolf werewolf, Weakness weakness, Strength strength, ArrayList<Weakness> weaknesses, ArrayList<Strength> strengths) {
         terminal.askNumWeakness();
         int numDebilidades = werewolfFactory.askNumber();
         for (int iterator = 1; iterator <= numDebilidades; iterator++) {
@@ -504,7 +529,7 @@ public class Client extends User {
             werewolfFactory.addWeakness(weaknesses, weakness);
         }
         werewolfFactory.setWeaknesses(werewolf, weaknesses);
-        terminal.askStrengthName();
+        terminal.askNumStrengths();
         int numFortalezas = werewolfFactory.askNumber();
         for (int iterator = 1; iterator <= numFortalezas; iterator++) {
             terminal.askStrengthName();
@@ -538,7 +563,7 @@ public class Client extends User {
         int numWeaponduras = werewolfFactory.askNumber();
         for (int iterator = 1; iterator <= numWeaponduras; iterator++) {
             armor = new Armor();
-            terminal.askNumArmors();
+            terminal.askNameArmors();
             werewolfFactory.initializeArmorName(armor);
             do {
                 terminal.askForDefenceArmor();
@@ -560,6 +585,7 @@ public class Client extends User {
     private void setAllWeaponsWerewolf(boolean[] aux1, boolean[] aux2, WerewolfFactory werewolfFactory, Terminal terminal, Werewolf werewolf, ArrayList<Weapon> weapons, ArrayList<Weapon> activeWeapons) {
         boolean[] rightWeapon;
         boolean rightValue;
+        terminal.askNumWeapons();
         int numWeapons = werewolfFactory.askNumber();
         for (int iterator = 1; iterator <= numWeapons; iterator++) {
             Weapon weapon = new Weapon();
@@ -603,12 +629,13 @@ public class Client extends User {
         terminal.askAbilityName();
         werewolfFactory.initializeAbilityName(don);
         werewolf.setRage(0);
+        don.setAttack(0);
+        don.setDefense(0);
         do {
             terminal.askAbilityRage();
             rightValue = werewolfFactory.initializeRageAbility(don);
         } while (!rightValue);
         werewolfFactory.setAbility(werewolf, don);
-        terminal.askNumArmors();
     }
 
 
