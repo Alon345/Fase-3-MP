@@ -46,6 +46,8 @@ public class MinionsComposit {
                     return createHuman();
                 } else {
                     terminal.errorHuman();
+                    terminal.askForMinionsNum();
+                    return createMinion(isVampiro);
                 }
             }
             case 2 -> {
