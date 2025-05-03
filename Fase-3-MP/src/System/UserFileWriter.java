@@ -6,9 +6,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
-import Entities.Character;
 
 public class UserFileWriter {
 
@@ -45,7 +43,7 @@ public class UserFileWriter {
 
             bw.close();
         } catch (Exception e) {
-            mainSystem system = new mainSystem();
+            MainSystem system = new MainSystem();
             system.selector();
             e.printStackTrace();
         }
@@ -90,18 +88,12 @@ public class UserFileWriter {
             }
             bw.close();
         } catch (Exception exception) {
-            mainSystem system = new mainSystem();
+            MainSystem system = new MainSystem();
             system.selector();
             exception.printStackTrace();
         }
     }
 
-    //ESCRITURA DE PERSONAJES
-    private void writeLine(BufferedWriter bw, String label, String value) throws IOException {
-        bw.write(label);
-        bw.write(value);
-        bw.newLine();
-    }
     public void vampireWriter(ArrayList<Client> listaCliente, int i, BufferedWriter bw) throws IOException {
 
         Vampire vampiro = (Vampire) listaCliente.get(i).getCharacter();
@@ -283,68 +275,15 @@ public class UserFileWriter {
             bw.newLine();
         }
 
-        //ESBIRROS
-        //NUMERO DE ESBIRROS
         bw.write("NUMERO-ESBIRROS ");
         bw.write(String.valueOf(listaCliente.get(i).getCharacter().getMinions().size()));
         bw.newLine();
 
-        //ESBIRROS
         for(MinionsComposit minion: vampiro.getMinions()){
             minionsWriter(listaCliente, i, minion, bw);
         }
 
         bw.write("========== FIN USUARIO ==========");
-        bw.newLine();
-    }
-
-    private void writeWeapon(BufferedWriter bw, Weapon weapon, String tipo) throws IOException {
-        bw.write("NOMBRE-DEL-" + tipo + " ");
-        bw.write(weapon.getName());
-        bw.newLine();
-
-        bw.write("ATAQUE-DEL-" + tipo + " ");
-        bw.write(String.valueOf(weapon.getAttackModifier()));
-        bw.newLine();
-
-        bw.write("DEFENSA-DEL-" + tipo + " ");
-        bw.write(String.valueOf(weapon.getDefenseModifier()));
-        bw.newLine();
-
-        bw.write("EMPUÑADURA ");
-        bw.write(weapon.isSingleHand() ? "true": "false");
-        bw.newLine();
-    }
-
-    private void writeArmor(BufferedWriter bw, Armor armor, String tipo) throws IOException {
-        bw.write("NOMBRE-DE-LA-" + tipo + " ");
-        bw.write(armor.getName());
-        bw.newLine();
-
-        bw.write("DEFENSA-DE-LA-" + tipo + " ");
-        bw.write(String.valueOf(armor.getDefenseModifier()));
-        bw.newLine();
-
-        bw.write("ATAQUE-DE-LA-" + tipo + " ");
-        bw.write(String.valueOf(armor.getAttackModifier()));
-        bw.newLine();
-    }
-
-    private void writeWeakness(BufferedWriter bw, Weakness w) throws IOException {
-        bw.write("NOMBRE-DE-LA-DEBILIDAD ");
-        bw.write(w.getName());
-        bw.newLine();
-        bw.write("VALOR-DE-LA-DEBILIDAD ");
-        bw.write(String.valueOf(w.getValue()));
-        bw.newLine();
-    }
-
-    private void writeStrength(BufferedWriter bw, Strength s) throws IOException {
-        bw.write("NOMBRE-DE-LA-FORTALEZA ");
-        bw.write(s.getName());
-        bw.newLine();
-        bw.write("VALOR-DE-LA-FORTALEZA ");
-        bw.write(String.valueOf(s.getValue()));
         bw.newLine();
     }
 
@@ -762,4 +701,4 @@ public class UserFileWriter {
             }
         }
     }
-} //FIN
+}

@@ -10,8 +10,7 @@ import Entities.Strength;
 import Entities.Talent;
 
 public class HunterFactory {
-    public HunterFactory() {
-    }
+    public HunterFactory() {}
 
     public void initializeName(Hunter hunter) {
         Scanner sc = new Scanner(System.in);

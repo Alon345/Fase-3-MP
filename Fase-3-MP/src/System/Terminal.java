@@ -5,19 +5,10 @@ import Entities.Character;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 public class Terminal {
-
-    private static final String RESET = "\u001B[0m";
-    private static final String RED = "\u001B[31m";
-    private static final String GREEN = "\u001B[32m";
-    private static final String YELLOW = "\u001B[33m";
-    private static final String BLUE = "\u001B[34m";
-    private static final String CYAN = "\u001B[36m";
-
 
     /**Mensajes iniciales**/
     public void wellcome() {
@@ -25,15 +16,15 @@ public class Terminal {
         String reset = "\033[0m"; // Reset de color
 
         System.out.println("=======================================");
-        System.out.println("      Bienvenido a " + red + "Shadow Clash" + reset + "!");
+        System.out.println("|     Bienvenido a " + red + "Shadow Clash" + reset + "!      |");
     }
     public void showStart() {
             System.out.println("=======================================");
-            System.out.println("  Por favor, selecciona una opción");
-            System.out.println("  1 Registrarse");
-            System.out.println("  2 Iniciar sesión como Jugador");
-            System.out.println("  3 Iniciar sesión como Administrador");
-            System.out.println("  4 Salir del Sistema");
+            System.out.println(" Por favor, selecciona una opción    ");
+            System.out.println("  1 Registrarse                       ");
+            System.out.println("  2 Iniciar sesión como Jugador       ");
+            System.out.println("  3 Iniciar sesión como Administrador ");
+            System.out.println("  4 Salir del Sistema                 ");
             System.out.println("=======================================");
         }
 
@@ -84,39 +75,6 @@ public class Terminal {
         }
     }
 
-
-    public void WIP() {
-        System.out.println("En desarrollo...");
-    }
-
-    public void startCombatMessage(Character challenger, Character rival) {
-        System.out.println("===========================================");
-        System.out.println(CYAN + "¡El combate comienza entre " + challenger.getName() + " y " + rival.getName() + "!" + RESET);
-    }
-    public void mostrarCombate(Combat combate) {
-        System.out.println("Combate: " + combate.getRegister());
-        System.out.println("Desafiante: " + combate.getChallenger().getNick());
-        System.out.println("Contrincante: " + combate.getRival().getNick());
-        System.out.println("Fecha: " + combate.getDate());
-        if (combate.isChallengerMinion()) {
-            System.out.println("Esbirros de " + combate.getChallenger().getNick() + " : vivos");
-        } else {
-            System.out.println("Esbirros de " + combate.getChallenger().getNick() + " : muertos");
-        }
-        if (combate.isRivalMinion()) {
-            System.out.println("Esbirros de " + combate.getRival().getNick() + " : vivos");
-        } else {
-            System.out.println("Esbirros de " + combate.getRival().getNick() + " : muertos");
-        }
-        System.out.println("Oro apostado: " + combate.getGold());
-        System.out.println("Modificadores:");
-        for (int numModificador = 0; numModificador < combate.getModifiers().size(); numModificador++) {
-            System.out.println(combate.getModifiers().get(numModificador).getName());
-        }
-        System.out.println("RONDAS:");
-        mostrarRondas(combate);
-    }
-
     public void mostrarRondas(Combat combate) {
         for (int numRonda = 0; numRonda < combate.getRounds().size(); numRonda++) {
             System.out.println("Ronda " + (numRonda+1) + " :");
@@ -131,28 +89,41 @@ public class Terminal {
         }
     }
 
-    public void combatWinner(String winnerNick, int winnerPower, int loserPower) {
-        System.out.println(GREEN + "¡" + winnerNick + " ha ganado el combate!" + RESET);
-        System.out.println(YELLOW + "Poder del ganador: " + winnerPower + " | Poder del perdedor: " + loserPower + RESET);
-    }
+    public void combatsInformation(Client currentClient) {
+        System.out.println("=======================================");
+        System.out.println("         HISTORIAL DE COMBATES         ");
+        System.out.println("=======================================");
 
-    public void combatDraw(int challengerPower, int rivalPower) {
-        System.out.println("===========================================");
-        System.out.println(RED + "¡El combate terminó en empate!" + RESET);
-        System.out.println(YELLOW + "Poder de ambos jugadores: " + challengerPower + RESET);
+        CombatFileReader combatReader = new CombatFileReader();
+        List<Combat> allCombats = combatReader.readCombats();
 
-    }
+        List<Combat> myCombats = new ArrayList<>();
+        for (Combat c : allCombats) {
+            if (c.getChallenger() != null && c.getRival() != null) {
+                String nick = currentClient.getNick();
+                if (nick.equals(c.getChallenger().getNick()) || nick.equals(c.getRival().getNick())) {
+                    myCombats.add(c);
+                }
+            }
+        }
 
-    public void combatDetails(String challengerNick, int challengerAttack, int challengerDefense,
-                              String rivalNick, int rivalAttack, int rivalDefense) {
-        System.out.println("===========================================");
-        System.out.println(BLUE + "Detalles del combate:" + RESET);
-        System.out.println(GREEN + challengerNick + " (Ataque: " + challengerAttack + ", Defensa: " + challengerDefense + ")" + RESET);
-        System.out.println(RED + rivalNick + " (Ataque: " + rivalAttack + ", Defensa: " + rivalDefense + ")" + RESET);
-    }
-
-    public void combatEnd() {
-        System.out.println(CYAN + "El combate ha finalizado." + RESET);
+        if (myCombats.isEmpty()) {
+            System.out.println("No tienes combates registrados.");
+        } else {
+            for (Combat c : myCombats) {
+                System.out.println("========== COMBATE ==========");
+                String role = currentClient.getNick().equals(c.getChallenger().getNick()) ? "DESAFIANTE" : "RIVAL";
+                String date = c.getDate() != null ? new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(c.getDate()) : "Fecha desconocida";
+                System.out.println("Tu Rol " + role);
+                System.out.println("Rival " + (role.equals("DESAFIANTE") ? c.getRival().getNick() : c.getChallenger().getNick()));
+                System.out.println("Fecha " + date);
+                System.out.println("Apuesta " + c.getGoldBet() + " Monedas de Oro");
+                System.out.println("Resultado " + c.getStatus());
+                System.out.println("Ganador " + (c.getWinner() != null ? c.getWinner().getNick() : "EMPATE"));
+                System.out.println("========== FIN COMBATE ==========");
+            }
+        }
+        System.out.println("=======================================");
     }
 
     /**Mensajes de los usuarios**/
@@ -204,13 +175,11 @@ public class Terminal {
         System.out.println("=======================================");
     }
 
-    /**Mensajes Mini**/
-
     public void error() {
         System.out.println("!Error!. Algo inesperado ocurrió");
     }
     public void askNameUser() {
-        System.out.println("Introduce tu nombre y apellidos");
+        System.out.println("Introduce tu nombre");
     }
     public void askNick() {
         System.out.println("Introduce tu nick de usuario");
@@ -218,7 +187,7 @@ public class Terminal {
     public void nickExists() {System.out.println("El nick introducido ya existe");}
 
     public void askWeaknessValue() {System.out.println("Introduce el valor de la debilidad. De 1 a 5 (incluídos)");}
-    public void askNumWeakness() {System.out.println("Introduce el numero de debilidades a añadir. (>=0) ");}
+    public void askNumWeakness() {System.out.println("Introduce el numero de debilidades a añadir. De 1 a 5 (incluídos) ");}
     public void askWeaknessName() {System.out.println("Introduce el nombre de la debilidad ");}
 
     public void askStrengthValue() {System.out.println("Introduce el valor de la fortaleza. De 1 a 5 (incluídos)");}
@@ -302,7 +271,11 @@ public class Terminal {
         System.out.println(colorCodeRed + "IMPORTANTE:" + resetCode + " La siguiente acción puede ser \nirreversible, asegúrate de que deseas hacerlo.");
         System.out.println("=========================================");
     }
-    public void writeConfirm(){System.out.println("Escriba 'ELIMINAR' para confirmar esta acción, \nsi deseas cancelar pulsa cualquier tecla.");}
+    public void writeConfirm(){
+        String colorCodeRed = "\033[0;31m"; // Rojo
+        String resetCode = "\033[0m";       // Reset de color
+        System.out.println("Escriba '"+colorCodeRed +"ELIMINAR"+resetCode +"' para confirmar esta acción, \nsi deseas cancelar pulsa cualquier tecla.")
+    ;}
 
     public void exit() {
         System.out.println("Guardando cambios... Saliendo...");
@@ -556,52 +529,6 @@ public class Terminal {
             System.out.println(iterator + 1 + ": " + minionsComposits.get(iterator).getName());
         }
     }
-    public void showCombats(List<Combat> combates, Client current) {
-        if (combates == null || combates.isEmpty()) {
-            System.out.println("No tienes combates registrados.");
-            return;
-        }
-
-        System.out.println("=======================================");
-        System.out.println("        HISTORIAL DE COMBATES");
-        System.out.println("=======================================");
-
-        for (Combat c : combates) {
-            // Determinar el rol del usuario actual
-            String youAre = current.getNick().equals(c.getChallenger().getNick()) ? "DESAFIANTE" : "CONTRINCANTE";
-            Client opponent = youAre.equals("DESAFIANTE") ? c.getRival() : c.getChallenger();
-
-            // Formatear la fecha del combate
-            String formattedDate;
-            if (c.getDate() != null) {
-                try {
-                    formattedDate = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(c.getDate());
-                } catch (Exception e) {
-                    formattedDate = "Fecha inválida";
-                }
-            } else {
-                formattedDate = "Fecha desconocida";
-            }
-
-            // Mostrar los detalles del combate
-            System.out.println("Tu Rol: " + youAre);
-            System.out.println("Oponente: " + (opponent != null ? opponent.getNick() : "Desconocido"));
-            System.out.println("Fecha: " + formattedDate);
-            System.out.println("Apuesta: " + c.getGold() + " Monedas de Oro");
-
-            // Determinar el resultado del combate
-            System.out.print("Resultado: ");
-            if (c.getWinner() == null) {
-                System.out.println("EMPATE");
-            } else if (c.getWinner().getNick().equals(current.getNick())) {
-                System.out.println("VICTORIA");
-            } else {
-                System.out.println("DERROTA");
-            }
-
-            System.out.println("=======================================");
-        }
-    }
 
     public void modifyMinions() {
         System.out.println("=======================================");
@@ -670,6 +597,21 @@ public class Terminal {
         try {
             for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
                 System.out.print("\rEliminando usuario... " + spinner[i % 4]); // Sobreescribir la línea
+                Thread.sleep(150); // Pausa de 150ms entre cada rotación
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(); // Imprimir una nueva línea después del "spinner"
+    }
+    public void deletingAdmin() {
+        final String RESET = "\033[0m";
+        String[] spinner = {"|", "/", "-", "\\"}; // Los 4 estados del "spinner"
+
+        System.out.print("Eliminando administrador... ");
+        try {
+            for (int i = 0; i < 10; i++) { // Número de iteraciones reducido
+                System.out.print("\rEliminando administrador... " + spinner[i % 4]); // Sobreescribir la línea
                 Thread.sleep(150); // Pausa de 150ms entre cada rotación
             }
         } catch (InterruptedException e) {
@@ -962,7 +904,7 @@ public class Terminal {
         final String ANSI_GREEN = "\u001B[32m";
         final String ANSI_YELLOW = "\u001B[33m";
         if (combat.getWinner() != null) {
-            System.out.println(ANSI_GREEN + "Victoria absoluta " + combat.getWinner().getNick() + " ha dominado la batalla." + ANSI_RESET);
+            System.out.println(ANSI_GREEN + "Victoria absoluta, " + combat.getWinner().getNick() + " ha dominado la batalla." + ANSI_RESET);
         } else {
             System.out.println(ANSI_YELLOW + "¡Empate! El honor de ambos prevalece." + ANSI_RESET);
         }
@@ -1092,13 +1034,13 @@ public class Terminal {
     public void errorMod() {
         System.out.println(" El modificador introducido es erroneo,\n por favor indique los modificadores mostrados anteriormente");
     }
-    public void noDesafiosParaValidar(int total) {
+    public void noDesafiosParaValidar() {
         System.out.println("No hay desafíos pendientes de validar.");
-        System.out.println("Número total de desafíos validados " + total);
     }
 
     public void mostrarDesafiosPendientes(List<Challenge> desafios) {
         System.out.println("========== DESAFÍOS PENDIENTES ==========");
+        System.out.println("Número total de desafíos pendientes " + desafios.size());
         for (Challenge ch : desafios) {
             System.out.println("--------------- INFO -----------------");
             System.out.println("ID " + ch.getRegister());
@@ -1115,23 +1057,35 @@ public class Terminal {
         System.out.println("=======================================");
     }
     public void pedirValidacion() {
-        System.out.println("¿Deseas validar el/los desafío/s?");
-        System.out.println("1 Validar");
-        System.out.println("2 Cancelar");
+        System.out.println("¿Deseas validar el desafío?");
+        System.out.println("1 Validar Desafío");
+        System.out.println("2 Rechazar Desafío");
         System.out.print("Opción ");
     }
     public void pedirNumeroDesafio(int totalPendientes) {
         System.out.println("Introduce el número del desafío a validar (1–" + totalPendientes + "):");
     }
 
-    public void usuarioBaneado(Client usuario) {
-        System.out.println("El usuario " + usuario.getNick() + " ha sido baneado por no validar el desafío en 24h.");
-    }
-
     public void desafioValidadoCorrectamente(Challenge desafio) {
-        System.out.println("Desafío con ID " + desafio.getRegister() + " validado correctamente.");
+        System.out.println("Desafío con ID" + desafio.getRegister() + " validado correctamente.");
     }
 
+    public void mostrarAdvertenciaBaneo(String nick) {
+        final String ANSI_RED_BOLD = "\u001B[1;31m";
+        final String ANSI_RESET = "\u001B[0m";
+
+        System.out.println("========================================");
+        System.out.println(ANSI_RED_BOLD +"¡ADVERTENCIA! " + ANSI_RESET+ "El usuario " + nick +
+                "\nha perdido un desafío en las últimas 24h.");
+        System.out.println("========================================");
+        System.out.println("¿Desea banearlo?");
+        System.out.println(" 1 Sí");
+        System.out.println(" 2 No");
+        System.out.println("========================================" );
+    }
+    public void userAlreadyBanned(){
+        System.out.println("El usuario ya está baneado.");
+    }
     public void desafioCancelado(Challenge desafio) {
         System.out.println("Desafío con ID " + desafio.getRegister() + " ha sido cancelado.");
     }
@@ -1216,9 +1170,6 @@ public class Terminal {
     }
 
     public void askHunterName() {System.out.println("Introduce el nombre del cazador ");}
-    public void errorClient() {System.out.println("Desafiante o rival no encontrado en los registros.");}
-    public void errorChar() {System.out.println("El personaje del desafiante o rival no está configurado.");}
-
 
     public void askAbilityAge() {System.out.println("Introduce la edad a la que el cazador adquirio el talento:");}
 
@@ -1253,6 +1204,10 @@ public class Terminal {
     public void askWeapToDelete() {
         System.out.println("Introduce el arma que quiere eliminar");
     }
+    public void goldStayTheSame() {
+        System.out.println("Vuestro oro prevalece. Nadie ha ganado ni perdido oro.");
+    }
+
     public void errorWeaponIsActive() {
         System.out.println("El arma esta activa, no se puede eliminar");
     }
@@ -1284,5 +1239,4 @@ public class Terminal {
         }
         System.out.println("\rOro restado con éxito.               "); // Limpia lo anterior
     }
-
-}//FIN
+}

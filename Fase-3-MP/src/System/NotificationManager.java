@@ -8,19 +8,22 @@ import java.util.Scanner;
 
 public class NotificationManager {
 
+    /**
+     * Notify the rival that has been challenged
+     */
     public void notifyChallenge(Client client, Terminal terminal, ArrayList<Challenge> challenges, int challengeNumber, Client desafiante, String regNumber) {
         int opcion;
         do {
             terminal.askChallenge(challenges.get(challengeNumber));
             opcion = askNum();
         } while (opcion < 1 || opcion > 2);
-        if (opcion == 1) { //aceptar
+        if (opcion == 1) { //ACEPTAR
             doCombat(client, terminal, challenges, challengeNumber);
         } else { // 2 = NO ACEPTAR
             doNotAcceptCombat(client, challenges, challengeNumber); //10% oro
             terminal.restandoOro();
         }
-        unsubscribeDesafio(challenges.get(challengeNumber), challenges);
+        deleteChallengeFromFile(challenges.get(challengeNumber), challenges);
     }
 
     public int askNum() {
@@ -28,7 +31,12 @@ public class NotificationManager {
         return sc.nextInt();
     }
 
-    private void unsubscribeDesafio(Challenge challenge, ArrayList<Challenge> challenges) {
+    /**
+     * Unsubscribe the challenge from the list of challenges
+     * @param challenge Challenge to unsubscribe
+     * @param challenges ArrayList of challenges
+     */
+    private void deleteChallengeFromFile(Challenge challenge, ArrayList<Challenge> challenges) {
         for (int numDesafio = 0; numDesafio < challenges.size(); numDesafio++) {
             if (challenge.getRegister().equals(challenges.get(numDesafio).getRegister())) {
                 challenges.remove(numDesafio);
@@ -38,8 +46,9 @@ public class NotificationManager {
             }
         }
     }
-    private void doCombat(Client client, Terminal terminal, ArrayList<Challenge> challenges, int numDesafio) {
 
+    private void doCombat(Client client, Terminal terminal, ArrayList<Challenge> challenges, int numDesafio) {
+        // Selección de equipo (sin cambios)
         int cambioEquipo;
         do {
             terminal.changeTeam();
@@ -49,113 +58,112 @@ public class NotificationManager {
         if (cambioEquipo == 1) {
             client.selectTeam(client);
         }
+        // Inicialización del combate
+        Challenge desafioActual = challenges.get(numDesafio);
+        int oroApostado = desafioActual.getGold();
 
         Combat combate = new Combat();
-        combate.setGoldBet(challenges.get(numDesafio).getGold()); // Oro apostado
+        combate.setGoldBet(oroApostado);
         combate = combate.initializeCombat(
-                challenges.get(numDesafio).getChallenger(),
+                desafioActual.getChallenger(),
                 client,
-                challenges.get(numDesafio).getDate(),
-                challenges.get(numDesafio).getGold(),
-                challenges.get(numDesafio).getModifiers(),
-                challenges.get(numDesafio).getRegister()
+                desafioActual.getDate(),
+                oroApostado,
+                desafioActual.getModifiers(),
+                desafioActual.getRegister()
         );
 
+        // Ejecución del combate
         combate = combate.startCombatFromFile();
 
-        // Si alguien ganó
+        // Cargar lista de clientes
+        UserFileReader userFileReader = new UserFileReader();
+        ArrayList<Client> clients = userFileReader.userFileReader();
+
+        // Buscar ambos jugadores en la lista
+        Client desafiante = null;
+        Client clienteActual = null;
+
+        for (Client c : clients) {
+            if (c.getNick().equals(desafioActual.getChallenger().getNick())) {
+                desafiante = c;
+            }
+            if (c.getNick().equals(client.getNick())) {
+                clienteActual = c;
+            }
+        }
+
+        // Manejo de resultados
         if (combate.getWinner() != null) {
             if (combate.getWinner().getNick().equals(client.getNick())) {
-                // Cliente gana
-                client.getCharacter().setGold(client.getCharacter().getGold() + challenges.get(numDesafio).getGold());
-                UserFileReader userFileReader = new UserFileReader();
-                ArrayList<Client> clients = userFileReader.userFileReader();
-
-                for (int numCliente = 0; numCliente < clients.size(); numCliente++) {
-                    if (client.getNick().equals(clients.get(numCliente).getNick())) {
-                        clients.set(numCliente, client);
-                        break;
-                    }
-                }
-
-                UserFileWriter userFileWriter = new UserFileWriter();
-                userFileWriter.rewriteUserFile(clients);
-
+                // CLIENTE GANA: recibe el oro apostado del desafiante
+                clienteActual.getCharacter().setGold(clienteActual.getCharacter().getGold() + oroApostado);
+                // DESAFIANTE PIERDE: se le resta el oro apostado
+                desafiante.getCharacter().setGold(
+                        Math.max(desafiante.getCharacter().getGold() - oroApostado, 0));
             } else {
-                // Cliente pierde
-                UserFileReader userFileReader = new UserFileReader();
-                ArrayList<Client> clients = userFileReader.userFileReader();
-
-                for (Client clientList : clients) {
-                    if (clientList.getNick().equals(challenges.get(numDesafio).getChallenger().getNick())) {
-                        clientList.getCharacter().setGold(clientList.getCharacter().getGold() + challenges.get(numDesafio).getGold() * 2);
-                        break;
-                    }
-                }
-
-                client.getCharacter().setGold(client.getCharacter().getGold() - challenges.get(numDesafio).getGold());
-                if (client.getCharacter().getGold() < 0) {
-                    client.getCharacter().setGold(0);
-                }
-
-                for (int numCliente = 0; numCliente < clients.size(); numCliente++) {
-                    if (client.getNick().equals(clients.get(numCliente).getNick())) {
-                        clients.set(numCliente, client);
-                        break;
-                    }
-                }
-
-                UserFileWriter userFileWriter = new UserFileWriter();
-                userFileWriter.rewriteUserFile(clients);
+                // DESAFIANTE GANA: recibe el oro apostado del cliente
+                desafiante.getCharacter().setGold(desafiante.getCharacter().getGold() + oroApostado);
+                // CLIENTE PIERDE: se le resta el oro apostado
+                clienteActual.getCharacter().setGold(
+                        Math.max(clienteActual.getCharacter().getGold() - oroApostado, 0)
+                );
             }
         } else {
-            // Empate
-            UserFileReader userFileReader = new UserFileReader();
-            ArrayList<Client> clients = userFileReader.userFileReader();
-
-            for (Client clientList : clients) {
-                if (clientList.getNick().equals(challenges.get(numDesafio).getChallenger().getNick())) {
-                    clientList.getCharacter().setGold(clientList.getCharacter().getGold() + challenges.get(numDesafio).getGold());
-                    break;
-                }
-            }
-            UserFileWriter userFileWriter = new UserFileWriter();
-            userFileWriter.rewriteUserFile(clients);
+            // EMPATE: no se transfiere oro
+            terminal.goldStayTheSame();
         }
+
+        // Actualizar ambos clientes en la lista
+        for (int i = 0; i < clients.size(); i++) {
+            Client c = clients.get(i);
+            if (c.getNick().equals(clienteActual.getNick())) {
+                clients.set(i, clienteActual);
+            } else if (c.getNick().equals(desafiante.getNick())) {
+                clients.set(i, desafiante);
+            }
+        }
+        // Guardar cambios
+        UserFileWriter userFileWriter = new UserFileWriter();
+        userFileWriter.rewriteUserFile(clients);
+
+        // Registrar combate y mostrar animación (sin cambios)
         CombatFileWriter combatFileWriter = new CombatFileWriter();
         combatFileWriter.combatFileWriter(combate);
         terminal.showClashAnimation();
     }
 
-
     private void doNotAcceptCombat(Client cliente, ArrayList<Challenge> challenges, int numDesafio) {
-        int penalizacion = challenges.get(numDesafio).getGold() / 10;
+        Challenge desafio = challenges.get(numDesafio);
+        int oroApostado = desafio.getGold();
+        int penalizacion = oroApostado / 10; // 10% del oro apostado
+
+        // Aplicar penalización al que rechazó
         int oroActual = cliente.getCharacter().getGold();
-        // Comprobamos que no se quede con oro negativo
-        if (oroActual >= penalizacion) {
-            cliente.getCharacter().setGold(oroActual - penalizacion);
-        } else {
-            cliente.getCharacter().setGold(0); // Si no tiene suficiente, se deja en 0
-        }
-        // Recompensar al desafiante con lo apostado + 10%
+        int nuevoOroRechazador = Math.max(oroActual - penalizacion, 0);
+        cliente.getCharacter().setGold(nuevoOroRechazador);
+
+        // Recompensar al desafiante solo con la penalización (10%)
         UserFileReader userFileReader = new UserFileReader();
         ArrayList<Client> clients = userFileReader.userFileReader();
-        for (Client listaCliente : clients) {
-            if (listaCliente.getNick().equals(challenges.get(numDesafio).getChallenger().getNick())) {
-                int recompensa = challenges.get(numDesafio).getGold() + penalizacion;
-                listaCliente.getCharacter().setGold(listaCliente.getCharacter().getGold() + recompensa);
+        String nickDesafiante = desafio.getChallenger().getNick();
+
+        for (Client clienteActual : clients) {
+            if (clienteActual.getNick().equals(nickDesafiante)) {
+                int oroDesafiante = clienteActual.getCharacter().getGold();
+                clienteActual.getCharacter().setGold(oroDesafiante + penalizacion);
                 break;
             }
         }
-        // Actualizar al cliente rechazador en la lista
-        for (int numCliente = 0; numCliente < clients.size(); numCliente++) {
-            if (cliente.getNick().equals(clients.get(numCliente).getNick())) {
-                clients.set(numCliente, cliente); // reemplazar en lugar de remove+add
+        // Actualizar al cliente que rechazó en la lista
+        for (int i = 0; i < clients.size(); i++) {
+            if (cliente.getNick().equals(clients.get(i).getNick())) {
+                clients.set(i, cliente);
                 break;
             }
         }
-        // Guardar los cambios
+        // Guardar cambios
         UserFileWriter userFileWriter = new UserFileWriter();
         userFileWriter.rewriteUserFile(clients);
     }
-}//FIN
+}

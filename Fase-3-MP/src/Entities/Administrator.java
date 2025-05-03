@@ -1,8 +1,8 @@
 package Entities;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import Factories.HunterFactory;
@@ -12,27 +12,13 @@ import System.*;
 
 
 public class Administrator extends User{
-    /**A continuación se definen Atributos**/
-    private String register;
-    /**A continuación se define el constructor**/
-
-    /**A continuación se definen los setters y getters**/
-
-    public String getRegister() {
-        return register;
-    }
-    public void setRegister(String register) {
-        this.register = register;
-    }
-
-    /**A continuación se definen las Operaciones**/
 
     /**
      * Elimina permanentemente una cuenta del sistema
      * @param admin Usuario logueado (puede ser Client o Administrator)
      * @param system Referencia al sistema principal
      */
-    public void deleteAdminAccount(Administrator admin, mainSystem system) {
+    public void deleteAdminAccount(Administrator admin, MainSystem system) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
 
@@ -55,9 +41,10 @@ public class Administrator extends User{
                 if (removed) {
                     // Guardar lista actualizada
                     AdministratorFileWriter adminFileWriter = new AdministratorFileWriter();
-                    adminFileWriter.rewriteUserFile(adminList);
+                    adminFileWriter.rewriteAdminFile(adminList);
 
                     // Cerrar sesión
+                    terminal.deletingAdmin();
                     terminal.deletedAccountOK();
                     terminal.logout();
                     system.selector();
@@ -76,9 +63,7 @@ public class Administrator extends User{
         }
     }
 
-    /**
-     * Modifica los atributos de un personaje
-     */
+    /**Modifica los atributos de un personaje**/
     public void modifyCharacter(){
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
@@ -129,13 +114,12 @@ public class Administrator extends User{
                 case 10 -> changePower(sc, terminal, client);
                 case 11 -> changeWaknesses(sc, terminal, client, HunterFactory);
                 case 12 -> changeStrengths(sc, terminal, client, HunterFactory);
-                //case 13 -> changeType(sc, terminal, client, VampireFactory, HunterFactory, WerewolfFactory);
                 case 13 -> {
                     terminal.savingChanges();
                     terminal.changesSaved();}
                 default -> terminal.error();
             }
-        } while (opcion != 14);
+        } while (opcion != 13);
         UserFileWriter userFileWriter = new UserFileWriter();
         for (int numclient = 0; numclient < listaclients.size(); numclient++){
             if (client.getNick().equals(listaclients.get(numclient).getNick())){
@@ -147,9 +131,7 @@ public class Administrator extends User{
         }
     }
 
-    /**
-     * Valida los desafíos pendientes
-     */
+    /**Valida los desafíos pendientes**/
     public void validatingChallenge() {
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
@@ -169,41 +151,74 @@ public class Administrator extends User{
             if (!ch.isValidated()) pending.add(ch);
         }
         if (pending.isEmpty()) {
-            terminal.noDesafiosParaValidar(challengeList.size());
+            terminal.noDesafiosParaValidar();
             return;
         }
 
         // 1) Mostrar pendientes con índice
         terminal.mostrarDesafiosPendientes(pending);
-        // Ejemplo de mostrarDesafiosPendientes:
-        //   1) Desafío de Tester vs Pedro (fecha...)
-        //   2) Desafío de Ana vs Luis (fecha...)
 
         // 2) Pedir selección
         int sel;
         do {
             terminal.pedirNumeroDesafio(pending.size());
             sel = sc.nextInt();
-            if (sel < 1 || sel > pending.size()) {
-                terminal.validNumber();
-            }
+            if (sel < 1 || sel > pending.size()) terminal.validNumber();
         } while (sel < 1 || sel > pending.size());
 
-        // Ajustar índice a 0-based
         Challenge challenge = pending.get(sel - 1);
-
-        // 3) Procesar sólo ese desafío
         Client challenger = challenge.getChallenger();
-        Client rival      = challenge.getRival();
-        // ... resto de verificaciones (existencia, personajes, baneo) iguales ...
-        // Mostrar modificadores si los hay:
+        Client rival = challenge.getRival();
+
+        // Nueva lógica de verificación de combates recientes
+        List<Combat> combates = new CombatFileReader().readCombats();
+        boolean debeBanear = false;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+
+        for (Combat combate : combates) {
+            if (combate.getChallenger().getNick().equals(challenger.getNick()) &&
+                    combate.getWinner() != null &&
+                    !combate.getWinner().getNick().equals(challenger.getNick())) {
+
+                // Conversión correcta de fechas
+                Date fechaCombate = combate.getDate();
+                Date ahora = new Date();
+
+                // Calcular diferencia en horas
+                long diferenciaMillis = ahora.getTime() - fechaCombate.getTime();
+                long horasDiferencia = diferenciaMillis / (60 * 60 * 1000);
+
+                if (horasDiferencia <= 24) {
+                    debeBanear = true;
+                    break;
+                }
+            }
+        }
+
+        if (debeBanear) {
+            terminal.mostrarAdvertenciaBaneo(challenger.getNick());
+            int opcionBan = sc.nextInt();
+            if (opcionBan == 1) {
+                // Buscar y banear al usuario
+                for (Client c : clientsList) {
+                    if (c.getNick().equals(challenger.getNick())) {
+                        ban24User(c);
+                        new UserFileWriter().rewriteUserFile(clientsList);
+                        // Eliminar desafío actual
+                        challengeList.remove(challenge);
+                        new ChallengeFileWriter().rewriteChallengeFile(challengeList);
+                        return;
+                    }
+                }
+            }
+        }
+
         ArrayList<Modifier> modifiers = challenge.getModifiers();
         if (!modifiers.isEmpty()) {
             terminal.haveModifiersToChose();
             terminal.showChallengeModifiers(challenger, rival);
             System.out.println("=======================================");
         }
-
         // Pedir VALIDAR o CANCELAR
         int opcion;
         do {
@@ -216,23 +231,34 @@ public class Administrator extends User{
             // VALIDAR
             challenge.setValidated(true);
             ArrayList<Modifier> selected = new ArrayList<>();
-            terminal.electModifiers();
-            sc.nextLine(); // limpiar buffer
-            String input;
-            do {
-                input = sc.nextLine();
-                if (!input.equals("salir")) {
-                    boolean found = false;
-                    for (Weakness w : challenger.getCharacter().getWeaknesses()) {
-                        if (w.getName().equals(input)) { selected.add(w); found = true; break; }
+
+            if(!modifiers.isEmpty()) {
+                terminal.electModifiers();
+                sc.nextLine(); // limpiar buffer
+                String input;
+                do {
+                    input = sc.nextLine();
+                    if (!input.equals("salir")) {
+                        boolean found = false;
+                        for (Weakness w : challenger.getCharacter().getWeaknesses()) {
+                            if (w.getName().equals(input)) {
+                                selected.add(w);
+                                found = true;
+                                break;
+                            }
+                        }
+                        for (Strength s : challenger.getCharacter().getStrengths()) {
+                            if (!found && s.getName().equals(input)) {
+                                selected.add(s);
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) terminal.errorMod();
                     }
-                    for (Strength s : challenger.getCharacter().getStrengths()) {
-                        if (!found && s.getName().equals(input)) { selected.add(s); found = true; break; }
-                    }
-                    if (!found) terminal.errorMod();
-                }
-            } while (!input.equals("salir"));
-            challenge.setModifiers(selected);
+                } while (!input.equals("salir"));
+                challenge.setModifiers(selected);
+            }
             terminal.desafioValidadoCorrectamente(challenge);
 
         } else {
@@ -240,56 +266,50 @@ public class Administrator extends User{
             challengeList.remove(challenge);
             terminal.desafioCancelado(challenge);
         }
-
         // 4) Guardar cambios
         new ChallengeFileWriter().rewriteChallengeFile(challengeList);
     }
 
-
-    /**
-     * Comprueba si el usuario ha sido baneado en las últimas 24 horas
-     * @param challengeDate Fecha del desafío
-     * @param client Cliente a comprobar
-     * @return true si el usuario debe ser baneado, false en caso contrario
-     */
-    private boolean checkBan(Date challengeDate, Client client) {
+    public void ban24User(Client client) {
+        BanFileReader banFileReader = new BanFileReader();
+        BanFileWriter banWriter = new BanFileWriter();
+        UserFileWriter userWriter = new UserFileWriter();
         Terminal terminal = new Terminal();
-        Scanner sc = new Scanner(System.in);
-        CombatFileReader combatFileReader = new CombatFileReader();
-        ArrayList<Combat> combats = (ArrayList<Combat>) combatFileReader.readCombats();
 
-        boolean sugerirBan = false;
-        boolean banear = false;
-        String nickDesafiante = null;
+        // 1. Verificar si ya está baneado
+        ArrayList<Client> bannedClients = banFileReader.readBannedUsers();
+        boolean yaBaneado = bannedClients.stream()
+                .anyMatch(c -> c.getNick().equalsIgnoreCase(client.getNick()));
 
-        for (Combat combat : combats) {
-            if (combat.getWinner() != null) {
-                // Verificar si el cliente participó en este combate (como desafiante o rival)
-                boolean esParticipante = combat.getChallenger().getNick().equals(client.getNick()) ||
-                        combat.getRival().getNick().equals(client.getNick());
+        if (yaBaneado) {
+            terminal.userAlreadyBanned();
+            return;
+        }
 
-                if (esParticipante) {
-                    Date fechaDesafioAnterior = combat.getDate();
-                    long diferenciaHoras = TimeUnit.MILLISECONDS.toHours(
-                            challengeDate.getTime() - fechaDesafioAnterior.getTime()
-                    );
-
-                    // Sugerir ban si perdió un combate en las últimas 24 horas
-                    if (diferenciaHoras <= 24 && !combat.getWinner().getNick().equals(client.getNick())) {
-                        sugerirBan = true;
-                        nickDesafiante = client.getNick().equals(combat.getChallenger().getNick()) ?
-                                combat.getRival().getNick() : combat.getChallenger().getNick();
-                        break;
-                    }
+        try {
+            // 2. Configurar datos de baneo
+            client.setBanDateTime(LocalDateTime.now());
+            client.setBanMotive("Baneo automático por pérdida en desafío dentro de 24h");
+            // 3. Actualizar archivos
+            // Añadir a lista de baneados
+            bannedClients.add(client);
+            banWriter.rewriteBanFile(bannedClients);
+            // Actualizar usuario en archivo principal
+            ArrayList<Client> allUsers = new UserFileReader().userFileReader();
+            for (int i = 0; i < allUsers.size(); i++) {
+                if (allUsers.get(i).getNick().equals(client.getNick())) {
+                    allUsers.set(i, client);
+                    break;
                 }
             }
+            userWriter.rewriteUserFile(allUsers);
+
+            terminal.banned(client.getNick());
+
+        } catch (Exception e) {
+            terminal.error();
+            e.printStackTrace();
         }
-        if (sugerirBan) {
-            terminal.askBan(nickDesafiante, client.getNick());
-            int opcion = sc.nextInt();
-            banear = (opcion == 1);
-        }
-        return banear;
     }
 
     /**
@@ -861,4 +881,4 @@ public class Administrator extends User{
             }
         } while (!salir);
     }
-}//FIN
+}

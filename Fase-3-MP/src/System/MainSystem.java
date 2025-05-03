@@ -2,17 +2,13 @@ package System;
 
 import Entities.Challenge;
 import Entities.Client;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.io.Console;
 import java.util.Optional;
 import java.util.Scanner;
 import Entities.Administrator;
-import Entities.Combat;
 
-public class mainSystem {
+public class MainSystem {
     public static Console out;
 
     /**
@@ -54,10 +50,10 @@ public class mainSystem {
             case 3 -> {
                 //INICIO DE SESION COMO ADMIN
                 Administrator admin = new Administrator();
-                admin = loginOperator(admin);
+                admin = loginAdmin(admin);
                 if (admin != null) {
                     Menu menu = new Menu();
-                    menu.operatorSelector(admin, this);
+                    menu.adminSelector(admin, this);
                 }
             }
             case 4 -> {
@@ -274,7 +270,7 @@ public class mainSystem {
         return foundUser;
     }
 
-    public Administrator loginOperator(Administrator admin) {
+    public Administrator loginAdmin(Administrator admin) {
         Scanner sc = new Scanner(System.in);
         Terminal terminal = new Terminal();
         AdministratorFileReader operatorFileReader = new AdministratorFileReader();
@@ -312,4 +308,4 @@ public class mainSystem {
         // Retornar el administrador encontrado, no el 'operator' pasado como parámetro.
         return list.get(index);
     }
-}//FIN
+}

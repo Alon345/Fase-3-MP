@@ -1,10 +1,9 @@
 package Entities;
+
 import Factories.*;
-import System.mainSystem;
+import System.MainSystem;
 import System.Terminal;
-
 import java.util.*;
-
 import System.UserFileReader;
 import System.UserFileWriter;
 
@@ -103,8 +102,6 @@ public class Client extends User {
             terminal.cancelOperation();
         }
     }
-
-    public void challenge(Client client) {}
 
     /**
      * Creación de los Vampiros
@@ -644,7 +641,7 @@ public class Client extends User {
      * @param client Usuario logueado (puede ser Client o Administrator)
      * @param system Referencia al sistema principal
      */
-    public void deleteAccount(Client client, mainSystem system) {
+    public void deleteAccount(Client client, MainSystem system) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
 
@@ -790,4 +787,4 @@ public class Client extends User {
         // Mostrar ranking con formato bonito
         terminal.showGoldRankingSimple(lista);
     }
-}//FIN
+}

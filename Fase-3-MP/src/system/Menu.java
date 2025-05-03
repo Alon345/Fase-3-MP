@@ -2,15 +2,12 @@ package System;
 
 import Entities.*;
 import Entities.Character;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
 
-    public void selectorClient(Client client, mainSystem system) {
+    public void selectorClient(Client client, MainSystem system) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
         int option;
@@ -52,7 +49,7 @@ public class Menu {
                     }
                     break;
                 case 5: // consulta de batallas
-                    consultarCombates(client);
+                    terminal.combatsInformation(client);
                     break;
                 case 6: //consultar desafios pendientes
                     consultarPendingChallenges(client);
@@ -72,43 +69,6 @@ public class Menu {
                     break;
             }
         } while (option != 8 && option != 9);
-    }
-
-    public void consultarCombates(Client currentClient) {
-        System.out.println("=======================================");
-        System.out.println("         HISTORIAL DE COMBATES         ");
-        System.out.println("=======================================");
-
-        CombatFileReader combatReader = new CombatFileReader();
-        List<Combat> allCombats = combatReader.readCombats();
-
-        List<Combat> myCombats = new ArrayList<>();
-        for (Combat c : allCombats) {
-            if (c.getChallenger() != null && c.getRival() != null) {
-                String nick = currentClient.getNick();
-                if (nick.equals(c.getChallenger().getNick()) || nick.equals(c.getRival().getNick())) {
-                    myCombats.add(c);
-                }
-            }
-        }
-
-        if (myCombats.isEmpty()) {
-            System.out.println("No tienes combates registrados.");
-        } else {
-            for (Combat c : myCombats) {
-                System.out.println("========== COMBATE ==========");
-                String role = currentClient.getNick().equals(c.getChallenger().getNick()) ? "DESAFIANTE" : "RIVAL";
-                String date = c.getDate() != null ? new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(c.getDate()) : "Fecha desconocida";
-                System.out.println("Tu Rol " + role);
-                System.out.println("Rival " + (role.equals("DESAFIANTE") ? c.getRival().getNick() : c.getChallenger().getNick()));
-                System.out.println("Fecha " + date);
-                System.out.println("Apuesta " + c.getGoldBet() + " Monedas de Oro");
-                System.out.println("Resultado " + c.getStatus());
-                System.out.print("Ganador " + (c.getWinner() != null ? c.getWinner().getNick() : "EMPATE"));
-                System.out.println("========== FIN COMBATE ==========");
-            }
-        }
-        System.out.println("=======================================");
     }
 
     public void consultarPendingChallenges(Client client){
@@ -179,7 +139,7 @@ public class Menu {
         }
     }
 
-    public void operatorSelector(Administrator admin, mainSystem system) {
+    public void adminSelector(Administrator admin, MainSystem system) {
         Terminal terminal = new Terminal();
         Scanner sc = new Scanner(System.in);
         Client client = new Client();

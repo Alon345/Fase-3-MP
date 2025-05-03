@@ -10,8 +10,7 @@ import Entities.Strength;
 import Entities.Werewolf;
 
 public class WerewolfFactory {
-    public WerewolfFactory() {
-    }
+    public WerewolfFactory() {}
 
     public void initializeName(Werewolf werewolf) {
         Scanner sc = new Scanner(System.in);

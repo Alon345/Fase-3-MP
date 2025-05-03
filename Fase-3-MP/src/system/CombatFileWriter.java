@@ -1,15 +1,11 @@
 package System;
 
 import Entities.*;
-import Entities.Character;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
 
 public class CombatFileWriter {
     private static final String COMBAT_FILE_PATH = "Fase-3-MP/src/Files/CombatRegister.txt";
@@ -62,7 +58,7 @@ public class CombatFileWriter {
             bw.write("==== INFORMACION DEL COMBATE ====");
             bw.newLine();
             bw.write("ORO-APOSTADO ");
-            bw.write(String.valueOf(Combat.getGold()));
+            bw.write(String.valueOf(Combat.getGoldBet()));
             bw.newLine();
 
             bw.write("CANTIDAD_MODIFICADORES ");
@@ -104,9 +100,8 @@ public class CombatFileWriter {
             bw.newLine();
             bw.newLine();
             bw.close();
-
         } catch (Exception e) {
-            mainSystem mainSystem = new mainSystem();
+            MainSystem mainSystem = new MainSystem();
             mainSystem.selector();
             e.printStackTrace();
         }

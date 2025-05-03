@@ -1,33 +1,15 @@
 package System;
 
 import Entities.Administrator;
-import Entities.Client;
 import java.io.*;
 import java.util.ArrayList;
 
 public class AdministratorFileWriter {
-
-    public int contarAdminsRegistrados() {
-        int contador = 0;
-        String ruta = "Fase-3-MP/src/Files/AdminRegister.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(ruta))) {
-            String linea;
-            while ((linea = br.readLine()) != null) {
-                if (linea.startsWith("========== ADMIN ==========")) {
-                    contador++;
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return contador;
-    }
-
+    private final String ADMIN_FILE_PATH = "Fase-3-MP/src/Files/AdminRegister.txt";
     // Registra un administrador en el fichero AdminRegister.txt
     public void adminRegister(Administrator admin) {
         try {
-            String ruta = "Fase-3-MP/src/Files/AdminRegister.txt"; // Ruta relativa
-            File file = new File(ruta);
+            File file = new File(ADMIN_FILE_PATH);
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -48,18 +30,15 @@ public class AdministratorFileWriter {
         } catch (Exception e) {
             e.printStackTrace();
             // En caso de error se puede volver al selector
-            new mainSystem().selector();
+            new MainSystem().selector();
         }
     }
-
     // Reescribe el fichero de usuarios (para clientes)
-    public void rewriteUserFile(ArrayList<Administrator> clientArrayList) {
+    public void rewriteAdminFile(ArrayList<Administrator> clientArrayList) {
         try {
-            String ruta = "Fase-3-MP/src/Files/UserRegister.txt"; // Ruta relativa
-            File file = new File(ruta);
+            File file = new File(ADMIN_FILE_PATH);
             FileWriter fw = new FileWriter(file);
             BufferedWriter bw = new BufferedWriter(fw);
-            // Recorre la lista de clientes
             for (Administrator client : clientArrayList) {
                 bw.write("=========== ADMIN ===========");
                 bw.newLine();
@@ -75,83 +54,9 @@ public class AdministratorFileWriter {
             bw.close();
         } catch (Exception exception) {
             exception.printStackTrace();
-            new mainSystem().selector();
+            new MainSystem().selector();
         }
     }
-
-    // Elimina el bloque de un administrador cuyo nick coincida exactamente con "NICK: " + adminNick
-    public void deleteAdmin(String adminNick) {
-        if (adminNick == null || adminNick.isEmpty()) {
-            System.out.println("El nick del administrador no puede ser nulo o vacío.");
-            return;
-        }
-
-        try {
-            String ruta = "Fase-3-MP/src/Files/AdminRegister.txt";
-            File archivo = new File(ruta);
-
-            if (!archivo.exists()) {
-                System.out.println("El archivo no existe.");
-                return;
-            }
-
-            BufferedReader br = new BufferedReader(new FileReader(archivo));
-            ArrayList<String> lines = new ArrayList<>();
-            String line;
-            boolean adminFound = false;
-            boolean insideBlockToDelete = false;
-            int blockStartIndex = -1;
-
-            while ((line = br.readLine()) != null) {
-                if (line.startsWith("========== ADMIN ==========")) {
-                    // Inicio de un nuevo bloque
-                    blockStartIndex = lines.size(); // Guardamos dónde empieza este bloque
-                    insideBlockToDelete = false; // Reseteamos el flag
-                    lines.add(line); // Añadimos la línea de inicio
-                }
-                else if (line.startsWith("NICK") && line.contains(adminNick)) {
-                    // Encontramos el NICK a borrar
-                    insideBlockToDelete = true;
-                    adminFound = true;
-                    // Eliminamos todas las líneas desde blockStartIndex
-                    lines = new ArrayList<>(lines.subList(0, blockStartIndex));
-                }
-                else if (line.startsWith("========== FIN ADMIN ==========")) {
-                    // Fin de un bloque
-                    if (!insideBlockToDelete) {
-                        lines.add(line); // Solo añadimos si no estamos borrando
-                    } else {
-                        insideBlockToDelete = false; // Terminamos de borrar
-                    }
-                }
-                else {
-                    if (!insideBlockToDelete) {
-                        lines.add(line); // Añadimos solo si no estamos borrando
-                    }
-                }
-            }
-            br.close();
-
-            if (!adminFound) {
-                System.out.println("No se encontró el administrador con el nick especificado.");
-                return;
-            }
-
-            // Reescribir el archivo
-            BufferedWriter bw = new BufferedWriter(new FileWriter(archivo));
-            for (String l : lines) {
-                bw.write(l);
-                bw.newLine();
-            }
-            bw.close();
-
-            System.out.println("Administrador eliminado correctamente.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
 }
 
 

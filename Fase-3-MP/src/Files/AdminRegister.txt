@@ -1,10 +1,15 @@
-========== ADMIN ==========
-NOMBRE admin2
+=========== ADMIN ===========
+NOMBRE JuanLucas
 NICK admin
 PASSWORD 12345678
 ========== FIN ADMIN ==========
-========== ADMIN ==========
-NOMBRE adminPROMAX
-NICK adminKLOK
+=========== ADMIN ===========
+NOMBRE AdminOfGods
+NICK admin007
+PASSWORD 12345678
+========== FIN ADMIN ==========
+=========== ADMIN ===========
+NOMBRE LauraValear
+NICK administrator
 PASSWORD 12345678
 ========== FIN ADMIN ==========

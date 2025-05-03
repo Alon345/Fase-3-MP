@@ -10,8 +10,7 @@ import Entities.Strength;
 import Entities.Vampire;
 
 public class VampireFactory {
-    public VampireFactory() {
-    }
+    public VampireFactory() {}
 
     public void initializeName(Vampire vampire) {
         Scanner sc = new Scanner(System.in);

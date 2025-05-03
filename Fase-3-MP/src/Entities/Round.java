@@ -5,14 +5,12 @@ import System.Terminal;
 import java.util.ArrayList;
 
 public class Round {
-    /**
-     * A continuación se definen los atributos
-     **/
+    /**A continuación se definen los atributos**/
+
     private int hpChallengerEnd;
     private int hpRivalEnd;
-    /**
-     * A continuación se definen las operaciones
-     **/
+    /**A continuación se definen las operaciones**/
+
     public int getHpChallengerEnd() {
         return hpChallengerEnd;
     }
@@ -85,7 +83,6 @@ public class Round {
         return hpContrincante;
     }
 
-
     private int doRoundShots(int potential) {
         int result = 0;
         for (int shot = 1; shot <= potential; shot++) {
@@ -135,7 +132,6 @@ public class Round {
         }
     }
 
-
     private int getChallengerMofifiersValues(Client client, ArrayList<Modifier> modifiers, int valueOfMods) {
         for (int weaknessNum = 0; weaknessNum < client.getCharacter().getWeaknesses().size(); weaknessNum++) {
             for (Modifier mod : modifiers) {
@@ -183,7 +179,6 @@ public class Round {
         return defencePotential;
     }
 
-
     private int getAttackPotential(Client client, int attackPotential) {
         if (client.getCharacter().getType().equals("VAMPIRO")) {
 
@@ -213,4 +208,4 @@ public class Round {
         }
         return attackPotential;
     }
-}//FIN
+}

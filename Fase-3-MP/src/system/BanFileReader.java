@@ -1,18 +1,10 @@
 package System;
 
 import Entities.Client;
-import Entities.Hunter;
-import Entities.Vampire;
-import Entities.Werewolf;
-
 import java.io.*;
-import java.nio.file.Paths;
-import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class BanFileReader {
     private static final String BAN_FILE_PATH = "Fase-3-MP/src/Files/BanRegister.txt";
@@ -81,4 +73,4 @@ public class BanFileReader {
         }
         return listaCliente;
     }
-}//FIN
+}

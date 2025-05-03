@@ -66,7 +66,7 @@ public class UserFileReader {
                         }
                         //LECTURA SI ES DE TIPO LICANTROPO
                         case "LICANTROPO" -> {
-                            Werewolf werewolf = lecturaWerewolf(br);
+                            Werewolf werewolf = werewolfReader(br);
                             cliente.setCharacter(werewolf);
                         }
                         //LECTURA SI ES DE TIPO CAZADOR
@@ -617,7 +617,7 @@ public class UserFileReader {
         return hunter;
     }
 
-    public Werewolf lecturaWerewolf(BufferedReader br) {
+    public Werewolf werewolfReader(BufferedReader br) {
         Werewolf Werewolf = new Werewolf();
         Don don = new Don();
 
@@ -875,4 +875,4 @@ public class UserFileReader {
         }
         return null;
     }
-}//FIN
+}

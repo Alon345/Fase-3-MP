@@ -1,7 +1,6 @@
 package Entities;
 
 import java.util.*;
-
 import System.*;
 
 public class Challenge {

@@ -3,7 +3,6 @@ package Entities;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import System.Terminal;
 import System.*;
 
@@ -104,6 +103,13 @@ public class Combat {
         this.seen = seen;
     }
 
+    public int getGoldBet() {
+        return goldBet;
+    }
+    public void setGoldBet(int goldBet) {
+        this.goldBet = goldBet;
+    }
+
     /**A continuación se definen las Operaciones**/
 
     // Método para establecer el estado del combate
@@ -120,7 +126,7 @@ public class Combat {
         setChallenger(challenger);
         setRival(rival);
         setDate(date);
-        setGold(gold);
+        setGoldBet(gold); //Antes estaba como setGold. No aseguraba que se guardara el oro apostado.
         setModifiers(modifiers);
         setRegister(register);
         setSeen(false);
@@ -232,13 +238,5 @@ public class Combat {
             hp = addMinionsHp(character.getMinions().get(numEsbirro), hp);
         }
         return hp;
-    }
-
-    public int getGoldBet() {
-        return goldBet;
-    }
-
-    public void setGoldBet(int goldBet) {
-        this.goldBet = goldBet;
     }
 }
