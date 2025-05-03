@@ -644,8 +644,7 @@ public class Terminal {
         System.out.println(" 10 Poder");
         System.out.println(" 11 Debilidades");
         System.out.println(" 12 Fortalezas");
-        System.out.println(" 13 Tipo");
-        System.out.println(" 14 Salir para guardar cambios");
+        System.out.println(" 13 Salir para guardar cambios");
         System.out.println("===========================================");
     }
     public void savingChanges() {
