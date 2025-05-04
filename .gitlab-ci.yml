@@ -1,0 +1,32 @@
+image: openjdk:17
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    # 1) Creamos la carpeta de clases compiladas
+    - mkdir -p build/classes
+    # 2) Compilamos todos los .java de src/ a build/classes/
+    - javac -d build/classes $(find src -name "*.java")
+  artifacts:
+    paths:
+      - build/classes
+    expire_in: 1h
+
+test:
+  stage: test
+  script:
+    # 3) Descargamos el JUnit 5 Console Launcher (jar standalone)
+    - wget -q https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.9.2/junit-platform-console-standalone-1.9.2.jar
+    # 4) Ejecutamos todos los tests que encuentre en build/classes/
+    - java -jar junit-platform-console-standalone-1.9.2.jar \
+      --class-path build/classes \
+      --scan-class-path \
+      --reports-dir junit-reports
+  artifacts:
+    when: always
+    reports:
+      junit: junit-reports/*.xml
