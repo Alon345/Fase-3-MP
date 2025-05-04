@@ -95,10 +95,11 @@ public class Round {
     }
 
     private int getArmourDefence(Client client, int armourDefence) {
-        for (int numWeapon = 0; numWeapon < client.getCharacter().getActiveWeapons().size(); numWeapon++) {
-            armourDefence += client.getCharacter().getActiveWeapons().get(0).getDefenseModifier();
+        if (client.getCharacter().getActiveWeapons() != null && !client.getCharacter().getActiveWeapons().isEmpty()) {
+            for (int numWeapon = 0; numWeapon < client.getCharacter().getActiveWeapons().size(); numWeapon++) {
+                armourDefence += client.getCharacter().getActiveWeapons().get(numWeapon).getDefenseModifier();
+            }
         }
-        armourDefence += client.getCharacter().getActiveWeapons().get(0).getDefenseModifier();
         return armourDefence;
     }
 
@@ -150,38 +151,8 @@ public class Round {
         return valueOfMods;
     }
 
-    private int getDefencePotential(Client client, int defencePotential) {
-        if (client.getCharacter().getType().equals("VAMPIRO")) {
-            Vampire vampire = (Vampire) client.getCharacter();
-            Discipline discipline = (Discipline) vampire.getAbility();
-            Terminal terminal = new Terminal();
-
-            if (vampire.getBlood() >= 5 && vampire.getBlood() >= discipline.getCost()) {
-                terminal.defenceAbility(vampire.getName(), discipline.getName());
-                defencePotential += 2;
-                vampire.setBlood(vampire.getBlood() - discipline.getCost());
-            }
-        } else if (client.getCharacter().getType().equals("LICANTROPO")) {
-            Werewolf werewolf = (Werewolf) client.getCharacter();
-            Don don = (Don) werewolf.getAbility();
-            Terminal terminal = new Terminal();
-            if (don.getMinimumValue() <= werewolf.getRage()) {
-                terminal.defenceAbility(werewolf.getName(), don.getName());
-                defencePotential += werewolf.getRage();
-            }
-        } else {
-            Terminal terminal = new Terminal();
-            Hunter hunter = (Hunter) client.getCharacter();
-            Talent talent = (Talent) hunter.getAbility();
-            terminal.defenceAbility(hunter.getName(), talent.getName());
-            defencePotential += talent.getDefense();
-        }
-        return defencePotential;
-    }
-
     private int getAttackPotential(Client client, int attackPotential) {
-        if (client.getCharacter().getType().equals("VAMPIRO")) {
-
+        if (client.getCharacter().getType().equals("VAMPIRO") && client.getCharacter() instanceof Vampire) {
             Vampire vampire = (Vampire) client.getCharacter();
             Discipline discipline = (Discipline) vampire.getAbility();
             Terminal terminal = new Terminal();
@@ -191,7 +162,7 @@ public class Round {
                 attackPotential += 2;
                 vampire.setBlood(vampire.getBlood() - discipline.getCost());
             }
-        } else if (client.getCharacter().getType().equals("LICANTROPO")) {
+        } else if (client.getCharacter().getType().equals("LICANTROPO") && client.getCharacter() instanceof Werewolf) {
             Werewolf werewolf = (Werewolf) client.getCharacter();
             Don don = (Don) werewolf.getAbility();
             Terminal terminal = new Terminal();
@@ -199,7 +170,7 @@ public class Round {
                 terminal.attackAbility(werewolf.getName(), don.getName());
                 attackPotential += werewolf.getRage();
             }
-        } else {
+        } else if (client.getCharacter().getType().equals("CAZADOR") && client.getCharacter() instanceof Hunter) {
             Hunter hunter = (Hunter) client.getCharacter();
             Talent talent = (Talent) hunter.getAbility();
             Terminal terminal = new Terminal();
@@ -207,5 +178,34 @@ public class Round {
             attackPotential += talent.getAttack();
         }
         return attackPotential;
+    }
+
+    private int getDefencePotential(Client client, int defencePotential) {
+        if (client.getCharacter().getType().equals("VAMPIRO") && client.getCharacter() instanceof Vampire) {
+            Vampire vampire = (Vampire) client.getCharacter();
+            Discipline discipline = (Discipline) vampire.getAbility();
+            Terminal terminal = new Terminal();
+
+            if (vampire.getBlood() >= 5 && vampire.getBlood() >= discipline.getCost()) {
+                terminal.defenceAbility(vampire.getName(), discipline.getName());
+                defencePotential += 2;
+                vampire.setBlood(vampire.getBlood() - discipline.getCost());
+            }
+        } else if (client.getCharacter().getType().equals("LICANTROPO") && client.getCharacter() instanceof Werewolf) {
+            Werewolf werewolf = (Werewolf) client.getCharacter();
+            Don don = (Don) werewolf.getAbility();
+            Terminal terminal = new Terminal();
+            if (don.getMinimumValue() <= werewolf.getRage()) {
+                terminal.defenceAbility(werewolf.getName(), don.getName());
+                defencePotential += werewolf.getRage();
+            }
+        } else if (client.getCharacter().getType().equals("CAZADOR") && client.getCharacter() instanceof Hunter) {
+            Hunter hunter = (Hunter) client.getCharacter();
+            Talent talent = (Talent) hunter.getAbility();
+            Terminal terminal = new Terminal();
+            terminal.defenceAbility(hunter.getName(), talent.getName());
+            defencePotential += talent.getDefense();
+        }
+        return defencePotential;
     }
 }
