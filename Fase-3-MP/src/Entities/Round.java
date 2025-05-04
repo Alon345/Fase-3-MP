@@ -76,7 +76,7 @@ public class Round {
         return (getHpChallengerEnd() == 0 || getHpRivalEnd() == 0);
     }
 
-    private int getHp(int ataqueDesafiante, int defensaContrincante, int hpContrincante, Client challenger, Client rival) {
+    public int getHp(int ataqueDesafiante, int defensaContrincante, int hpContrincante, Client challenger, Client rival) {
         int damage = Math.max(ataqueDesafiante - defensaContrincante, 0);
         hpContrincante -= damage;
         modifyValues(challenger, rival);
@@ -113,21 +113,21 @@ public class Round {
 
 
     private void modifyValues(Client challenger, Client rival) {
-        if (challenger.getCharacter().getType().equals("VAMPIRO")) {
+        if (challenger.getCharacter().getType().equals("VAMPIRO") && challenger.getCharacter() instanceof Vampire) {
             Vampire vampire = (Vampire) challenger.getCharacter();
             vampire.setBlood(vampire.getBlood() + 4);
             if (vampire.getBlood() > 10) {
                 vampire.setBlood(10);
             }
         }
-        if (rival.getCharacter().getType().equals("LICANTROPO")) {
+        if (rival.getCharacter().getType().equals("LICANTROPO") && rival.getCharacter() instanceof Werewolf) {
             Werewolf werewolf = (Werewolf) rival.getCharacter();
             if (werewolf.getRage() != 3) {
                 werewolf.setRage(werewolf.getRage() + 1);
             }
-        } else if (rival.getCharacter().getType().equals("CAZADOR")) {
+        } else if (rival.getCharacter().getType().equals("CAZADOR") && rival.getCharacter() instanceof Hunter) {
             Hunter hunter = (Hunter) rival.getCharacter();
-            if (hunter.getWillpower() != 0) { //willpower = voluntad
+            if (hunter.getWillpower() != 0) { // willpower = voluntad
                 hunter.setWillpower(hunter.getWillpower() - 1);
             }
         }
