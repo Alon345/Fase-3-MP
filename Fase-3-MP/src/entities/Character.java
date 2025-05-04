@@ -18,6 +18,18 @@ public class Character {
     private String type;
     private ArrayList<MinionsComposit> minionsComposit;
 
+    /** Constructor **/
+    public Character() {
+        this.weapons = new ArrayList<>();
+        this.activeWeapons = new ArrayList<>();
+        this.armors = new ArrayList<>();
+        this.weaknesses = new ArrayList<>();
+        this.strengths = new ArrayList<>();
+        this.ability = new Ability();
+        this.type = "default";
+        this.minionsComposit = new ArrayList<>();
+    }
+
     /** Setters y Getters **/
 
     public String getName() {
@@ -84,7 +96,7 @@ public class Character {
     }
 
     public ArrayList<MinionsComposit> getMinions() {
-        return minionsComposit;
+        return this.minionsComposit;
     }
     public void setMinions(ArrayList<MinionsComposit> minionsComposit) {
         this.minionsComposit = minionsComposit;

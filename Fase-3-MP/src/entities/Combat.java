@@ -78,7 +78,8 @@ public class Combat {
     public int getGold() {
         return gold;
     }
-    public void setGold(int oro) {
+
+    public void setGold(int gold) {
         this.gold = gold;
     }
 
@@ -121,7 +122,7 @@ public class Combat {
     public String getStatus() {
         return status;
     }
-    
+
     public Combat initializeCombat(Client challenger, Client rival, Date date,int gold, ArrayList<Modifier> modifiers, String register) {
         setChallenger(challenger);
         setRival(rival);
@@ -222,12 +223,12 @@ public class Combat {
 
 
     private int addMinionsHp(MinionsComposit minion, int hp) {
-            hp += minion.getHp();
-            if (minion.getType().equals("DEMONIO")) {
-                Demon demon = (Demon) minion;
-                for (MinionsComposit subMinion: demon.getMinionsComposits()){
+        hp += minion.getHp();
+        if (minion.getType().equals("DEMONIO")) {
+            Demon demon = (Demon) minion;
+            for (MinionsComposit subMinion: demon.getMinionsComposits()){
 
-                    hp = addMinionsHp(subMinion, hp);
+                hp = addMinionsHp(subMinion, hp);
             }
         }
         return hp;
