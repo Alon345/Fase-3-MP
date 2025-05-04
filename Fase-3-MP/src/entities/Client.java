@@ -270,7 +270,7 @@ public class Client extends User {
         } while (!Arrays.equals(rightWeapon, aux1) && !Arrays.equals(rightWeapon, aux2));
         if (Arrays.equals(rightWeapon, aux1)) {
             do {
-                terminal.anotherWeapon(weapons, activeWeapons.getFirst());
+                terminal.anotherWeapon(weapons, activeWeapons.get(0));
                 rightValue = vampireFactory.addActiveWeapon2(weapons, activeWeapons);
                 if (!rightValue) {
                     terminal.noCorrectNumSelecction();

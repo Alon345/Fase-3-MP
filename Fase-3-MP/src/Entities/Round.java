@@ -96,9 +96,9 @@ public class Round {
 
     private int getArmourDefence(Client client, int armourDefence) {
         for (int numWeapon = 0; numWeapon < client.getCharacter().getActiveWeapons().size(); numWeapon++) {
-            armourDefence += client.getCharacter().getActiveWeapons().getFirst().getDefenseModifier();
+            armourDefence += client.getCharacter().getActiveWeapons().get(0).getDefenseModifier();
         }
-        armourDefence += client.getCharacter().getActiveWeapons().getFirst().getDefenseModifier();
+        armourDefence += client.getCharacter().getActiveWeapons().get(0).getDefenseModifier();
         return armourDefence;
     }
 
