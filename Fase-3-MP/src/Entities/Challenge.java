@@ -12,6 +12,7 @@ public class Challenge {
     private boolean validated;
     private String register;
     private Date date;
+    private static long counter = 0; // Contador para garantizar unicidad
 
     /** Setters y Getters **/
     public void setRival(Client rival) { this.rival = rival; }
@@ -54,7 +55,7 @@ public class Challenge {
             Client current = iterator.next();
             if (current.getNick().equals(myNick) || current.getCharacter() == null) {
                 iterator.remove();
-            }else if (current.getCharacter().getGold() == 0) {
+            } else if (current.getCharacter().getGold() == 0) {
                 iterator.remove();
             }
         }
@@ -132,7 +133,7 @@ public class Challenge {
         return sc.nextInt();
     }
 
-    public String generateRegisterNumber() {
-        return Long.valueOf(System.currentTimeMillis()).toString();
+    public synchronized String generateRegisterNumber() {
+        return System.currentTimeMillis() + String.valueOf(counter++);
     }
-}//FIN
+}
