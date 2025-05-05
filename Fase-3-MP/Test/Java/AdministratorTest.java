@@ -7,10 +7,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import System.*;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
+
+import java.io.*;
+import java.util.ArrayList;
 
 public class AdministratorTest {
 
@@ -40,7 +39,7 @@ public class AdministratorTest {
     //Test sobre las contraseñas y sus restricciones.
     // Comprueba que contraseñas de longitud entre 8 y 12 no lancen excepción
     @Test
-    public void testPasswordWithinRangeDoesNotThrow() {
+    public void validPassword_NoException() {
         // longitudes válidas: 8, 9, …, 12
         Administrator admin = new Administrator();
         assertDoesNotThrow(() -> admin.setPasswordAdmin("Abcdef12"));
@@ -82,77 +81,63 @@ public class AdministratorTest {
         );
     }
 
-    private final InputStream systemInBackup = System.in;
-    private final PrintStream systemOutBackup = System.out;
-    private ByteArrayInputStream testIn;
-    private ByteArrayOutputStream testOut;
-
-    @BeforeEach
-    public void setUpStreams() {
-        testOut = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(testOut));
-    }
-
-    @AfterEach
-    public void restoreStreams() {
-        System.setIn(systemInBackup);
-        System.setOut(systemOutBackup);
-    }
-
-    static class TestMainSystem extends MainSystem {
-        private boolean called = false;
-        @Override
-        public void selector() { called = true; }
-        public boolean wasCalled() { return called; }
-    }
-
     // Comprueba cancelación: escribe algo distinto de "ELIMINAR"
     @Test
-    public void testDeleteAdminAccount_CancelledCallsSelector() {
-        // simular entrada "CANCELAR"
-        testIn = new ByteArrayInputStream("CANCELAR\n".getBytes());
-        System.setIn(testIn);
-
+    public void testDeleteAdminAccount_ConfirmacionExitosa() throws IOException {
+        // Configurar un administrador de prueba
         Administrator admin = new Administrator();
-        admin.setNick("admin1");
+        admin.setNick("admin_test");
+        admin.setPassword("admin123");
+        new AdministratorFileWriter().adminRegister(admin);
 
-        TestMainSystem system = new TestMainSystem();
-        Client client = new Client();
-        client.deleteAccount(client, system);
+        // Simular entrada de confirmación
+        String input = "ELIMINAR\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
 
-        // debe invocar selector() aunque cancele
-        assertTrue(system.wasCalled(),
-                "Al cancelar, MainSystem.selector() debe ser invocado");
+        MainSystem system = new MainSystem();
+        admin.deleteAdminAccount(admin, system);
 
-        String out = testOut.toString();
-        // ajusta estos literales al texto real que imprime tu Terminal:
-        assertTrue(out.contains("Operación cancelada"),
-                "Debe mostrar el mensaje de operación cancelada");
-        assertTrue(out.contains("Sesión cerrada por seguridad"),
-                "Debe mostrar el mensaje de sesión cerrada por seguridad");
+        // Verificar eliminación
+        ArrayList<Administrator> admins = new AdministratorFileReader().adminFileReader();
+        assertFalse(admins.stream().anyMatch(a -> a.getNick().equals("admin_test")));
     }
 
-    // Comprueba confirmación: escribe "ELIMINAR"
     @Test
-    public void testDeleteAdminAccount_ConfirmDeletesAndCallsSelector() {
-        testIn = new ByteArrayInputStream("ELIMINAR\n".getBytes());
-        System.setIn(testIn);
-
+    public void testDeleteAdminAccount_CancelarOperacion() throws IOException {
+        // Configurar administrador
         Administrator admin = new Administrator();
-        admin.setNick("adminToRemove");
+        admin.setNick("admin_test");
+        new AdministratorFileWriter().adminRegister(admin);
 
-        TestMainSystem system = new TestMainSystem();
-        Client client = new Client();
-        client.deleteAccount(client, system);
+        // Simular entrada de cancelación
+        String input = "cancelar\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
 
-        assertTrue(system.wasCalled(),
-                "Después de eliminar, MainSystem.selector() debe ser invocado");
+        MainSystem system = new MainSystem();
+        admin.deleteAdminAccount(admin, system);
 
-        String out = testOut.toString();
-        // aquí también ajusta según tu Terminal:
-        assertTrue(
-                out.contains("Borrando administrador") ||
-                        out.contains("No existe cuenta de administrador"),
-                "Debe mostrar el mensaje de borrado o el de cuenta no existente");
+        // Verificar que sigue en el archivo
+        ArrayList<Administrator> admins = new AdministratorFileReader().adminFileReader();
+        assertTrue(admins.stream().anyMatch(a -> a.getNick().equals("admin_test")));
+    }
+
+    @Test
+    public void testDeleteAdminAccount_AdminNoExiste() throws IOException {
+        // Administrador que no existe
+        Administrator nonExistingAdmin = new Administrator();
+        nonExistingAdmin.setNick("fantasma");
+
+        // Simular confirmación
+        String input = "ELIMINAR\n";
+        System.setIn(new ByteArrayInputStream(input.getBytes()));
+
+        // Ejecutar con admin no existente
+        Administrator admin = new Administrator();
+        MainSystem system = new MainSystem();
+        admin.deleteAdminAccount(nonExistingAdmin, system);
+
+        // Verificar que no hay cambios (asumiendo archivo vacío)
+        ArrayList<Administrator> admins = new AdministratorFileReader().adminFileReader();
+        assertTrue(admins.isEmpty());
     }
 }

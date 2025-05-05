@@ -38,5 +38,15 @@ public class User {
     public void setBanDateTime(LocalDateTime banDateTime) {this.banDateTime = banDateTime;}
     public LocalDateTime getBanDateTime() {return banDateTime;}
 
+    public void setPasswordAdmin(String password) {
+        if (password.length() < 8 || password.length() > 12) {
+            throw new IllegalArgumentException("La contraseña debe tener entre 8 y 12 caracteres");
+        }
+        this.password = password;
+    }
+    public String getPasswordAdmin() {
+        return password;
+    }
+
 }//FIN
 
