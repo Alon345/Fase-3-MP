@@ -9,7 +9,10 @@ public class Werewolf extends Character {
 
     /**A continuación se definen los Getters y Setters**/
 
-    public int getRage() {return this.rage;} //valor de Rabia
+    public int getRage() {
+        return rage;
+    }
+
     public void setRage(int rage) {
         this.rage = rage;
     }

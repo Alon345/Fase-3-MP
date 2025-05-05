@@ -10,8 +10,9 @@ public class Vampire extends Character {
 
     /**A continuación se definen los Getters y Setters**/
     public int getBlood() {
-        return this.blood;
+        return blood;
     }
+
     public void setBlood(int blood) {
         this.blood = blood;
     }
