@@ -7,4 +7,23 @@ PASSWORD 12345678
 NOMBRE Victor
 NICK administrator_002
 PASSWORD 12345678
+========== FIN ADMIN ==================== ADMIN ==========
+NOMBRE null
+NICK admin_test
+PASSWORD null
+========== FIN ADMIN ==========
+========== ADMIN ==========
+NOMBRE null
+NICK admin_test
+PASSWORD admin123
+========== FIN ADMIN ==========
+========== ADMIN ==========
+NOMBRE null
+NICK admin_test
+PASSWORD null
+========== FIN ADMIN ==========
+========== ADMIN ==========
+NOMBRE null
+NICK admin_test
+PASSWORD admin123
 ========== FIN ADMIN ==========
