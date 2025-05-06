@@ -81,7 +81,7 @@ public class MainSystemTest {
         // Prepara un admin
         Administrator admin = new Administrator();
         admin.setNick("superadmin"); //no existe nick, poner en documento
-        admin.setPasswordAdmin("admin123");
+        admin.setPassword("admin123");
         new AdministratorFileWriter().adminRegister(admin);
 
         String input = "superadmin\nadmin123\n";

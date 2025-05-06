@@ -32,8 +32,8 @@ public class AdministratorTest {
     public void setPasswordTest() {
         String password = "My_Password";
         Administrator admin = new Administrator();
-        admin.setPasswordAdmin(password);
-        assertEquals(password, admin.getPasswordAdmin(), "La contraseña debe ser el establecida");
+        admin.setPassword(password);
+        assertEquals(password, admin.getPassword(), "La contraseña debe ser el establecida");
     }
 
     //Test sobre las contraseñas y sus restricciones.
@@ -42,11 +42,11 @@ public class AdministratorTest {
     public void validPassword_NoException() {
         // longitudes válidas: 8, 9, …, 12
         Administrator admin = new Administrator();
-        assertDoesNotThrow(() -> admin.setPasswordAdmin("Abcdef12"));
-        assertEquals("Abcdef12", admin.getPasswordAdmin());
+        assertDoesNotThrow(() -> admin.setPassword("Abcdef12"));
+        assertEquals("Abcdef12", admin.getPassword());
 
-        assertDoesNotThrow(() -> admin.setPasswordAdmin("123456789012"));
-        assertEquals("123456789012", admin.getPasswordAdmin());
+        assertDoesNotThrow(() -> admin.setPassword("123456789012"));
+        assertEquals("123456789012", admin.getPassword());
     }
 
     // Comprueba que una contraseña demasiado corta lance IllegalArgumentException
@@ -56,7 +56,7 @@ public class AdministratorTest {
         Administrator admin = new Administrator();
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> admin.setPasswordAdmin(tooShort),
+                () -> admin.setPassword(tooShort),
                 "Debe lanzar IllegalArgumentException para contraseñas < 8 caracteres"
         );
         assertEquals(
@@ -72,7 +72,7 @@ public class AdministratorTest {
         Administrator admin = new Administrator();
         IllegalArgumentException ex = assertThrows(
                 IllegalArgumentException.class,
-                () -> admin.setPasswordAdmin(tooLong),
+                () -> admin.setPassword(tooLong),
                 "Debe lanzar IllegalArgumentException para contraseñas > 12 caracteres"
         );
         assertEquals(

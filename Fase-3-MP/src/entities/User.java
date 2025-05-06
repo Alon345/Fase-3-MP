@@ -25,26 +25,19 @@ public class User {
         this.nick = nick;
     }
 
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getBanMotive(){return banMotive;}
     public void setBanMotive(String banMotive) {this.banMotive = banMotive;}
 
     public void setBanDateTime(LocalDateTime banDateTime) {this.banDateTime = banDateTime;}
     public LocalDateTime getBanDateTime() {return banDateTime;}
 
-    public void setPasswordAdmin(String password) {
+    public void setPassword(String password) {
         if (password.length() < 8 || password.length() > 12) {
             throw new IllegalArgumentException("La contraseña debe tener entre 8 y 12 caracteres");
         }
         this.password = password;
     }
-    public String getPasswordAdmin() {
+    public String getPassword() {
         return password;
     }
 
