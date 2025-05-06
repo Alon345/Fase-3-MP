@@ -15,7 +15,7 @@ public class Character {
     private int gold;
     private int health;
     private int power;
-    private String type;
+    public String type;
     private ArrayList<MinionsComposit> minionsComposit;
 
     /** Constructor **/
@@ -123,32 +123,5 @@ public class Character {
         this.type = type;
     }
 
-    /** Métodos adicionales necesarios para el combate **/
-
-    public int getAttack() {
-        int totalAttack = power;
-        if (activeWeapons != null) {
-            for (Weapon weapon : activeWeapons) {
-                totalAttack += weapon.getAttack();
-            }
-        }
-        if (activeArmor != null) {
-            totalAttack += activeArmor.getAttack();
-        }
-        return totalAttack;
-    }
-
-    public int getDefense() {
-        int totalDefense = 0;
-        if (activeWeapons != null) {
-            for (Weapon weapon : activeWeapons) {
-                totalDefense += weapon.getDefense();
-            }
-        }
-        if (activeArmor != null) {
-            totalDefense += activeArmor.getDefense();
-        }
-        return totalDefense;
-    }
 }
 

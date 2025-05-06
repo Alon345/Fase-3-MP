@@ -6,7 +6,10 @@ public class Hunter extends Character {
     private int willpower;
 
     /**A continuación se define el constructor**/
-    public Hunter() {}
+    public Hunter() {
+        super();
+        this.type = "CAZADOR";
+    }
 
 
     /**A continuación se definen Getters y Setters**/

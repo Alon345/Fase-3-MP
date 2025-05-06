@@ -27,6 +27,7 @@ public class MainSystemTest {
         ArrayList<Client> users = new UserFileReader().userFileReader();
         assertTrue(users.stream().anyMatch(u -> u.getNick().equals("juanito")));
     }
+
     @Test
     public void testRegisterUser_DuplicateNick() throws IOException {
         // Prepara un usuario existente

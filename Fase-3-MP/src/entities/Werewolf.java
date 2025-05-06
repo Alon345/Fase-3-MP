@@ -5,7 +5,10 @@ public class Werewolf extends Character {
     private int rage;
 
     /**A continuación se define el constructor**/
-    public Werewolf() {}
+    public Werewolf() {
+        super();
+        this.type = "LICANTROPO";
+    }
 
     /**A continuación se definen los Getters y Setters**/
 
