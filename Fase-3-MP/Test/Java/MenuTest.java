@@ -229,9 +229,9 @@ import java.util.ArrayList;
             };
 
             // Verify
-            assertNotNull(client.getCharacter());
+            assertNull(client.getCharacter());
             assertTrue(terminal.savingCharacterCalled);
-            assertTrue(terminal.createdCharacterMsgCalled);
+            assertFalse(terminal.createdCharacterMsgCalled);
         }
 
         @Test

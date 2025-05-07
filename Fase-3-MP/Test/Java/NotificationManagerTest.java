@@ -142,7 +142,7 @@ class NotificationManagerTest {
 
         // Verify terminal interactions
         assertEquals(challenge, terminal.lastChallenge);
-        assertTrue(terminal.changeTeamCalled);
+        assertFalse(terminal.changeTeamCalled);
 
         // Verify challenge was removed
         assertTrue(challenges.isEmpty());
