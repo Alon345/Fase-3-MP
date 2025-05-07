@@ -129,7 +129,7 @@ import java.util.ArrayList;
             }
         }
 
-        // Test double for Scanner
+        // Test double for Scanner test
         private static class TestScanner {
             private final int[] inputs;
             private int currentIndex = 0;
