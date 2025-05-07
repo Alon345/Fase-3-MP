@@ -807,7 +807,7 @@ public class UserFileReader {
         return Werewolf;
     }
 
-    private MinionsComposit minionsFile(String linea, BufferedReader br, String[] spaceBtwText) throws NumberFormatException, IOException {
+    public MinionsComposit minionsFile(String linea, BufferedReader br, String[] spaceBtwText) throws NumberFormatException, IOException {
         int tope = Integer.parseInt(spaceBtwText[1]);
         for (int i = 0; i < tope; i++) {
             linea = br.readLine();
