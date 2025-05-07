@@ -109,5 +109,52 @@ public class MainSystemTest {
 
         assertNotNull(result);
     }
+    @Test
+    public void testLoginExitoso() throws IOException {
+        // 1. Crear archivos temporales
+        crearArchivoUsuarios();
+        crearArchivoBaneadosVacio();
+
+        // 2. Redirigir entrada del usuario
+        String inputSimulado = "testUser\ntestPass\n";
+        ByteArrayInputStream testInput = new ByteArrayInputStream(inputSimulado.getBytes());
+        System.setIn(testInput);
+
+        // 3. Redirigir salida para capturar mensajes
+        ByteArrayOutputStream outputCapturado = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outputCapturado));
+
+        // 4. Ejecutar método bajo test
+        Client clienteTest = new Client();
+        MainSystem system = new MainSystem();
+        Client resultado = system.loginClient(clienteTest);
+
+        // 5. Verificaciones
+        assertNotNull(resultado);
+        assertEquals("testUser", resultado.getNick());
+        assertEquals("Test User", resultado.getName());
+        assertTrue(outputCapturado.toString().contains("Hola de nuevo Test User"));
+
+        // 6. Limpieza
+        eliminarArchivosTemporales();
+    }
+
+    private static final String USER_FILE_PATH = "Fase-3-MP/src/Files/UserRegister.txt";
+    private static final String BAN_FILE_PATH = "Fase-3-MP/src/Files/BanRegister.txt";
+
+    private void crearArchivoUsuarios() throws IOException {
+        try (FileWriter fw = new FileWriter(USER_FILE_PATH)) {
+            fw.write("testUser,testPass,Test User\n");
+        }
+    }
+
+    private void crearArchivoBaneadosVacio() throws IOException {
+        new File(BAN_FILE_PATH).createNewFile();
+    }
+
+    private void eliminarArchivosTemporales() {
+        new File(USER_FILE_PATH).delete();
+        new File(BAN_FILE_PATH).delete();
+    }
 }
 

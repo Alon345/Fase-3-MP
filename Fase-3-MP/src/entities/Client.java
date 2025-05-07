@@ -10,7 +10,7 @@ import System.UserFileWriter;
 public class Client extends User {
 
     /**A continuación se definen atributos**/
-    private final String USER_FILE_PATH = "Fase-3-MP/src/Files/UserRegister.txt";
+    public static String USER_FILE_PATH = "Fase-3-MP/src/Files/UserRegister.txt";
     private String register;
     private Character character;
 
