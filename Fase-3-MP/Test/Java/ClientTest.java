@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
-import org.junit.Before;
+//import org.junit.Before;
 import java.io.PrintStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -134,7 +134,7 @@ public class ClientTest {
         Files.write(p, Arrays.asList(
                    "alice 10", "bob 5", "charlie 20"));
         // 2) apuntar la ruta usada por Client.globalRanking()
-        Client.USER_FILE_PATH = USER_FILE_PATH;
+        //Client.USER_FILE_PATH = USER_FILE_PATH;
 
         // 3) preparar captura de consola
         originalOut = System.out;
